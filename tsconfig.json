@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/*"]
+    },
+    "sourceMap": false,
+    "strict": true
+  },
+  "include": ["src", "src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
