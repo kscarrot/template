@@ -1,4 +1,4 @@
-function randomArrayGenerator(length: number) {
+export function randomArray(length: number) {
   if (length <= 0) return []
   const arr = []
   for (let i = 0; i < Math.floor(length); i++) {
@@ -6,5 +6,3 @@ function randomArrayGenerator(length: number) {
   }
   return arr
 }
-
-export default randomArrayGenerator

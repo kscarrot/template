@@ -4,7 +4,7 @@
     "module": "ESNext",
     "baseUrl": "./",
     "paths": {
-      "*": ["src/*"]
+      "*": ["*"]
     },
     "sourceMap": false,
     "strict": true
