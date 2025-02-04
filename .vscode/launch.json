@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Debug",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${file}",
+      "program": "${workspaceFolder}/${relativeFile}",
       "outFiles": ["${workspaceFolder}/**/*.js"],
       "preLaunchTask": "npm: build",
       "runtimeExecutable": "/Users/ks/.volta/tools/image/node/23.6.1/bin/node"
