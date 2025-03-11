@@ -38,6 +38,7 @@ test('test CircularLinkList insert', () => {
   expect([...l]).toStrictEqual([3, 2, 1, 99])
 
   expect(() => l.get(-1)).toThrow()
+  // expect(l.get(-1)).toBe(99)
 })
 
 test('test CircularLinkList traverse', () => {
