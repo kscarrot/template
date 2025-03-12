@@ -1,14 +1,6 @@
 import { ListADT } from 'src/datastructure/ADT'
-import {
-  headSymbol,
-  LinkHeadNode,
-  isHeadNode,
-  tailSymbol,
-  LinkTailNode,
-  isTailNode,
-  LinkNode,
-  LinkNodes,
-} from 'src/datastructure/node'
+import type { LinkHeadNode, LinkTailNode, LinkNodes } from 'src/datastructure/node'
+import { isHeadNode, isTailNode, LinkNode, createLinkNodes } from 'src/datastructure/node'
 
 export class LinkList<T> implements ListADT<T> {
   size = 0
@@ -16,8 +8,9 @@ export class LinkList<T> implements ListADT<T> {
   tail: LinkTailNode<T>
 
   constructor() {
-    this.tail = { next: null, value: tailSymbol }
-    this.head = { next: this.tail, value: headSymbol }
+    const { headNode, tailNode } = createLinkNodes<T>()
+    this.head = headNode
+    this.tail = tailNode
   }
 
   get isEmpty() {

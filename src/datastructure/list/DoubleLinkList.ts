@@ -1,14 +1,6 @@
 import { ListADT } from 'src/datastructure/ADT'
-import {
-  headSymbol,
-  DoubleLinkHeadNode,
-  isHeadNode,
-  tailSymbol,
-  DoubleLinkTailNode,
-  isTailNode,
-  DoubleLinkNode,
-  DoubleLinkNodes,
-} from 'src/datastructure/node'
+import type { DoubleLinkHeadNode, DoubleLinkTailNode, DoubleLinkNodes } from 'src/datastructure/node'
+import { isHeadNode, isTailNode, DoubleLinkNode, createDoubleLinkNodes } from 'src/datastructure/node'
 
 export class DoubleLinkList<T> implements ListADT<T> {
   size = 0
@@ -16,9 +8,9 @@ export class DoubleLinkList<T> implements ListADT<T> {
   tail: DoubleLinkTailNode<T>
 
   constructor() {
-    this.head = { prev: null, next: null, value: headSymbol } as unknown as DoubleLinkHeadNode<T>
-    this.tail = { prev: this.head, next: null, value: tailSymbol }
-    this.head.next = this.tail
+    const { headNode, tailNode } = createDoubleLinkNodes<T>()
+    this.head = headNode
+    this.tail = tailNode
   }
 
   get isEmpty() {
@@ -94,7 +86,7 @@ export class DoubleLinkList<T> implements ListADT<T> {
     let current: DoubleLinkNodes<T> = this.head
     while (true) {
       yield current
-      if (isTailNode(current)) return
+      if (isTailNode<T>(current)) return
       current = current.next
     }
   }
@@ -104,9 +96,9 @@ export class DoubleLinkList<T> implements ListADT<T> {
 
     let point = traverse.next()
     whileLoop: while (!point.done) {
-      if (isTailNode(point.value)) return
+      if (isTailNode<T>(point.value)) return
 
-      if (isHeadNode(point.value)) {
+      if (isHeadNode<T>(point.value)) {
         point = traverse.next()
         continue whileLoop
       }

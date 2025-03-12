@@ -66,18 +66,35 @@ class CircularLinkNode<T> {
   }
 }
 
-export {
-  headSymbol,
-  DoubleLinkHeadNode,
-  isHeadNode,
-  tailSymbol,
-  DoubleLinkTailNode,
-  isTailNode,
-  DoubleLinkNode,
-  DoubleLinkNodes,
-  CircularLinkNode,
-  LinkNode,
-  LinkHeadNode,
-  LinkTailNode,
-  LinkNodes,
+const createLinkNodes = <T>() => {
+  const tailNode: LinkTailNode<T> = {
+    next: null,
+    value: tailSymbol,
+  }
+  const headNode: LinkHeadNode<T> = {
+    next: tailNode,
+    value: headSymbol,
+  }
+  return { headNode, tailNode }
 }
+
+const createDoubleLinkNodes = <T>() => {
+  const tailNode: DoubleLinkTailNode<T> = {
+    prev: null as unknown as DoubleLinkHeadNode<T>, // 下面连接保证
+    next: null,
+    value: tailSymbol,
+  }
+  const headNode: DoubleLinkHeadNode<T> = {
+    prev: null,
+    next: tailNode,
+    value: headSymbol,
+  }
+  tailNode.prev = headNode
+  return { headNode, tailNode }
+}
+
+// Type exports
+export type { LinkHeadNode, LinkTailNode, LinkNodes, DoubleLinkHeadNode, DoubleLinkTailNode, DoubleLinkNodes }
+
+// Implementation exports
+export { isHeadNode, isTailNode, createLinkNodes, createDoubleLinkNodes, LinkNode, DoubleLinkNode, CircularLinkNode }
