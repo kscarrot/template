@@ -12,6 +12,27 @@ class DoubleLinkNode<T> {
   }
 }
 
+class LinkNode<T> {
+  value: T
+  next: LinkNode<T> | LinkTailNode<T>
+  constructor(value: T) {
+    this.value = value
+    this.next = this
+  }
+}
+
+interface LinkHeadNode<T> {
+  next: LinkNode<T> | LinkTailNode<T>
+  value: Symbol
+}
+
+interface LinkTailNode<T> {
+  next: null
+  value: Symbol
+}
+
+type LinkNodes<T> = LinkHeadNode<T> | LinkNode<T> | LinkTailNode<T>
+
 interface DoubleLinkHeadNode<T> {
   prev: null
   next: DoubleLinkNode<T> | DoubleLinkTailNode<T>
@@ -26,11 +47,11 @@ interface DoubleLinkTailNode<T> {
 
 type DoubleLinkNodes<T> = DoubleLinkHeadNode<T> | DoubleLinkNode<T> | DoubleLinkTailNode<T>
 
-const isHeadNode = <T>(node: DoubleLinkNodes<T>): node is DoubleLinkHeadNode<T> => {
+const isHeadNode = <T>(node: LinkNodes<T>): node is LinkHeadNode<T> => {
   return node.value === headSymbol
 }
 
-const isTailNode = <T>(node: DoubleLinkNodes<T>): node is DoubleLinkTailNode<T> => {
+const isTailNode = <T>(node: LinkNodes<T>): node is LinkTailNode<T> => {
   return node.value === tailSymbol
 }
 
@@ -55,4 +76,8 @@ export {
   DoubleLinkNode,
   DoubleLinkNodes,
   CircularLinkNode,
+  LinkNode,
+  LinkHeadNode,
+  LinkTailNode,
+  LinkNodes,
 }
