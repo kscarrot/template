@@ -75,3 +75,25 @@ test('test LinkList normal delete', () => {
   expect(() => l.insert(100, 123)).toThrow()
   expect(() => l.delete(100)).toThrow()
 })
+
+describe('LinkList', () => {
+  test('add should append element to the end of list', () => {
+    const list = new LinkList<number>()
+
+    // Test adding to empty list
+    list.add(1)
+    expect(list.size).toBe(1)
+    expect([...list]).toEqual([1])
+
+    // Test adding multiple elements
+    list.add(2).add(3)
+    expect(list.size).toBe(3)
+    expect([...list]).toEqual([1, 2, 3])
+
+    // Test chaining add calls
+    const result = list.add(4)
+    expect(result).toBe(list)
+    expect(list.size).toBe(4)
+    expect([...list]).toEqual([1, 2, 3, 4])
+  })
+})

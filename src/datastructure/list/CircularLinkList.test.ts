@@ -55,3 +55,36 @@ test('test CircularLinkList traverse', () => {
   l.delete(2)
   expect([...l]).toStrictEqual([0, 1, 9, 3, 4])
 })
+
+describe('CircularLinkList', () => {
+  test('add should append element to the end of list', () => {
+    const list = new CircularLinkList<number>()
+
+    // Test adding to empty list
+    list.add(1)
+    expect(list.size).toBe(1)
+    expect([...list]).toEqual([1])
+
+    // Test adding multiple elements
+    list.add(2).add(3)
+    expect(list.size).toBe(3)
+    expect([...list]).toEqual([1, 2, 3])
+
+    // Test chaining add calls
+    const result = list.add(4)
+    expect(result).toBe(list)
+    expect(list.size).toBe(4)
+    expect([...list]).toEqual([1, 2, 3, 4])
+
+    // Test circular nature
+    const iterator = list.traverseNode()
+    let node = iterator.next().value!
+    let count = 0
+    while (count < list.size) {
+      expect(node.next).toBeDefined()
+      expect(node.prev).toBeDefined()
+      node = node.next
+      count++
+    }
+  })
+})

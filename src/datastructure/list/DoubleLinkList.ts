@@ -13,6 +13,20 @@ export class DoubleLinkList<T> implements ListADT<T> {
     this.tail = tailNode
   }
 
+  add(value: T) {
+    const insertNode = new DoubleLinkNode(value)
+    const prevNode = this.tail.prev
+
+    prevNode.next = insertNode
+    insertNode.prev = prevNode
+
+    this.tail.prev = insertNode
+    insertNode.next = this.tail
+
+    this.size = this.size + 1
+    return this
+  }
+
   get isEmpty() {
     return this.size === 0
   }

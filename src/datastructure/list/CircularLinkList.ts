@@ -4,6 +4,32 @@ import { CircularLinkNode } from 'src/datastructure/node'
 export class CircularLinkList<T> implements ListADT<T> {
   size = 0
   head: null | CircularLinkNode<T> = null
+  tail: null | CircularLinkNode<T> = null
+
+  add(value: T) {
+    const insertNode = new CircularLinkNode(value)
+
+    if (this.isEmpty) {
+      this.head = insertNode
+      this.tail = insertNode
+      insertNode.next = insertNode
+      insertNode.prev = insertNode
+    } else {
+      const prevNode = this.tail!
+      const nextNode = this.head!
+
+      prevNode.next = insertNode
+      insertNode.prev = prevNode
+
+      nextNode.prev = insertNode
+      insertNode.next = nextNode
+
+      this.tail = insertNode
+    }
+
+    this.size = this.size + 1
+    return this
+  }
 
   get isEmpty() {
     return this.size === 0

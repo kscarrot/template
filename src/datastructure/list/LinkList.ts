@@ -13,6 +13,10 @@ export class LinkList<T> implements ListADT<T> {
     this.tail = tailNode
   }
 
+  add(value: T) {
+    return this.insert(this.size, value)
+  }
+
   get isEmpty() {
     return this.size === 0
   }

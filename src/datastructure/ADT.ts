@@ -4,6 +4,7 @@ export interface ListADT<T> {
   get: (index: number) => T
   delete: (index: number) => T
   insert: (index: number, value: T) => this
+  add: (value: T) => this
 }
 
 export interface StackADT<T> {
