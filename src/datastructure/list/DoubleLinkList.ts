@@ -86,7 +86,8 @@ export class DoubleLinkList<T> implements ListADT<T> {
     }
 
     // 控制了index的范围 类型用size保证
-    const deleteNode = this.getNode(index) as DoubleLinkNode<T>
+    const deleteNode =
+      index === this.size - 1 ? (this.tail.prev as DoubleLinkNode<T>) : (this.getNode(index) as DoubleLinkNode<T>)
 
     deleteNode.next.prev = deleteNode.prev
     deleteNode.prev.next = deleteNode.next

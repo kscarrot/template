@@ -65,11 +65,11 @@ test('test Node traverse', () => {
   const nodeIterator = l.traverseNode()
   let cursor = nodeIterator.next()
   if (cursor.value) {
-    expect(isHeadNode(cursor.value)).toBe(true)
+    expect(isHeadNode<number>(cursor.value)).toBe(true)
   }
   cursor = nodeIterator.next()
   if (cursor.value) {
-    expect(isTailNode(cursor.value)).toBe(true)
+    expect(isTailNode<number>(cursor.value)).toBe(true)
   }
   cursor = nodeIterator.next()
   expect(cursor.done).toBe(true)
