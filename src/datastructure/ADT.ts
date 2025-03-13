@@ -40,3 +40,16 @@ export interface DequeueADT<T> {
   /** get the last element of dequeue */
   back: () => T
 }
+
+export interface HashTableADT<T> {
+  size: number
+  get: (key: any) => T | null
+  set: (key: any, value: T) => this
+  delete: (key: string) => this
+}
+export interface HashSetADT<T> {
+  size: number
+  add: (value: T) => this
+  delete: (value: T) => this
+  has: (value: T) => boolean
+}
