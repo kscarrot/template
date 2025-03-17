@@ -53,3 +53,14 @@ export interface HashSetADT<T> {
   delete: (value: T) => this
   has: (value: T) => boolean
 }
+
+export interface HeapADT<T> {
+  size: number
+  isEmpty: boolean
+  /** 插入一个元素到堆中 */
+  insert: (value: T) => this
+  /** 删除并返回堆顶元素 */
+  extract: () => T
+  /** 查看堆顶元素但不删除 */
+  peek: () => T
+}
