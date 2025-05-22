@@ -7,8 +7,18 @@
       "*": ["*"]
     },
     "sourceMap": false,
-    "strict": true
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true
   },
   "include": ["src", "src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
