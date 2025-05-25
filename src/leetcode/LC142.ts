@@ -1,4 +1,4 @@
-import { ListNode } from './leetcode-types'
+import type { ListNode } from './leetcode-types'
 
 /**
  * @link: https://leetcode.cn/problems/linked-list-cycle-ii/

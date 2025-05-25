@@ -1,4 +1,4 @@
-import { ListNode } from './leetcode-types'
+import type { ListNode } from './leetcode-types'
 import { chunkArray } from './utils'
 import mergeTwoLists from './LC21'
 
