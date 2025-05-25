@@ -13,11 +13,14 @@ function middleNode(head: ListNode | null): ListNode | null {
 
   let slowCursor: ListNode | null = head
   let fastCursor: ListNode | null = head
+  let prevCursor: ListNode | null = null
 
   while (fastCursor && fastCursor.next) {
+    prevCursor = slowCursor
     slowCursor = slowCursor?.next || null
     fastCursor = fastCursor?.next?.next || null
   }
+  ;(prevCursor as unknown as ListNode).next = null
   return slowCursor
 }
 
