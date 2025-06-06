@@ -12,7 +12,7 @@
       "program": "${workspaceFolder}/${relativeFile}",
       "outFiles": ["${workspaceFolder}/**/*.js"],
       "preLaunchTask": "npm: build",
-      "runtimeExecutable": "/Users/ks/.volta/tools/image/node/23.6.1/bin/node"
+      "runtimeExecutable": "/Users/ks/.volta/tools/image/node/24.1.0/bin/node"
     }
   ]
 }
