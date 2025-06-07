@@ -35,3 +35,31 @@ export function linkListToArray(head: ListNode | null): number[] {
   }
   return result
 }
+
+/**
+ * @description: 参考Python3的 cache 装饰器，实现一个缓存装饰器
+ * @param fn 需要缓存的函数
+ * @param getKey 自定义 key 计算函数
+ * @returns 缓存后的函数
+ */
+export function cacheFn<T extends (...args: any[]) => any>(
+  fn: T,
+  getKey: (...args: any[]) => any = (...args) => JSON.stringify(args),
+  initCache: Record<string, any> = {},
+): T {
+  const cache = new Map<string, any>(Object.entries(initCache))
+
+  const cachedFn = (...args: any[]): any => {
+    const key = getKey(...args)
+
+    if (cache.has(key)) {
+      return cache.get(key)
+    }
+
+    const result = fn(...args)
+    cache.set(key, result)
+    return result
+  }
+
+  return cachedFn as T
+}
