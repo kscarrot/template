@@ -4,4 +4,4 @@
  * type Obj = { a: string; b: number }
  * type Values = ValueOf<Obj> // string | number
  */
-type ValueOf<T> = T[keyof T] 
+type ValueOf<T> = T[keyof T]
