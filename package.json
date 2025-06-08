@@ -7,6 +7,7 @@
   "scripts": {
     "test": "jest",
     "prepare": "husky",
+    "lint:check": "prettier . --check",
     "lint": "prettier . --write",
     "build": "rm -rf dist && swc ./src -d dist --config-file .buildswcrc",
     "build-view": "vite build",
