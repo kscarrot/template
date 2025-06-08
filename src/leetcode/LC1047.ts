@@ -15,3 +15,5 @@ function removeDuplicates(s: string): string {
   }
   return stack.join('')
 }
+
+export { removeDuplicates }

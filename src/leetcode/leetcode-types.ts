@@ -11,6 +11,12 @@ interface TreeNode {
   right: TreeNode | null
 }
 
+// N 叉树节点
+interface NTreeNode {
+  val: number
+  children: NTreeNode[]
+}
+
 // 图节点
 interface GraphNode {
   val: number
@@ -44,4 +50,4 @@ interface Problem {
 }
 
 // 导出所有类型
-export type { ListNode, TreeNode, GraphNode, InputType, OutputType, TestCase, Solution, Problem }
+export type { ListNode, TreeNode, NTreeNode, GraphNode, InputType, OutputType, TestCase, Solution, Problem }

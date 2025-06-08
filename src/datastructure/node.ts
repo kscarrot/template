@@ -93,8 +93,51 @@ const createDoubleLinkNodes = <T>() => {
   return { headNode, tailNode }
 }
 
-// Type exports
+/**
+ * @description: 二叉树节点
+ */
+class BinaryTreeNode<T> {
+  value: T
+  parent: BinaryTreeNode<T> | null = null
+  left: BinaryTreeNode<T> | null = null
+  right: BinaryTreeNode<T> | null = null
+  constructor(value: T, parent?: BinaryTreeNode<T>) {
+    this.value = value
+    if (parent) this.parent = parent
+  }
+
+  get isLeaf() {
+    return this.right === null && this.left === null
+  }
+}
+
+/**
+ * @description: 多叉树节点
+ */
+class MultiTreeNode<T> {
+  value: T
+  parent: MultiTreeNode<T> | null = null
+  children: MultiTreeNode<T>[] = []
+  constructor(value: T, parent?: MultiTreeNode<T>) {
+    this.value = value
+    if (parent) this.parent = parent
+  }
+
+  get isLeaf() {
+    return this.children.length === 0
+  }
+}
+
 export type { LinkHeadNode, LinkTailNode, LinkNodes, DoubleLinkHeadNode, DoubleLinkTailNode, DoubleLinkNodes }
 
-// Implementation exports
-export { isHeadNode, isTailNode, createLinkNodes, createDoubleLinkNodes, LinkNode, DoubleLinkNode, CircularLinkNode }
+export {
+  isHeadNode,
+  isTailNode,
+  createLinkNodes,
+  createDoubleLinkNodes,
+  LinkNode,
+  DoubleLinkNode,
+  CircularLinkNode,
+  BinaryTreeNode,
+  MultiTreeNode,
+}
