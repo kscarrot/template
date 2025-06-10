@@ -1,8 +1,10 @@
 import { NTreeNode } from './leetcode-types'
 
 /**
- * @link: https://leetcode.cn/problems/n-ary-tree-preorder-traversal/
- * @description: 给定一个 N 叉树，返回其节点值的 前序 遍历。
+ * @name: N 叉树的前序遍历
+ * @level: 简单
+ * @link: https://leetcode.cn/problems/n-ary-tree-preorder-traversal
+ * @description: 给定一个 n 叉树的根节点 root ，返回 其节点值的 前序遍历 。
  * @param {NTreeNode} root
  * @return {number[]}
  */

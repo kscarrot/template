@@ -1,8 +1,10 @@
 import { TreeNode } from './leetcode-types'
 
 /**
- * @link: https://leetcode.cn/problems/binary-tree-level-order-traversal/
- * @description: 给你二叉树的根节点 root ，返回其节点值的 层序 遍历。 （即逐层地，从左到右访问所有节点）。
+ * @name: 二叉树的层序遍历
+ * @level: 中等
+ * @link: https://leetcode.cn/problems/binary-tree-level-order-traversal
+ * @description: 给你二叉树的根节点 root ，返回其节点值的 层序遍历 。 （即逐层地，从左到右访问所有节点）。
  * @param {TreeNode} root
  * @return {number[][]}
  */

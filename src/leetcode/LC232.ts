@@ -1,6 +1,8 @@
 /**
- * @link: https://leetcode.cn/problems/implement-queue-using-stacks/
- * @description: 用栈实现队列
+ * @name: 用栈实现队列
+ * @level: 简单
+ * @link: https://leetcode.cn/problems/implement-queue-using-stacks
+ * @description: 请你仅使用两个栈实现先入先出队列。
  */
 class MyQueue {
   private stack: number[] = []

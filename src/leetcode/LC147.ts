@@ -1,7 +1,9 @@
 import { ListNode } from './utils'
 /**
+ * @name: 对链表进行插入排序
+ * @level: 中等
  * @link: https://leetcode.cn/problems/insertion-sort-list
- * @description: 给定单个链表的头 head ，使用 插入排序 对链表进行排序，并返回 排序后链表的头
+ * @description: 给定单个链表的头节点 head ，使用插入排序对链表进行排序，并返回排序后的链表。
  * @param {ListNode | null} head
  * @return {ListNode | null}
  */

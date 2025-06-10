@@ -3,6 +3,8 @@ import middleNode from './LC876'
 import reverseList from './LC206'
 
 /**
+ * @name: 回文链表
+ * @level: 简单
  * @link: https://leetcode.cn/problems/palindrome-linked-list/
  * @description: 给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false
  * @param {ListNode | null} head

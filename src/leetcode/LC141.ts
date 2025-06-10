@@ -1,7 +1,9 @@
 import type { ListNode } from './leetcode-types'
 
 /**
- * @link: https://leetcode.cn/problems/linked-list-cycle/
+ * @name: 环形链表
+ * @level: 简单
+ * @link: https://leetcode.cn/problems/linked-list-cycle
  * @description: 给定一个链表，判断链表中是否有环。
  * @param {ListNode} head
  * @return {boolean}

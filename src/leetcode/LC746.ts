@@ -1,6 +1,8 @@
 /**
- * @link: https://leetcode.cn/problems/min-cost-climbing-stairs/
- * @description: 数组的每个下标作为一个阶梯，第 i 个阶梯对应着一个非负数的体力花费值 cost[i]（下标从 0 开始）。
+ * @name: 使用最小花费爬楼梯
+ * @level: 简单
+ * @link: https://leetcode.cn/problems/min-cost-climbing-stairs
+ * @description: 给你一个整数数组 cost ，其中 cost[i] 是从楼梯第 i 个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。
  * @param {number[]} cost
  * @return {number}
  */

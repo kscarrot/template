@@ -1,6 +1,8 @@
 /**
- * @link: https://leetcode.cn/problems/count-number-of-texts/
- * @description: 给你一个字符串 pressedKeys，表示只包含数字 '2' 到 '9' 的字符串，返回按键的 总 可能组合数。
+ * @name: 统计打字方案数
+ * @level: 中等
+ * @link: https://leetcode.cn/problems/count-number-of-texts
+ * @description: Alice 在给 Bob 用手机打字。数字到字母的 映射 如下（与电话按键相同）。注意 1 不对应任何字母。
  * @param {string} pressedKeys
  * @return {number}
  */

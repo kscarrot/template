@@ -1,8 +1,10 @@
 import type { ListNode } from './leetcode-types'
 
 /**
- * @link: https://leetcode.cn/problems/delete-the-middle-node-of-a-linked-list/
- * @description: 给你一个链表的头节点 head 。删除 链表的 中间节点 ，并返回修改后的链表的头节点 head
+ * @name: 删除链表的中间节点
+ * @level: 中等
+ * @link: https://leetcode.cn/problems/delete-the-middle-node-of-a-linked-list
+ * @description: 给你一个下标从 0 开始的链表，删除链表的中间节点，并返回删除后的链表的头节点。
  * @param {ListNode} head
  * @return {ListNode}
  */

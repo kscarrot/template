@@ -1,3 +1,10 @@
+/**
+ * @name: 扁平化嵌套列表迭代器
+ * @level: 中等
+ * @link: https://leetcode.cn/problems/flatten-nested-list-iterator
+ * @description: 给你一个嵌套的整数列表 nestedList 。请你设计一个迭代器，使其能够遍历这个列表中的所有整数。
+ */
+
 type NestedInteger = {
   isInteger: () => boolean
   getInteger: () => number

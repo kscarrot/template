@@ -1,6 +1,8 @@
 /**
- * @link: https://leetcode.cn/problems/implement-stack-using-queues/
- * @description: 用队列实现栈
+ * @name: 用队列实现栈
+ * @level: 简单
+ * @link: https://leetcode.cn/problems/implement-stack-using-queues
+ * @description: 请你仅使用两个队列实现后入先出（LIFO）的栈结构，并支持普通栈的全部四种操作。
  */
 class MyStack {
   private queue: number[] = []

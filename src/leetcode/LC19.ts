@@ -1,6 +1,8 @@
 import { ListNode } from './utils'
 
 /**
+ * @name: 删除链表的倒数第 N 个结点
+ * @level: 中等
  * @link: https://leetcode.cn/problems/remove-nth-node-from-end-of-list
  * @description: 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
  * @param {ListNode | null} head

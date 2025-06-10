@@ -1,8 +1,10 @@
 import type { ListNode } from './leetcode-types'
 
 /**
- * @link: https://leetcode.cn/problems/middle-of-the-linked-list/
- * @description: 给你单链表的头结点 head ，请你找出并返回链表的中间结点。
+ * @name: 链表的中间结点
+ * @level: 简单
+ * @link: https://leetcode.cn/problems/middle-of-the-linked-list
+ * @description: 给定一个头结点为 head 的非空单链表，返回链表的中间结点。
  * 如果有两个中间结点，则返回第二个中间结点。
  * @param {ListNode} head
  * @return {ListNode}

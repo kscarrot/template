@@ -1,6 +1,8 @@
 /**
- * @link: https://leetcode.cn/problems/daily-temperatures/
- * @description: 给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指在第 i 天之后，才会有更高的温度。如果气温在这之后都不会升高，请在该位置用 0 来代替。
+ * @name: 每日温度
+ * @level: 中等
+ * @link: https://leetcode.cn/problems/daily-temperatures
+ * @description: 请根据每日 气温 列表，重新生成一个列表，要求其对应位置的输出为：需要再等待多少天才能等到一个更高的气温。
  * @param {number[]} temperatures
  * @return {number[]}
  */

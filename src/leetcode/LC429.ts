@@ -1,8 +1,10 @@
 import { NTreeNode } from './leetcode-types'
 
 /**
- * @link: https://leetcode.cn/problems/n-ary-tree-level-order-traversal/
- * @description: 给定一个 N 叉树，返回其节点值的 层序 遍历。 （即逐层地，从左到右访问所有节点）。
+ * @name: N 叉树的层序遍历
+ * @level: 中等
+ * @link: https://leetcode.cn/problems/n-ary-tree-level-order-traversal
+ * @description: 给定一个 N 叉树，返回其节点值的层序遍历。（即从左到右，逐层遍历）。
  * @param {NTreeNode} root
  * @return {number[][]}
  */

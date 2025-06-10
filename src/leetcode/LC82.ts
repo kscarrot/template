@@ -1,8 +1,10 @@
 import { ListNode } from './utils'
 
 /**
+ * @name: 删除排序链表中的重复元素 II
+ * @level: 中等
  * @link: https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii
- * @description: 给定一个已排序的链表的头 head ， 删除所有有重复数字的节点，只保留原始链表中 没有重复出现 的数字。
+ * @description: 给定一个已排序的链表的头 head ，删除原始链表中所有重复数字的节点，只留下不同的数字。
  * @param {ListNode | null} head
  * @return {ListNode | null}
  */

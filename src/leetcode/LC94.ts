@@ -1,7 +1,9 @@
 import { TreeNode } from './leetcode-types'
 
 /**
- * @link: https://leetcode.cn/problems/binary-tree-inorder-traversal/
+ * @name: 二叉树的中序遍历
+ * @level: 简单
+ * @link: https://leetcode.cn/problems/binary-tree-inorder-traversal
  * @description: 给定一个二叉树的根节点 root ，返回 它的 中序 遍历 。
  * @param {TreeNode} root
  * @return {number[]}

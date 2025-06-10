@@ -1,5 +1,7 @@
 /**
- * @link: https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/
+ * @name: 删除字符串中的所有相邻重复项
+ * @level: 简单
+ * @link: https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string
  * @description: 给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。
  * @param {string} s
  * @return {string}
