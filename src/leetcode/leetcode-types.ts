@@ -5,10 +5,16 @@ interface ListNode {
 }
 
 // 二叉树节点
-interface TreeNode {
+class TreeNode {
   val: number
   left: TreeNode | null
   right: TreeNode | null
+
+  constructor(val: number = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+    this.val = val
+    this.left = left
+    this.right = right
+  }
 }
 
 // N 叉树节点
@@ -50,4 +56,6 @@ interface Problem {
 }
 
 // 导出所有类型
-export type { ListNode, TreeNode, NTreeNode, GraphNode, InputType, OutputType, TestCase, Solution, Problem }
+export type { ListNode, NTreeNode, GraphNode, InputType, OutputType, TestCase, Solution, Problem }
+
+export { TreeNode }

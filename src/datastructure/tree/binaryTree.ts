@@ -1,19 +1,25 @@
 import { BinaryTreeNode } from 'src/datastructure/node'
 
 export function valuesToBinaryTree<T>(values: Array<T | null>): BinaryTreeNode<T> | null {
+  // 如果数组为空，则返回 null
   if (values.length === 0) return null
+  // 创建根节点
   const root = new BinaryTreeNode(values[0] as T)
+  // 创建二叉树
   const binaryTreeBuilder = (root: BinaryTreeNode<T>, index: number, values: Array<T | null>) => {
     const leftIndex = 2 * index + 1
     const rightIndex = 2 * index + 2
+    // 如果左子节点存在，则创建左子节点
     if (leftIndex < values.length && values[leftIndex] !== null) {
       root.left = binaryTreeBuilder(new BinaryTreeNode(values[leftIndex] as T, root), leftIndex, values)
     }
+    // 如果右子节点存在，则创建右子节点
     if (rightIndex < values.length && values[rightIndex] !== null) {
       root.right = binaryTreeBuilder(new BinaryTreeNode(values[rightIndex] as T, root), rightIndex, values)
     }
     return root
   }
+  // 构建二叉树
   return binaryTreeBuilder(root, 0, values)
 }
 
