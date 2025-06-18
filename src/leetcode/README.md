@@ -6,6 +6,7 @@
 | 21   | 合并两个有序链表               | 简单 | [链接](https://leetcode.cn/problems/merge-two-sorted-lists)                                     | [代码](./LC21.ts)   |
 | 23   | 合并 K 个升序链表              | 困难 | [链接](https://leetcode.cn/problems/merge-k-sorted-lists)                                       | [代码](./LC23.ts)   |
 | 70   | 爬楼梯                         | 简单 | [链接](https://leetcode.cn/problems/climbing-stairs)                                            | [代码](./LC70.ts)   |
+| 75   | 颜色分类                       | 中等 | [链接](https://leetcode.cn/problems/sort-colors)                                                | [代码](./LC75.ts)   |
 | 82   | 删除排序链表中的重复元素 II    | 中等 | [链接](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii)                      | [代码](./LC82.ts)   |
 | 83   | 删除排序链表中的重复元素       | 简单 | [链接](https://leetcode.cn/problems/remove-duplicates-from-sorted-list)                         | [代码](./LC83.ts)   |
 | 94   | 二叉树的中序遍历               | 简单 | [链接](https://leetcode.cn/problems/binary-tree-inorder-traversal)                              | [代码](./LC94.ts)   |
@@ -20,9 +21,11 @@
 | 142  | 环形链表 II                    | 中等 | [链接](https://leetcode.cn/problems/linked-list-cycle-ii)                                       | [代码](./LC142.ts)  |
 | 144  | 二叉树的前序遍历               | 简单 | [链接](https://leetcode.cn/problems/binary-tree-preorder-traversal)                             | [代码](./LC144.ts)  |
 | 145  | 二叉树的后序遍历               | 简单 | [链接](https://leetcode.cn/problems/binary-tree-postorder-traversal)                            | [代码](./LC145.ts)  |
+| 146  | LRU 缓存                       | 中等 | [链接](https://leetcode.cn/problems/lru-cache)                                                  | [代码](./LC146.ts)  |
 | 147  | 对链表进行插入排序             | 中等 | [链接](https://leetcode.cn/problems/insertion-sort-list)                                        | [代码](./LC147.ts)  |
 | 155  | 最小栈                         | 中等 | [链接](https://leetcode.cn/problems/min-stack)                                                  | [代码](./LC155.ts)  |
 | 198  | 打家劫舍                       | 中等 | [链接](https://leetcode.cn/problems/house-robber)                                               | [代码](./LC198.ts)  |
+| 199  | 二叉树的右视图                 | 中等 | [链接](https://leetcode.cn/problems/binary-tree-right-side-view)                                | [代码](./LC199.ts)  |
 | 203  | 移除链表元素                   | 简单 | [链接](https://leetcode.cn/problems/remove-linked-list-elements)                                | [代码](./LC203.ts)  |
 | 222  | 完全二叉树的节点个数           | 简单 | [链接](https://leetcode.cn/problems/count-complete-tree-nodes)                                  | [代码](./LC222.ts)  |
 | 225  | 用队列实现栈                   | 简单 | [链接](https://leetcode.cn/problems/implement-stack-using-queues)                               | [代码](./LC225.ts)  |
