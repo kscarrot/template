@@ -1,4 +1,4 @@
-import { cacheFn } from './utils'
+import { memo } from './utils'
 /**
  * @name: 打家劫舍
  * @level: 中等
@@ -8,12 +8,16 @@ import { cacheFn } from './utils'
  * @return {number}
  */
 function rob(nums: number[]): number {
-  const dfs = cacheFn(
-    (index: number): number => {
-      if (index < 0) return 0
-      return Math.max(dfs(index - 1), dfs(index - 2) + nums[index])
+  const dfs = memo(
+    // 递推式
+    (index: number): number => Math.max(dfs(index - 1), dfs(index - 2) + nums[index]),
+    // 初始值
+    {
+      '-2': 0,
+      '-1': 0,
     },
-    (index: number) => index,
+    // 缓存key
+    (index: number) => index.toString(),
   )
   return dfs(nums.length - 1)
 }

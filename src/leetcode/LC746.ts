@@ -1,3 +1,4 @@
+import { memo } from './utils'
 /**
  * @name: 使用最小花费爬楼梯
  * @level: 简单
@@ -8,6 +9,27 @@
  */
 function minCostClimbingStairs(cost: number[]): number {
   const n = cost.length
+  const dfs = memo(
+    (index: number): number => {
+      // 从 index-1 爬一步花费 cost[index-1] 到 index
+      const costFromOneStep = dfs(index - 1) + cost[index - 1]
+      // 从 index-2 爬两步花费 cost[index-2] 到 index
+      const costFromTwoStep = dfs(index - 2) + cost[index - 2]
+      // 选择花费最小的
+      return Math.min(costFromOneStep, costFromTwoStep)
+    },
+    {
+      0: 0,
+      1: 0,
+    },
+    (index: number) => index.toString(),
+  )
+
+  return dfs(n)
+}
+
+function minCostClimbingStairsDp(cost: number[]): number {
+  const n = cost.length
   if (n <= 1) return 0
   const dp = Array(n + 1).fill(0)
   for (let i = 2; i <= n; i++) {
@@ -15,3 +37,5 @@ function minCostClimbingStairs(cost: number[]): number {
   }
   return dp[n]
 }
+
+export { minCostClimbingStairs, minCostClimbingStairsDp }

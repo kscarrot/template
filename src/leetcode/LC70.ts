@@ -1,4 +1,4 @@
-import { cacheFn } from './utils'
+import { memo } from './utils'
 /**
  * @name: 爬楼梯
  * @level: 简单
@@ -8,17 +8,16 @@ import { cacheFn } from './utils'
  * @return {number}
  */
 function climbStairs(n: number): number {
-  const dfs = cacheFn(
-    (n: number): number => {
-      return dfs(n - 1) + dfs(n - 2)
-    },
-    // 缓存Key是字符串
-    (n: number) => n.toString(),
+  const dfs = memo(
+    // 递推式
+    (n: number): number => dfs(n - 1) + dfs(n - 2),
     // 初始值
     {
       0: 1,
       1: 1,
     },
+    // 缓存key
+    (n: number) => n.toString(),
   )
   return dfs(n)
 }
