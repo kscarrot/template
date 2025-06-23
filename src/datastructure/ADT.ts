@@ -64,3 +64,33 @@ export interface HeapADT<T> {
   /** 查看堆顶元素但不删除 */
   peek: () => T
 }
+
+export interface BinaryTreeADT<T> {
+  /** 二叉树的大小 */
+  size: number
+  /** 二叉树是否为空 */
+  isEmpty: boolean
+  /** 打印二叉树 */
+  print: (options?: { showNull: boolean }) => void
+  /** 遍历二叉树 */
+  [Symbol.iterator]: () => Generator<T>
+}
+
+export interface BinarySearchTreeADT<T> extends BinaryTreeADT<T> {
+  /** 从二叉搜索树中插入一个元素 */
+  insert: (value: T) => this
+  /** 从二叉搜索树中删除一个元素 */
+  delete: (value: T) => this
+  /** 查找一个元素在二叉搜索树中的最小值 */
+  getMin: () => T | null
+  /** 查找一个元素在二叉搜索树中的最大值 */
+  getMax: () => T | null
+  /** 查找一个元素在二叉搜索树中的顺序排名 */
+  getRank: (value: T) => number
+  /** 查找一个元素在二叉搜索树中的前驱 */
+  getPrev: (value: T) => T | null
+  /** 查找一个元素在二叉搜索树中的后继 */
+  getNext: (value: T) => T | null
+  /** 查找二叉搜索树中的第k大的元素 */
+  getKth: (k: number) => T | null
+}

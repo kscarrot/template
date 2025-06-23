@@ -1,5 +1,11 @@
 import { BinaryTreeNode } from 'src/datastructure/node'
+import { BinaryTreeADT } from 'src/datastructure/ADT'
 
+/**
+ * @description 将数组转换为二叉树
+ * @param values 数组
+ * @returns 二叉树的根节点
+ */
 export function valuesToBinaryTree<T>(values: Array<T | null>): BinaryTreeNode<T> | null {
   // 如果数组为空，则返回 null
   if (values.length === 0) return null
@@ -32,6 +38,12 @@ export const TraverseType = {
   POST_ORDER: 'postOrder',
 } as const
 
+/**
+ * @description 遍历二叉树
+ * @param root 二叉树的根节点
+ * @param type 遍历类型
+ * @returns 遍历结果
+ */
 export function* traverse<T>(
   root: BinaryTreeNode<T> | null,
   type: ValueOf<typeof TraverseType> = TraverseType.IN_ORDER,
@@ -48,31 +60,24 @@ export function* traverse<T>(
   yield* order(root)
 }
 
-interface BinaryTreeADT<T> {
-  size: number
-  isEmpty: boolean
-  print: (options?: { showNull: boolean }) => void
-  [Symbol.iterator]: () => Generator<T>
-}
-
+/**
+ * @description 二叉树
+ * @template T 二叉树的节点类型
+ */
 export class BinaryTree<T> implements BinaryTreeADT<T> {
-  #root: BinaryTreeNode<T> | null = null
-  #size: number = 0
+  root: BinaryTreeNode<T> | null = null
+  size: number = 0
 
   constructor(values: Array<T | null>) {
-    this.#root = valuesToBinaryTree(values)
-    this.#size = values.filter(Boolean).length
-  }
-
-  get size() {
-    return this.#size
+    this.root = valuesToBinaryTree(values)
+    this.size = values.filter(Boolean).length
   }
 
   get isEmpty() {
-    return this.#size === 0
+    return this.size === 0
   }
 
-  [Symbol.iterator] = () => traverse(this.#root)
+  [Symbol.iterator] = () => traverse(this.root)
 
   print(options = { showNull: false }) {
     const { showNull } = options
@@ -110,6 +115,9 @@ export class BinaryTree<T> implements BinaryTreeADT<T> {
       }
     }
 
-    visualizeNode(this.#root)
+    visualizeNode(this.root)
   }
 }
+
+const tree = new BinaryTree([1, 2, 3, 4, 5, 6, null])
+tree.print()
