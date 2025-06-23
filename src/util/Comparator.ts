@@ -7,7 +7,7 @@ export class Comparator<T> {
     }
   }
 
-  private compare(a: T, b: T) {
+  compare(a: T, b: T) {
     if (a === b) {
       return 0
     }

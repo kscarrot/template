@@ -178,5 +178,23 @@ describe('二叉树', () => {
 
       expect(consoleSpy).toHaveBeenCalledWith('(空树)')
     })
+
+    it('测试showNull为true且isLast为false的情况', () => {
+      // 构造一个树：根节点有左右两个子节点，右子节点为null，左子节点有值
+      // [1, 2, null, 4, 5] 表示：
+      //       1
+      //      / \
+      //     2   null
+      //    / \
+      //   4   5
+      const tree = new BinaryTree([1, 2, null, 4, 5])
+      tree.print({ showNull: true })
+
+      expect(consoleSpy).toHaveBeenCalledWith('└─1')
+      expect(consoleSpy).toHaveBeenCalledWith('   ├─null') // 右子节点，isLast=false
+      expect(consoleSpy).toHaveBeenCalledWith('   └─2') // 左子节点，isLast=true
+      expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
+      expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+    })
   })
 })
