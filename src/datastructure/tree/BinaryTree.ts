@@ -118,6 +118,3 @@ export class BinaryTree<T> implements BinaryTreeADT<T> {
     visualizeNode(this.root)
   }
 }
-
-const tree = new BinaryTree([1, 2, 3, 4, 5, 6, null])
-tree.print()

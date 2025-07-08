@@ -50,6 +50,10 @@ describe('二叉树', () => {
     const binaryTree = new BinaryTree([1, 2, 3, 4, 5, 6, 7, 8, 9])
     // 默认中序遍历
     expect([...binaryTree]).toStrictEqual([8, 4, 9, 2, 5, 1, 6, 3, 7])
+
+    const preOrder = Array.from(traverse(binaryTree.root, TraverseType.PRE_ORDER))
+    expect(preOrder).toStrictEqual([1, 2, 4, 8, 9, 5, 3, 6, 7])
+
     expect(binaryTree.size).toBe(9)
     expect(binaryTree.isEmpty).toBe(false)
   })

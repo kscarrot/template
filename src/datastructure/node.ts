@@ -114,17 +114,31 @@ class BinaryTreeNode<T> {
 /**
  * @description: 多叉树节点
  */
-class MultiTreeNode<T> {
+class TreeNode<T> {
   value: T
-  parent: MultiTreeNode<T> | null = null
-  children: MultiTreeNode<T>[] = []
-  constructor(value: T, parent?: MultiTreeNode<T>) {
+  parent: TreeNode<T> | null = null
+  children: TreeNode<T>[] = []
+  constructor(value: T, parent: TreeNode<T> | null) {
     this.value = value
     if (parent) this.parent = parent
   }
 
   get isLeaf() {
     return this.children.length === 0
+  }
+}
+
+/**
+ * @description: Fiber节点
+ */
+class FiberNode<T> {
+  value: T
+  parent: FiberNode<T> | null = null
+  sibling: FiberNode<T> | null = null
+  child: FiberNode<T> | null = null
+  constructor(value: T, parent: FiberNode<T> | null) {
+    this.value = value
+    if (parent) this.parent = parent
   }
 }
 
@@ -139,5 +153,6 @@ export {
   DoubleLinkNode,
   CircularLinkNode,
   BinaryTreeNode,
-  MultiTreeNode,
+  TreeNode,
+  FiberNode,
 }
