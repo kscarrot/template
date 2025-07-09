@@ -20,8 +20,10 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^24.0.0",
+    "cytoscape": "^3.32.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.6.3"
   },
   "devDependencies": {
     "@swc/cli": "^0.6.0",

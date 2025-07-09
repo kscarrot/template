@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { App } from 'src/visual/App'
+import App from 'src/visual/App'
 
 const container = document.getElementById('root')
 if (!container) throw new Error('Failed to find the root element')

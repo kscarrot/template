@@ -1,4 +1,10 @@
-import { valuesToBinaryTree, traverse, TraverseType, BinaryTree } from 'src/datastructure/tree/BinaryTree'
+import {
+  valuesToBinaryTree,
+  traverseBinaryTree,
+  traverseBinaryTreeNode,
+  TraverseType,
+  BinaryTree,
+} from 'src/datastructure/tree/BinaryTree'
 
 describe('二叉树', () => {
   it('二叉树的构建和遍历', () => {
@@ -18,15 +24,15 @@ describe('二叉树', () => {
     expect(root?.right?.left?.left?.isLeaf).toBe(true)
 
     // 前序遍历
-    const preOrder = Array.from(traverse(root, TraverseType.PRE_ORDER))
+    const preOrder = Array.from(traverseBinaryTree(root, TraverseType.PRE_ORDER))
     expect(preOrder).toStrictEqual([1, 2, 4, 5, 6, 7, 3, 8, 9])
 
     // 中序遍历
-    const inOrder = Array.from(traverse(root))
+    const inOrder = Array.from(traverseBinaryTree(root))
     expect(inOrder).toStrictEqual([4, 2, 6, 5, 7, 1, 9, 8, 3])
 
     // 后序遍历
-    const postOrder = Array.from(traverse(root, TraverseType.POST_ORDER))
+    const postOrder = Array.from(traverseBinaryTree(root, TraverseType.POST_ORDER))
     expect(postOrder).toStrictEqual([4, 6, 7, 5, 2, 9, 8, 3, 1])
   })
 
@@ -51,11 +57,16 @@ describe('二叉树', () => {
     // 默认中序遍历
     expect([...binaryTree]).toStrictEqual([8, 4, 9, 2, 5, 1, 6, 3, 7])
 
-    const preOrder = Array.from(traverse(binaryTree.root, TraverseType.PRE_ORDER))
+    const preOrder = Array.from(traverseBinaryTree(binaryTree.root, TraverseType.PRE_ORDER))
     expect(preOrder).toStrictEqual([1, 2, 4, 8, 9, 5, 3, 6, 7])
 
     expect(binaryTree.size).toBe(9)
     expect(binaryTree.isEmpty).toBe(false)
+
+    const nodeIterator = traverseBinaryTreeNode(binaryTree.root, TraverseType.PRE_ORDER)
+    expect(nodeIterator.next().value?.value).toBe(1)
+    const nodeIterator2 = traverseBinaryTreeNode(binaryTree.root)
+    expect(nodeIterator2.next().value?.value).toBe(8)
   })
 
   describe('打印验证', () => {

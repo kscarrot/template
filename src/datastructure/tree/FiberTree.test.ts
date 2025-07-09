@@ -1,4 +1,4 @@
-import { FiberTree } from 'src/datastructure/tree/FiberTree'
+import { FiberTree, traverseFiberTreeNode } from 'src/datastructure/tree/FiberTree'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 import { TreeNode } from 'src/datastructure/node'
 
@@ -13,13 +13,19 @@ describe('FiberTree', () => {
     expect(fiberTreeOneElement.root?.value).toBe(1)
 
     const bt2 = new BinaryTree([1, 2, 3])
-    const fiberTreeTwoElements = new FiberTree(bt2)
-    expect([...fiberTreeTwoElements]).toStrictEqual([1, 2, 3])
+    const fiberTreeThreeElements = new FiberTree(bt2)
+    expect([...fiberTreeThreeElements]).toStrictEqual([1, 2, 3])
 
-    expect(fiberTreeTwoElements.root).toBeDefined()
-    expect(fiberTreeTwoElements.root?.value).toBe(1)
-    expect(fiberTreeTwoElements.root?.child?.value).toBe(2)
-    expect(fiberTreeTwoElements.root?.child?.parent?.sibling?.value).toBe(3)
+    const nodeIterator = traverseFiberTreeNode(fiberTreeThreeElements.root)
+    expect(nodeIterator.next().value.value).toBe(1)
+    expect(nodeIterator.next().value.value).toBe(2)
+    expect(nodeIterator.next().value.value).toBe(3)
+    expect(nodeIterator.next().done).toBe(true)
+
+    expect(fiberTreeThreeElements.root).toBeDefined()
+    expect(fiberTreeThreeElements.root?.value).toBe(1)
+    expect(fiberTreeThreeElements.root?.child?.value).toBe(2)
+    expect(fiberTreeThreeElements.root?.child?.parent?.sibling?.value).toBe(3)
   })
 
   test('从二叉树创建FiberTree并遍历', () => {

@@ -44,20 +44,29 @@ export const TraverseType = {
  * @param type 遍历类型
  * @returns 遍历结果
  */
-export function* traverse<T>(
+export function* traverseBinaryTreeNode<T>(
   root: BinaryTreeNode<T> | null,
   type: ValueOf<typeof TraverseType> = TraverseType.IN_ORDER,
 ) {
-  function* order(root: BinaryTreeNode<T> | null): Generator<T> {
+  function* order(root: BinaryTreeNode<T> | null): Generator<BinaryTreeNode<T>> {
     if (root) {
-      if (type === TraverseType.PRE_ORDER) yield root.value
+      if (type === TraverseType.PRE_ORDER) yield root
       yield* order(root.left)
-      if (type === TraverseType.IN_ORDER) yield root.value
+      if (type === TraverseType.IN_ORDER) yield root
       yield* order(root.right)
-      if (type === TraverseType.POST_ORDER) yield root.value
+      if (type === TraverseType.POST_ORDER) yield root
     }
   }
   yield* order(root)
+}
+
+export function* traverseBinaryTree<T>(
+  root: BinaryTreeNode<T> | null,
+  type: ValueOf<typeof TraverseType> = TraverseType.IN_ORDER,
+) {
+  for (const node of traverseBinaryTreeNode(root, type)) {
+    yield node.value
+  }
 }
 
 /**
@@ -77,7 +86,7 @@ export class BinaryTree<T> implements BinaryTreeADT<T> {
     return this.size === 0
   }
 
-  [Symbol.iterator] = () => traverse(this.root)
+  [Symbol.iterator] = () => traverseBinaryTree(this.root)
 
   print(options = { showNull: false }) {
     const { showNull } = options

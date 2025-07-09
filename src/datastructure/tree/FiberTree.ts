@@ -69,10 +69,15 @@ function buildFiberTreeFromTreeNode<T>(treeNode: TreeNode<T>, parentFiberNode: F
   return currentFiberNode
 }
 
-function* traverse<T>(fiberTree: FiberNode<T> | null): Generator<T> {
+/**
+ * @description 遍历Fiber树
+ * @param fiberTree 要遍历的Fiber树
+ * @returns 返回一个Generator，用于遍历Fiber树
+ */
+function* traverseFiberTreeNode<T>(fiberTree: FiberNode<T> | null): Generator<FiberNode<T>> {
   let current = fiberTree
   while (current) {
-    yield current.value
+    yield current
     if (current.child) {
       current = current.child
     } else if (current.sibling) {
@@ -83,7 +88,13 @@ function* traverse<T>(fiberTree: FiberNode<T> | null): Generator<T> {
   }
 }
 
-export class FiberTree<T> {
+function* traverseFiberTree<T>(fiberTree: FiberNode<T> | null): Generator<T> {
+  for (const node of traverseFiberTreeNode(fiberTree)) {
+    yield node.value
+  }
+}
+
+class FiberTree<T> {
   root: FiberNode<T> | null = null
 
   constructor(tree: BinaryTree<T> | TreeNode<T> | null) {
@@ -96,7 +107,9 @@ export class FiberTree<T> {
     }
   }
 
-  [Symbol.iterator]() {
-    return traverse(this.root)
+  [Symbol.iterator](): Iterator<T> {
+    return traverseFiberTree(this.root)
   }
 }
+
+export { traverseFiberTreeNode, FiberTree }
