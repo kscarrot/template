@@ -8,7 +8,7 @@ interface FiberTreeVisualizerProps {
 }
 
 type CyNode = { data: { id: string; label: string } }
-type CyEdge = { data: { source: string; target: string; edgeType: 'child' | 'sibling' | 'parent' } }
+type CyEdge = { data: { source: string; target: string; edgeType: 'child' | 'parent' | 'sibling' } }
 
 // traverseFiberTree 生成器
 function* traverseFiberTree<T>(fiberTree: FiberNode<T> | null): Generator<FiberNode<T>, void, unknown> {
@@ -25,6 +25,11 @@ function* traverseFiberTree<T>(fiberTree: FiberNode<T> | null): Generator<FiberN
   }
 }
 
+/**
+ * @description 将 FiberTree 转换为 Cytoscape.js 可视化数据
+ * @param root FiberTree 根节点
+ * @returns { nodes, edges }
+ */
 function fiberTreeToCytoscapeData(root: FiberNode<any> | null) {
   const nodes: CyNode[] = []
   const edges: CyEdge[] = []
@@ -63,11 +68,14 @@ function fiberTreeToCytoscapeData(root: FiberNode<any> | null) {
 }
 
 const edgeColors = {
-  parent: '#FF851B', // 橙色
   child: '#2ECC40', // 绿色
+  parent: '#FF851B', // 橙色
   sibling: '#0074D9', // 蓝色
 }
 
+/**
+ * @description FiberTree 可视化组件，画布自适应填满父容器并居中
+ */
 const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }) => {
   const cyRef = useRef<HTMLDivElement>(null)
   const cyInstance = useRef<cytoscape.Core | null>(null)
@@ -93,7 +101,7 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
             height: 40,
           },
         },
-        // child 边
+        // child
         {
           selector: 'edge.child',
           style: {
@@ -104,7 +112,7 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
             'curve-style': 'bezier',
           },
         },
-        // sibling 边
+        // sibling
         {
           selector: 'edge.sibling',
           style: {
@@ -116,7 +124,7 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
             'line-style': 'dashed',
           },
         },
-        // parent 边
+        // parent
         {
           selector: 'edge.parent',
           style: {

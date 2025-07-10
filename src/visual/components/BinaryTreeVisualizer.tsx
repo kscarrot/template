@@ -11,6 +11,11 @@ interface BinaryTreeVisualizerProps {
 type CyNode = { data: { id: string; label: string } }
 type CyEdge = { data: { source: string; target: string; edgeType: 'child' | 'parent' } }
 
+/**
+ * @description 将二叉树转换为 Cytoscape.js 可视化数据
+ * @param root 二叉树根节点
+ * @returns { nodes, edges }
+ */
 function binaryTreeToCytoscapeData(root: BinaryTreeNode<any> | null) {
   const nodes: CyNode[] = []
   const edges: CyEdge[] = []
@@ -39,7 +44,6 @@ function binaryTreeToCytoscapeData(root: BinaryTreeNode<any> | null) {
     if (node.right) {
       const childId = nodeMap.get(node.right)!
       edges.push({ data: { source: nodeId, target: childId, edgeType: 'child' } })
-      // parent 边（子指向父）
       edges.push({ data: { source: childId, target: nodeId, edgeType: 'parent' } })
     }
   }
@@ -51,6 +55,9 @@ const edgeColors = {
   parent: '#FF851B', // 橙色
 }
 
+/**
+ * @description 二叉树可视化组件，画布自适应填满父容器并居中
+ */
 const BinaryTreeVisualizer: React.FC<BinaryTreeVisualizerProps> = ({ root, style }) => {
   const cyRef = useRef<HTMLDivElement>(null)
   const cyInstance = useRef<cytoscape.Core | null>(null)

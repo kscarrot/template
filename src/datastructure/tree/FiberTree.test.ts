@@ -25,7 +25,7 @@ describe('FiberTree', () => {
     expect(fiberTreeThreeElements.root).toBeDefined()
     expect(fiberTreeThreeElements.root?.value).toBe(1)
     expect(fiberTreeThreeElements.root?.child?.value).toBe(2)
-    expect(fiberTreeThreeElements.root?.child?.parent?.sibling?.value).toBe(3)
+    expect(fiberTreeThreeElements.root?.child?.sibling?.value).toBe(3)
   })
 
   test('从二叉树创建FiberTree并遍历', () => {
