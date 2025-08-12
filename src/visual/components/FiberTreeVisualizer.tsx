@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import cytoscape from 'cytoscape'
 import { FiberNode } from 'src/datastructure/node'
+import { traverseFiberTreeNode } from 'src/datastructure/tree/FiberTree'
 
 interface FiberTreeVisualizerProps {
   root: FiberNode<any> | null
@@ -9,21 +10,6 @@ interface FiberTreeVisualizerProps {
 
 type CyNode = { data: { id: string; label: string } }
 type CyEdge = { data: { source: string; target: string; edgeType: 'child' | 'parent' | 'sibling' } }
-
-// traverseFiberTree 生成器
-function* traverseFiberTree<T>(fiberTree: FiberNode<T> | null): Generator<FiberNode<T>, void, unknown> {
-  let current = fiberTree
-  while (current) {
-    yield current
-    if (current.child) {
-      current = current.child
-    } else if (current.sibling) {
-      current = current.sibling
-    } else {
-      current = current.parent?.sibling || null
-    }
-  }
-}
 
 /**
  * @description 将 FiberTree 转换为 Cytoscape.js 可视化数据
@@ -37,7 +23,7 @@ function fiberTreeToCytoscapeData(root: FiberNode<any> | null) {
   const nodeMap = new Map<FiberNode<any>, string>()
 
   // 第一次遍历：收集所有节点
-  for (const node of traverseFiberTree(root)) {
+  for (const node of traverseFiberTreeNode(root)) {
     let nodeId = nodeMap.get(node)
     if (!nodeId) {
       nodeId = String(node.value) + '_' + id++
@@ -46,7 +32,7 @@ function fiberTreeToCytoscapeData(root: FiberNode<any> | null) {
     }
   }
   // 第二次遍历：收集所有边
-  for (const node of traverseFiberTree(root)) {
+  for (const node of traverseFiberTreeNode(root)) {
     const nodeId = nodeMap.get(node)!
     // parent 边（箭头应从子指向父）
     if (node.parent) {
