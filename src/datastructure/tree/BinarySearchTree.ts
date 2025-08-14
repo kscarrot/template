@@ -2,15 +2,22 @@ import { BinarySearchTreeADT } from 'src/datastructure/ADT'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 import { Comparator } from 'src/util/Comparator'
 import type { compareFunction } from 'src/util/Comparator'
-import { BinaryTreeNode } from 'src/datastructure/node'
+import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 
 export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTreeADT<T> {
-  #comparator: Comparator<T>
+  comparator: Comparator<T>
 
-  constructor(comparator?: compareFunction<T>) {
+  constructor(values?: Array<T | null>, comparator?: compareFunction<T>) {
     /** 搜索树有顺序 不适用按索引的初始化 */
     super([])
-    this.#comparator = new Comparator(comparator)
+    this.comparator = new Comparator(comparator)
+    if (values) {
+      for (const value of values) {
+        if (value !== null) {
+          this.insert(value)
+        }
+      }
+    }
   }
 
   protected searchMinNode(currentNode: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
@@ -53,7 +60,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
     }
 
     /** 判断插入到左子树还是右子树 */
-    const child = this.#comparator.lt(value, parentNode.value) ? 'left' : 'right'
+    const child = this.comparator.lt(value, parentNode.value) ? 'left' : 'right'
 
     if (parentNode[child] === null) {
       /** 如果子节点为空，则直接插入 */
@@ -71,7 +78,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
     if (currentNode === null) {
       return null
     } else {
-      switch (this.#comparator.compare(value, currentNode.value)) {
+      switch (this.comparator.compare(value, currentNode.value)) {
         case 0:
           return currentNode
         case 1:
@@ -152,7 +159,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
     if (currentNode === null) {
       return 0
     }
-    if (this.#comparator.lt(value, currentNode.value)) {
+    if (this.comparator.lt(value, currentNode.value)) {
       return this.getNodeRank(currentNode.left, value)
     } else {
       const leftSize = this.getNodeSize(currentNode.left)

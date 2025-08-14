@@ -1,5 +1,5 @@
 import { ListADT } from 'src/datastructure/ADT'
-import { CircularLinkNode } from 'src/datastructure/node'
+import { CircularLinkNode } from 'src/datastructure/node/ListNode'
 
 export class CircularLinkList<T> implements ListADT<T> {
   size = 0

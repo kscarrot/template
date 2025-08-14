@@ -1,5 +1,5 @@
 import { LinkList } from 'src/datastructure/list/LinkList'
-import { isHeadNode, isTailNode } from 'src/datastructure/node'
+import { isHeadNode, isTailNode } from 'src/datastructure/node/ListNode'
 
 test('test Node traverse', () => {
   const l = new LinkList<number>()

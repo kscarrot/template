@@ -23,8 +23,7 @@ describe('二叉搜索树', () => {
   })
 
   it('插入验证', () => {
-    const bst = new BinarySearchTree()
-    bst.insert(10).insert(12).insert(3).insert(4).insert(13).insert(9).insert(11)
+    const bst = new BinarySearchTree([10, 12, 3, 4, 13, 9, 11])
     expect(bst.size).toBe(7)
     /**
      *             10

@@ -1,6 +1,6 @@
 import { ListADT } from 'src/datastructure/ADT'
-import type { DoubleLinkHeadNode, DoubleLinkTailNode, DoubleLinkNodes } from 'src/datastructure/node'
-import { isHeadNode, isTailNode, DoubleLinkNode, createDoubleLinkNodes } from 'src/datastructure/node'
+import type { DoubleLinkHeadNode, DoubleLinkTailNode, DoubleLinkNodes } from 'src/datastructure/node/ListNode'
+import { isHeadNode, isTailNode, DoubleLinkNode, createDoubleLinkNodes } from 'src/datastructure/node/ListNode'
 
 export class DoubleLinkList<T> implements ListADT<T> {
   size = 0

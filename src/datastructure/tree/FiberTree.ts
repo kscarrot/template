@@ -1,4 +1,4 @@
-import { TreeNode, BinaryTreeNode, FiberNode } from 'src/datastructure/node'
+import { TreeNode, BinaryTreeNode, FiberNode } from 'src/datastructure/node/TreeNode'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 
 /**

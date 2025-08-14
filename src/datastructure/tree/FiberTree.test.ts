@@ -1,6 +1,6 @@
 import { FiberTree, traverseFiberTreeNode } from 'src/datastructure/tree/FiberTree'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
-import { TreeNode } from 'src/datastructure/node'
+import { TreeNode } from 'src/datastructure/node/TreeNode'
 
 describe('FiberTree', () => {
   test('从二叉树创建FiberTree', () => {

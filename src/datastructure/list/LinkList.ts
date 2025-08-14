@@ -1,6 +1,6 @@
 import { ListADT } from 'src/datastructure/ADT'
-import type { LinkHeadNode, LinkTailNode, LinkNodes } from 'src/datastructure/node'
-import { isHeadNode, isTailNode, LinkNode, createLinkNodes } from 'src/datastructure/node'
+import type { LinkHeadNode, LinkTailNode, LinkNodes } from 'src/datastructure/node/ListNode'
+import { isHeadNode, isTailNode, LinkNode, createLinkNodes } from 'src/datastructure/node/ListNode'
 
 export class LinkList<T> implements ListADT<T> {
   size = 0

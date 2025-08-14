@@ -1,5 +1,5 @@
 import { DoubleLinkList } from 'src/datastructure/list/DoubleLinkList'
-import { isHeadNode, isTailNode } from 'src/datastructure/node'
+import { isHeadNode, isTailNode } from 'src/datastructure/node/ListNode'
 
 test('test DoubleLinkList normal add insert', () => {
   const l = new DoubleLinkList<number>()
