@@ -2,5 +2,19 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.fontLigatures": true,
   "editor.fontFamily": "Fira Code,Microsoft Yahei UI, monospace",
-  "terminal.integrated.fontFamily": "Menlo, Monaco, 'Courier New', monospace"
+  "terminal.integrated.fontFamily": "Menlo, Monaco, 'Courier New', monospace",
+  "macros": {
+    "commentAndDuplicate": [
+      // 1. 先将选中的代码复制到剪贴板
+      "editor.action.clipboardCopyAction",
+      // 2. 然后，直接将当前选中的原始代码注释掉
+      "editor.action.addCommentLine",
+      // 3. 取消选区，并将光标移动到当前行的末尾
+      "cursorDown",
+      // 4. 在当前行的下方插入一个新行，光标会自动移动下去
+      "editor.action.insertLineAfter",
+      // 5. 在新行上，粘贴剪贴板里的内容（即未被注释的原始代码）
+      "editor.action.clipboardPasteAction"
+    ]
+  }
 }
