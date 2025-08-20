@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import cytoscape from 'cytoscape'
-import { FiberNode } from 'src/datastructure/node'
+import { FiberNode } from 'src/datastructure/node/TreeNode'
 import { traverseFiberTreeNode } from 'src/datastructure/tree/FiberTree'
 
 interface FiberTreeVisualizerProps {

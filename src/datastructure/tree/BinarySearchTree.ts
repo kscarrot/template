@@ -7,16 +7,12 @@ import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTreeADT<T> {
   comparator: Comparator<T>
 
-  constructor(values?: Array<T | null>, comparator?: compareFunction<T>) {
+  constructor(values: Array<T> = [], comparator?: compareFunction<T>) {
     /** 搜索树有顺序 不适用按索引的初始化 */
     super([])
     this.comparator = new Comparator(comparator)
-    if (values) {
-      for (const value of values) {
-        if (value !== null) {
-          this.insert(value)
-        }
-      }
+    for (const value of values) {
+      this.insert(value)
     }
   }
 
@@ -64,7 +60,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
 
     if (parentNode[child] === null) {
       /** 如果子节点为空，则直接插入 */
-      parentNode[child] = new BinaryTreeNode(value, parentNode)
+      parentNode[child] = new BinaryTreeNode(value, { parent: parentNode })
       this.size++
     } else {
       /** 如果子节点不为空，则递归插入 */

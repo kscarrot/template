@@ -17,11 +17,11 @@ export function valuesToBinaryTree<T>(values: Array<T | null>): BinaryTreeNode<T
     const rightIndex = 2 * index + 2
     // 如果左子节点存在，则创建左子节点
     if (leftIndex < values.length && values[leftIndex] !== null) {
-      root.left = binaryTreeBuilder(new BinaryTreeNode(values[leftIndex] as T, root), leftIndex, values)
+      root.left = binaryTreeBuilder(new BinaryTreeNode(values[leftIndex] as T, { parent: root }), leftIndex, values)
     }
     // 如果右子节点存在，则创建右子节点
     if (rightIndex < values.length && values[rightIndex] !== null) {
-      root.right = binaryTreeBuilder(new BinaryTreeNode(values[rightIndex] as T, root), rightIndex, values)
+      root.right = binaryTreeBuilder(new BinaryTreeNode(values[rightIndex] as T, { parent: root }), rightIndex, values)
     }
     return root
   }

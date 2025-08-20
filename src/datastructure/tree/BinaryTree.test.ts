@@ -68,148 +68,148 @@ describe('二叉树', () => {
     const nodeIterator2 = traverseBinaryTreeNode(binaryTree.root)
     expect(nodeIterator2.next().value?.value).toBe(8)
   })
+})
 
-  describe('打印验证', () => {
-    let consoleSpy: jest.SpyInstance
+describe('打印验证', () => {
+  let consoleSpy: jest.SpyInstance
 
-    beforeEach(() => {
-      consoleSpy = jest.spyOn(console, 'log').mockImplementation()
-    })
+  beforeEach(() => {
+    consoleSpy = jest.spyOn(console, 'log').mockImplementation()
+  })
 
-    afterEach(() => {
-      consoleSpy.mockRestore()
-    })
+  afterEach(() => {
+    consoleSpy.mockRestore()
+  })
 
-    it('空树打印', () => {
-      const emptyTree = new BinaryTree([])
-      emptyTree.print()
+  it('空树打印', () => {
+    const emptyTree = new BinaryTree([])
+    emptyTree.print()
 
-      expect(consoleSpy).toHaveBeenCalledWith('(空树)')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('(空树)')
+  })
 
-    it('普通二叉树打印', () => {
-      const tree = new BinaryTree([1, 2, 3, 4, 5, null, 7])
-      tree.print()
+  it('普通二叉树打印', () => {
+    const tree = new BinaryTree([1, 2, 3, 4, 5, null, 7])
+    tree.print()
 
-      expect(consoleSpy).toHaveBeenCalledWith('└─1')
-      expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  └─7')
-      expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-      expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-      expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('└─1')
+    expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  └─7')
+    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
+    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
+    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+  })
 
-    it('打印包含空节点的二叉树', () => {
-      const tree = new BinaryTree([1, 2, 3, 4, 5, null, 7])
-      tree.print({ showNull: true })
+  it('打印包含空节点的二叉树', () => {
+    const tree = new BinaryTree([1, 2, 3, 4, 5, null, 7])
+    tree.print({ showNull: true })
 
-      expect(consoleSpy).toHaveBeenCalledWith('└─1')
-      expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  └─7')
-      expect(consoleSpy).toHaveBeenCalledWith('   │     └─null')
-      expect(consoleSpy).toHaveBeenCalledWith('   │     └─null')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  └─null')
-      expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-      expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-      expect(consoleSpy).toHaveBeenCalledWith('      │  └─null')
-      expect(consoleSpy).toHaveBeenCalledWith('      │  └─null')
-      expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-      expect(consoleSpy).toHaveBeenCalledWith('         └─null')
-      expect(consoleSpy).toHaveBeenCalledWith('         └─null')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('└─1')
+    expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  └─7')
+    expect(consoleSpy).toHaveBeenCalledWith('   │     └─null')
+    expect(consoleSpy).toHaveBeenCalledWith('   │     └─null')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  └─null')
+    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
+    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
+    expect(consoleSpy).toHaveBeenCalledWith('      │  └─null')
+    expect(consoleSpy).toHaveBeenCalledWith('      │  └─null')
+    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+    expect(consoleSpy).toHaveBeenCalledWith('         └─null')
+    expect(consoleSpy).toHaveBeenCalledWith('         └─null')
+  })
 
-    it('打印平衡二叉树', () => {
-      const tree = new BinaryTree([1, 2, 3, 4, 5, 6, 7])
-      tree.print()
+  it('打印平衡二叉树', () => {
+    const tree = new BinaryTree([1, 2, 3, 4, 5, 6, 7])
+    tree.print()
 
-      expect(consoleSpy).toHaveBeenCalledWith('└─1')
-      expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  ├─7')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  └─6')
-      expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-      expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-      expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('└─1')
+    expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  ├─7')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  └─6')
+    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
+    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
+    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+  })
 
-    it('打印左偏树', () => {
-      const tree = new BinaryTree([1, 2, null, 4, 5])
-      tree.print()
+  it('打印左偏树', () => {
+    const tree = new BinaryTree([1, 2, null, 4, 5])
+    tree.print()
 
-      expect(consoleSpy).toHaveBeenCalledWith('└─1')
-      expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-      expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-      expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('└─1')
+    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
+    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
+    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+  })
 
-    it('打印右偏树', () => {
-      const tree = new BinaryTree([1, null, 3, null, null, 6, 7])
-      tree.print()
+  it('打印右偏树', () => {
+    const tree = new BinaryTree([1, null, 3, null, null, 6, 7])
+    tree.print()
 
-      expect(consoleSpy).toHaveBeenCalledWith('└─1')
-      expect(consoleSpy).toHaveBeenCalledWith('   └─3')
-      expect(consoleSpy).toHaveBeenCalledWith('      ├─7')
-      expect(consoleSpy).toHaveBeenCalledWith('      └─6')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('└─1')
+    expect(consoleSpy).toHaveBeenCalledWith('   └─3')
+    expect(consoleSpy).toHaveBeenCalledWith('      ├─7')
+    expect(consoleSpy).toHaveBeenCalledWith('      └─6')
+  })
 
-    it('打印单节点树', () => {
-      const tree = new BinaryTree([42])
-      tree.print()
+  it('打印单节点树', () => {
+    const tree = new BinaryTree([42])
+    tree.print()
 
-      expect(consoleSpy).toHaveBeenCalledWith('└─42')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('└─42')
+  })
 
-    it('打印大型二叉树', () => {
-      const tree = new BinaryTree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
-      tree.print()
+  it('打印大型二叉树', () => {
+    const tree = new BinaryTree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+    tree.print()
 
-      expect(consoleSpy).toHaveBeenCalledWith('└─1')
-      expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  ├─7')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  │  ├─15')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  │  └─14')
-      expect(consoleSpy).toHaveBeenCalledWith('   │  └─6')
-      expect(consoleSpy).toHaveBeenCalledWith('   │     ├─13')
-      expect(consoleSpy).toHaveBeenCalledWith('   │     └─12')
-      expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-      expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-      expect(consoleSpy).toHaveBeenCalledWith('      │  ├─11')
-      expect(consoleSpy).toHaveBeenCalledWith('      │  └─10')
-      expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-      expect(consoleSpy).toHaveBeenCalledWith('         ├─9')
-      expect(consoleSpy).toHaveBeenCalledWith('         └─8')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('└─1')
+    expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  ├─7')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  │  ├─15')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  │  └─14')
+    expect(consoleSpy).toHaveBeenCalledWith('   │  └─6')
+    expect(consoleSpy).toHaveBeenCalledWith('   │     ├─13')
+    expect(consoleSpy).toHaveBeenCalledWith('   │     └─12')
+    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
+    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
+    expect(consoleSpy).toHaveBeenCalledWith('      │  ├─11')
+    expect(consoleSpy).toHaveBeenCalledWith('      │  └─10')
+    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+    expect(consoleSpy).toHaveBeenCalledWith('         ├─9')
+    expect(consoleSpy).toHaveBeenCalledWith('         └─8')
+  })
 
-    it('使用默认选项', () => {
-      const tree = new BinaryTree([1, 2, 3])
-      tree.print()
+  it('使用默认选项', () => {
+    const tree = new BinaryTree([1, 2, 3])
+    tree.print()
 
-      // 应该不显示null节点（默认showNull: false）
-      expect(consoleSpy).not.toHaveBeenCalledWith(expect.stringContaining('null'))
-    })
+    // 应该不显示null节点（默认showNull: false）
+    expect(consoleSpy).not.toHaveBeenCalledWith(expect.stringContaining('null'))
+  })
 
-    it('处理只有空值的树', () => {
-      const tree = new BinaryTree([null])
-      tree.print()
+  it('处理只有空值的树', () => {
+    const tree = new BinaryTree([null])
+    tree.print()
 
-      expect(consoleSpy).toHaveBeenCalledWith('(空树)')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('(空树)')
+  })
 
-    it('测试showNull为true且isLast为false的情况', () => {
-      // 构造一个树：根节点有左右两个子节点，右子节点为null，左子节点有值
-      // [1, 2, null, 4, 5] 表示：
-      //       1
-      //      / \
-      //     2   null
-      //    / \
-      //   4   5
-      const tree = new BinaryTree([1, 2, null, 4, 5])
-      tree.print({ showNull: true })
+  it('测试showNull为true且isLast为false的情况', () => {
+    // 构造一个树：根节点有左右两个子节点，右子节点为null，左子节点有值
+    // [1, 2, null, 4, 5] 表示：
+    //       1
+    //      / \
+    //     2   null
+    //    / \
+    //   4   5
+    const tree = new BinaryTree([1, 2, null, 4, 5])
+    tree.print({ showNull: true })
 
-      expect(consoleSpy).toHaveBeenCalledWith('└─1')
-      expect(consoleSpy).toHaveBeenCalledWith('   ├─null') // 右子节点，isLast=false
-      expect(consoleSpy).toHaveBeenCalledWith('   └─2') // 左子节点，isLast=true
-      expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-      expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-    })
+    expect(consoleSpy).toHaveBeenCalledWith('└─1')
+    expect(consoleSpy).toHaveBeenCalledWith('   ├─null') // 右子节点，isLast=false
+    expect(consoleSpy).toHaveBeenCalledWith('   └─2') // 左子节点，isLast=true
+    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
+    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
   })
 })

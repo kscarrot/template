@@ -9,6 +9,7 @@
     "prepare": "husky",
     "lint:check": "prettier . --check",
     "lint": "prettier . --write",
+    "tc": "tsc --noEmit",
     "build": "rm -rf dist && swc ./src -d dist --config-file .buildswcrc",
     "build-view": "vite build",
     "dev": "vite",

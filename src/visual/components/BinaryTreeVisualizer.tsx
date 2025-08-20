@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import cytoscape from 'cytoscape'
-import { BinaryTreeNode } from 'src/datastructure/node'
+import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import { traverseBinaryTreeNode } from 'src/datastructure/tree/BinaryTree'
 
 interface BinaryTreeVisualizerProps {
