@@ -14,6 +14,7 @@
 - [二叉树](./src/datastructure/tree/binaryTree.ts)
 - [二叉搜索树](./src/datastructure/tree/BinarySearchTree.ts)
 - [Fiber树](./src/datastructure/tree/FiberTree.ts)
+- [Splay树](./src/datastructure/tree/SplayTree.ts)
 
 ## 习题
 

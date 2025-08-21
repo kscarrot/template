@@ -4,13 +4,16 @@ import BinaryTreeVisualizer from './components/BinaryTreeVisualizer'
 import FiberTreeVisualizer from './components/FiberTreeVisualizer'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 import { FiberTree } from 'src/datastructure/tree/FiberTree'
+import { SplayTree } from 'src/datastructure/tree/SplayTree'
 
 const bt = new BinaryTree([1, 2, 3, 4, 5, 6, 7])
 const fiberTree = new FiberTree(bt)
+const splayTree = new SplayTree([10, 12, 3, 4, 13, 9, 11])
 
 const navItems = [
   { path: '/binary-tree', label: '二叉树可视化' },
   { path: '/fiber-tree', label: 'FiberTree 可视化' },
+  { path: '/splay-tree', label: '伸展树可视化' },
 ]
 
 const Sidebar: React.FC = () => (
@@ -35,6 +38,7 @@ const Router: React.FC = () => (
         <Routes>
           <Route path="/binary-tree" element={<BinaryTreeVisualizer root={bt.root} />} />
           <Route path="/fiber-tree" element={<FiberTreeVisualizer root={fiberTree.root} />} />
+          <Route path="/splay-tree" element={<BinaryTreeVisualizer root={splayTree.root} />} />
           <Route path="*" element={<Navigate to="/binary-tree" replace />} />
         </Routes>
       </div>
