@@ -88,6 +88,13 @@ export class BinaryTree<T> implements BinaryTreeADT<T> {
 
   [Symbol.iterator] = () => traverseBinaryTree(this.root)
 
+  search(value: T) {
+    for (const node of traverseBinaryTreeNode(this.root)) {
+      if (node.value === value) return true
+    }
+    return false
+  }
+
   print(options = { showNull: false }) {
     const { showNull } = options
 

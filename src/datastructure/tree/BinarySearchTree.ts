@@ -42,51 +42,86 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
     return maxNode?.value ?? null
   }
 
-  insert(value: T, parentNode: BinaryTreeNode<T> | null = null) {
-    /** 如果树为空，则直接插入替换根节点 */
+  protected insertNode(value: T, parentNode: BinaryTreeNode<T> | null = null): BinaryTreeNode<T> {
+    // 如果树为空，则直接创建根节点
     if (this.isEmpty) {
       this.root = new BinaryTreeNode(value)
       this.size++
-      return this
+      return this.root
     }
 
-    /** 从根节点开始插入 */
+    // 如果没有指定父节点，从根节点开始
     if (parentNode === null) {
       parentNode = this.root as BinaryTreeNode<T>
     }
 
-    /** 判断插入到左子树还是右子树 */
     const child = this.comparator.lt(value, parentNode.value) ? 'left' : 'right'
 
     if (parentNode[child] === null) {
-      /** 如果子节点为空，则直接插入 */
       parentNode[child] = new BinaryTreeNode(value, { parent: parentNode })
       this.size++
+      return parentNode[child]
     } else {
-      /** 如果子节点不为空，则递归插入 */
-      this.insert(value, parentNode[child])
+      return this.insertNode(value, parentNode[child])
     }
+  }
 
+  insert(value: T) {
+    /** 使用 insertNode 方法进行插入，统一处理所有情况 */
+    this.insertNode(value)
     return this
   }
 
-  #searchNode(value: T, currentNode: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
+  protected searchNode(value: T, currentNode: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
+    const result = this.searchNodeWithLastVisited(value, currentNode)
+    return result.node
+  }
+
+  protected searchNodeWithLastVisited(
+    value: T,
+    currentNode: BinaryTreeNode<T> | null,
+  ): {
+    node: BinaryTreeNode<T> | null
+    lastNode: BinaryTreeNode<T> | null
+  } {
     if (currentNode === null) {
-      return null
-    } else {
+      return {
+        node: null,
+        lastNode: null,
+      }
+    }
+
+    let lastNode = currentNode
+    while (currentNode) {
+      lastNode = currentNode
+
       switch (this.comparator.compare(value, currentNode.value)) {
         case 0:
-          return currentNode
+          return {
+            node: currentNode,
+            lastNode,
+          }
         case 1:
-          return this.#searchNode(value, currentNode.right)
+          currentNode = currentNode.right
+          break
         case -1:
-          return this.#searchNode(value, currentNode.left)
+          currentNode = currentNode.left
+          break
       }
+    }
+
+    return {
+      node: null,
+      lastNode,
     }
   }
 
+  search(value: T) {
+    return this.searchNode(value, this.root) !== null
+  }
+
   delete(value: T) {
-    const node = this.#searchNode(value, this.root)
+    const node = this.searchNode(value, this.root)
     /** 如果节点不存在，则直接返回 */
     if (node === null) {
       return this

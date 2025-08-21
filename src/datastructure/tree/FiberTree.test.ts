@@ -57,6 +57,7 @@ describe('FiberTree', () => {
      *    5
      */
     const tree2 = new TreeNode(1, null)
+    expect(tree2.isLeaf).toBe(true)
     tree2.children.push(new TreeNode(2, tree2))
     tree2.children.push(new TreeNode(3, tree2))
     tree2.children.push(new TreeNode(4, tree2))

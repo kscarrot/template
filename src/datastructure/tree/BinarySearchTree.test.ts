@@ -7,6 +7,9 @@ describe('二叉搜索树', () => {
     expect(bst.getMin()).toBe(null)
     expect(bst.isEmpty).toBe(true)
     expect(bst.root).toBe(null)
+    expect(bst.search(10)).toBe(false)
+    expect(bst.search(100)).toBe(false)
+
     bst.insert(10)
     expect(bst.size).toBe(1)
     expect(bst.root?.value).toBe(10)
@@ -20,6 +23,12 @@ describe('二叉搜索树', () => {
 
     expect(bst.getMax()).toBe(15)
     expect(bst.getMin()).toBe(5)
+
+    expect(bst.search(10)).toBe(true)
+    expect(bst.search(100)).toBe(false)
+
+    bst.insert(100)
+    expect(bst.search(100)).toBe(true)
   })
 
   it('插入验证', () => {

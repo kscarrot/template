@@ -74,6 +74,8 @@ export interface BinaryTreeADT<T> {
   print: (options?: { showNull: boolean }) => void
   /** 遍历二叉树 */
   [Symbol.iterator]: () => Generator<T>
+  /** 查询一个元素是否在二叉树中 */
+  search: (value: T) => boolean
 }
 
 export interface BinarySearchTreeADT<T> extends BinaryTreeADT<T> {

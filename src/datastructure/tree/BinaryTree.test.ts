@@ -57,6 +57,10 @@ describe('二叉树', () => {
     // 默认中序遍历
     expect([...binaryTree]).toStrictEqual([8, 4, 9, 2, 5, 1, 6, 3, 7])
 
+    // 搜索
+    expect(binaryTree.search(1)).toBe(true)
+    expect(binaryTree.search(10)).toBe(false)
+
     const preOrder = Array.from(traverseBinaryTree(binaryTree.root, TraverseType.PRE_ORDER))
     expect(preOrder).toStrictEqual([1, 2, 4, 8, 9, 5, 3, 6, 7])
 

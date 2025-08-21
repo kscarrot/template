@@ -1,10 +1,12 @@
 import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 
-describe('二叉树节点', () => {
+describe('树节点', () => {
   it('创建二叉树节点', () => {
     const node = new BinaryTreeNode(1)
     expect(node.value).toBe(1)
     expect(node.parent).toBeNull()
+    expect(node.isRoot).toBe(true)
+    expect(node.isLeaf).toBe(true)
     expect(node.left).toBeNull()
     expect(node.right).toBeNull()
   })
