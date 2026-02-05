@@ -8,7 +8,7 @@
  */
 function countTexts(pressedKeys: string): number {
   const strLength = pressedKeys.length
-  const dp = Array(strLength + 1).fill(0)
+  const dp = new Array(strLength + 1).fill(0)
 
   const MOD = 1e9 + 7
   dp[0] = 1
@@ -30,12 +30,12 @@ function countTexts(pressedKeys: string): number {
 
     // 四个连续相同字符且为7或9
     if (
-      (char === '7' || char === '9') &&
-      i >= 4 &&
-      pressedKeys[i - 4] === char &&
-      pressedKeys[i - 3] === char &&
-      pressedKeys[i - 2] === char &&
-      pressedKeys[i - 1] === char
+      (char === '7' || char === '9')
+      && i >= 4
+      && pressedKeys[i - 4] === char
+      && pressedKeys[i - 3] === char
+      && pressedKeys[i - 2] === char
+      && pressedKeys[i - 1] === char
     ) {
       dp[i] = (dp[i] + dp[i - 4]) % MOD
     }

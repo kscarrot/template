@@ -1,8 +1,8 @@
-import { BinarySearchTreeADT } from 'src/datastructure/ADT'
-import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
-import { Comparator } from 'src/util/Comparator'
+import type { BinarySearchTreeADT } from 'src/datastructure/ADT'
 import type { compareFunction } from 'src/util/Comparator'
 import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
+import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
+import { Comparator } from 'src/util/Comparator'
 
 export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTreeADT<T> {
   comparator: Comparator<T>
@@ -61,7 +61,8 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
       parentNode[child] = new BinaryTreeNode(value, { parent: parentNode })
       this.size++
       return parentNode[child]
-    } else {
+    }
+    else {
       return this.insertNode(value, parentNode[child])
     }
   }
@@ -131,13 +132,15 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
       const minNode = this.searchMinNode(node.right) as BinaryTreeNode<T>
       this.delete(minNode.value)
       node.value = minNode.value
-    } else {
+    }
+    else {
       const parentNode = node.parent
       const child = node.left ?? node.right
       if (parentNode) {
         /** 删除当前节点,将当前节点的父节点指向对应的子节点 */
         parentNode[node === parentNode.left ? 'left' : 'right'] = child
-      } else {
+      }
+      else {
         /** 如果节点是根节点，则直接替换根节点 */
         this.root = child
       }
@@ -154,9 +157,11 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
   protected getNodeSize(currentNode: BinaryTreeNode<T> | null): number {
     if (currentNode === null) {
       return 0
-    } else if (currentNode.isLeaf) {
+    }
+    else if (currentNode.isLeaf) {
       return 1
-    } else {
+    }
+    else {
       return 1 + this.getNodeSize(currentNode.left) + this.getNodeSize(currentNode.right)
     }
   }
@@ -169,13 +174,15 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
     const leftSize = this.getNodeSize(currentNode.left)
     if (leftSize > index) {
       return this.getKthNode(currentNode.left, index)
-    } else if (leftSize < index) {
+    }
+    else if (leftSize < index) {
       /**
        * 当前节点不是第k个节点，需要继续在右子树中查找
        * 前往右子树的过程中,需要减去左子树的节点数
        */
       return this.getKthNode(currentNode.right, index - leftSize - 1)
-    } else {
+    }
+    else {
       /** 当前节点就是第k个节点 */
       return currentNode
     }
@@ -192,7 +199,8 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements BinarySearchTr
     }
     if (this.comparator.lt(value, currentNode.value)) {
       return this.getNodeRank(currentNode.left, value)
-    } else {
+    }
+    else {
       const leftSize = this.getNodeSize(currentNode.left)
       return this.getNodeRank(currentNode.right, value) + leftSize + 1
     }

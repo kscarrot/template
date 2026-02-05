@@ -1,4 +1,4 @@
-import { TreeNode } from './leetcode-types'
+import type { TreeNode } from './leetcode-types'
 
 /**
  * @name: 叶子相似的树
@@ -10,16 +10,20 @@ import { TreeNode } from './leetcode-types'
  * @return {boolean}
  */
 function leafSimilar(root1: TreeNode | null, root2: TreeNode | null): boolean {
-  if (!root1 && !root2) return true
+  if (!root1 && !root2)
+    return true
   const leafs1 = getLeafs(root1)
   const leafs2 = getLeafs(root2)
-  if (leafs1.length !== leafs2.length) return false
+  if (leafs1.length !== leafs2.length)
+    return false
   return leafs1.every((leaf, index) => leaf === leafs2[index])
 }
 
 function getLeafs(root: TreeNode | null): number[] {
-  if (!root) return []
-  if (!root.left && !root.right) return [root.val]
+  if (!root)
+    return []
+  if (!root.left && !root.right)
+    return [root.val]
   return [...getLeafs(root.left), ...getLeafs(root.right)]
 }
 

@@ -9,10 +9,12 @@ import { ListNode } from './utils'
  * @return {ListNode | null}
  */
 function deleteDuplicates(head: ListNode | null): ListNode | null {
-  if (!head) return null
-  if (!head.next) return head
+  if (!head)
+    return null
+  if (!head.next)
+    return head
 
-  let headNode = new ListNode(NaN)
+  const headNode = new ListNode(Number.NaN)
   headNode.next = head
 
   let prevCursor: ListNode | null = headNode
@@ -20,7 +22,7 @@ function deleteDuplicates(head: ListNode | null): ListNode | null {
 
   while (currentCursor) {
     if (currentCursor.val === currentCursor.next?.val) {
-      //找到下一个不同的值为止
+      // 找到下一个不同的值为止
       while (currentCursor.val === currentCursor.next?.val) {
         currentCursor = currentCursor.next
       }
@@ -29,7 +31,8 @@ function deleteDuplicates(head: ListNode | null): ListNode | null {
         ;(prevCursor as unknown as ListNode).next = null
         break
       }
-    } else {
+    }
+    else {
       // 唯一值 游标后移
       prevCursor.next = currentCursor
       prevCursor = currentCursor

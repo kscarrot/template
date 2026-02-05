@@ -1,6 +1,6 @@
 import { Queue } from 'src/datastructure/list/Queue'
 
-test('test Queue ', () => {
+it('test Queue ', () => {
   const q = new Queue()
   expect(q.size).toBe(0)
   expect(q.isEmpty).toBe(true)

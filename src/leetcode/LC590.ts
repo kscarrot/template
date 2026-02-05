@@ -1,4 +1,4 @@
-import { NTreeNode } from './leetcode-types'
+import type { NTreeNode } from './leetcode-types'
 
 /**
  * @name: N 叉树的后序遍历
@@ -11,7 +11,8 @@ import { NTreeNode } from './leetcode-types'
 function postorder(root: NTreeNode | null): number[] {
   const result: number[] = []
   const dfs = (root: NTreeNode | null) => {
-    if (!root) return
+    if (!root)
+      return
     for (const child of root.children) {
       dfs(child)
     }

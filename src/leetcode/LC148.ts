@@ -1,6 +1,6 @@
-import { ListNode } from './utils'
-import middleNode from './LC876'
+import type { ListNode } from './utils'
 import mergeTwoLists from './LC21'
+import middleNode from './LC876'
 
 /**
  * @link: https://leetcode.cn/problems/sort-list
@@ -10,9 +10,11 @@ import mergeTwoLists from './LC21'
  */
 
 function sortList(head: ListNode | null): ListNode | null {
-  if (!head) return null
-  if (!head.next) return head
-  let middleHead = middleNode(head)
+  if (!head)
+    return null
+  if (!head.next)
+    return head
+  const middleHead = middleNode(head)
   return mergeTwoLists(sortList(head), sortList(middleHead))
 }
 

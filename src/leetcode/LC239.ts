@@ -14,7 +14,7 @@ function maxSlidingWindow(nums: number[], k: number): number[] {
   const queue: number[] = []
 
   for (let i = 0; i < nums.length; i++) {
-    //把队列里比当前元素小的都弹出
+    // 把队列里比当前元素小的都弹出
     while (queue.length > 0 && nums[i] > nums[queue[queue.length - 1]]) {
       queue.pop()
     }

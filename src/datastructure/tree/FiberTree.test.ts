@@ -1,9 +1,9 @@
-import { FiberTree, traverseFiberTreeNode } from 'src/datastructure/tree/FiberTree'
-import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 import { TreeNode } from 'src/datastructure/node/TreeNode'
+import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
+import { FiberTree, traverseFiberTreeNode } from 'src/datastructure/tree/FiberTree'
 
-describe('FiberTree', () => {
-  test('从二叉树创建FiberTree', () => {
+describe('fiberTree', () => {
+  it('从二叉树创建FiberTree', () => {
     const fiberTree = new FiberTree(null)
     expect(fiberTree.root).toBeNull()
 
@@ -28,7 +28,7 @@ describe('FiberTree', () => {
     expect(fiberTreeThreeElements.root?.child?.sibling?.value).toBe(3)
   })
 
-  test('从二叉树创建FiberTree并遍历', () => {
+  it('从二叉树创建FiberTree并遍历', () => {
     const bt = new BinaryTree([1, 2, 3, 4, 5, 6, 7, 8, 9])
     const fiberTree = new FiberTree(bt)
     expect(fiberTree).toBeDefined()
@@ -36,7 +36,7 @@ describe('FiberTree', () => {
     expect([...fiberTree]).toStrictEqual([1, 2, 4, 8, 9, 5, 3, 6, 7])
   })
 
-  test('从普通树创建FiberTree', () => {
+  it('从普通树创建FiberTree', () => {
     const nullFiberTree = new FiberTree(null)
     expect(nullFiberTree.root).toBeNull()
 

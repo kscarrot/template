@@ -1,5 +1,5 @@
+import type { BinaryTreeADT } from 'src/datastructure/ADT'
 import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
-import { BinaryTreeADT } from 'src/datastructure/ADT'
 
 /**
  * @description 将数组转换为二叉树
@@ -8,7 +8,8 @@ import { BinaryTreeADT } from 'src/datastructure/ADT'
  */
 export function valuesToBinaryTree<T>(values: Array<T | null>): BinaryTreeNode<T> | null {
   // 如果数组为空，则返回 null
-  if (values.length === 0) return null
+  if (values.length === 0)
+    return null
   // 创建根节点
   const root = new BinaryTreeNode(values[0] as T)
   // 创建二叉树
@@ -50,11 +51,14 @@ export function* traverseBinaryTreeNode<T>(
 ) {
   function* order(root: BinaryTreeNode<T> | null): Generator<BinaryTreeNode<T>> {
     if (root) {
-      if (type === TraverseType.PRE_ORDER) yield root
+      if (type === TraverseType.PRE_ORDER)
+        yield root
       yield* order(root.left)
-      if (type === TraverseType.IN_ORDER) yield root
+      if (type === TraverseType.IN_ORDER)
+        yield root
       yield* order(root.right)
-      if (type === TraverseType.POST_ORDER) yield root
+      if (type === TraverseType.POST_ORDER)
+        yield root
     }
   }
   yield* order(root)
@@ -90,7 +94,8 @@ export class BinaryTree<T> implements BinaryTreeADT<T> {
 
   search(value: T) {
     for (const node of traverseBinaryTreeNode(this.root)) {
-      if (node.value === value) return true
+      if (node.value === value)
+        return true
     }
     return false
   }
@@ -119,14 +124,16 @@ export class BinaryTree<T> implements BinaryTreeADT<T> {
       // 先处理右子节点（为了正确的显示顺序）
       if (node.right) {
         visualizeNode(node.right, newPrefix, node.left === null)
-      } else if (showNull) {
+      }
+      else if (showNull) {
         visualizeNode(null, newPrefix, node.left === null)
       }
 
       // 再处理左子节点
       if (node.left) {
         visualizeNode(node.left, newPrefix, true)
-      } else if (showNull) {
+      }
+      else if (showNull) {
         visualizeNode(null, newPrefix, true)
       }
     }

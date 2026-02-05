@@ -8,7 +8,7 @@
  */
 function dailyTemperatures(temperatures: number[]): number[] {
   // 存索引差
-  const result: number[] = new Array(temperatures.length).fill(0)
+  const result: number[] = Array.from({ length: temperatures.length }, () => 0)
   // 存索引
   const stack: number[] = []
   for (let i = temperatures.length - 1; i >= 0; i--) {

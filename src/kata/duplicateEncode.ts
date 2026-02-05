@@ -8,7 +8,8 @@ export function duplicateEncode(word: string) {
   for (const letter of lowerCaseString) {
     if (map.has(letter)) {
       map.set(letter, ')')
-    } else {
+    }
+    else {
       map.set(letter, '(')
     }
   }

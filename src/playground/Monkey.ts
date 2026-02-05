@@ -25,7 +25,7 @@ class Monkey {
   sleep(seconds: number) {
     this.#queue.push(() => {
       console.log(`等待 ${seconds}s`)
-      return new Promise((resolve) =>
+      return new Promise(resolve =>
         setTimeout(() => {
           resolve()
           this.run()

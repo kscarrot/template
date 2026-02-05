@@ -1,6 +1,6 @@
 import { Heap } from 'src/datastructure/heap/Heap'
 
-test('test min heap basic', () => {
+it('test min heap basic', () => {
   const h = new Heap()
   expect(h.isEmpty).toBe(true)
   expect(() => h.peek()).toThrow()
@@ -20,7 +20,7 @@ test('test min heap basic', () => {
   expect(arr1).toStrictEqual([1, 2, 3, 4])
 })
 
-test('test max heap', () => {
+it('test max heap', () => {
   const h = new Heap((a: number, b: number) => (b === a ? 0 : b > a ? 1 : -1))
   h.insert(3)
   h.insert(2)

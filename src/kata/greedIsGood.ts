@@ -5,24 +5,24 @@
 export function score(dice: number[]): number {
   // Fill me in!
   const scoreMap: Record<string, number> = {
-    '1': 100,
-    '11': 200,
-    '111': 1000,
-    '1111': 1100,
-    '11111': 1200,
-    '5': 50,
-    '55': 100,
-    '555': 500,
-    '5555': 550,
-    '55555': 600,
-    '666': 600,
-    '444': 400,
-    '333': 300,
-    '222': 200,
+    1: 100,
+    11: 200,
+    111: 1000,
+    1111: 1100,
+    11111: 1200,
+    5: 50,
+    55: 100,
+    555: 500,
+    5555: 550,
+    55555: 600,
+    666: 600,
+    444: 400,
+    333: 300,
+    222: 200,
   }
 
-  return Object.values(Object.groupBy(dice, (v) => v))
-    .map((sameArray) => sameArray?.join(''))
-    .map((str) => scoreMap[str ?? ''] ?? 0)
+  return Object.values(Object.groupBy(dice, v => v))
+    .map(sameArray => sameArray?.join(''))
+    .map(str => scoreMap[str ?? ''] ?? 0)
     .reduce((sum, current) => (sum += current), 0)
 }

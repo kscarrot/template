@@ -7,8 +7,10 @@ import type { ListNode } from './leetcode-types'
  * @return {ListNode | null}
  */
 function reverseList(head: ListNode | null): ListNode | null {
-  if (!head) return null
-  if (!head.next) return head
+  if (!head)
+    return null
+  if (!head.next)
+    return head
 
   let prevCursor: ListNode | null = null
   let currentCursor: ListNode | null = head
@@ -16,7 +18,7 @@ function reverseList(head: ListNode | null): ListNode | null {
 
   while (nextCursor) {
     currentCursor.next = prevCursor
-    let nextNextCursor: ListNode | null = nextCursor.next
+    const nextNextCursor: ListNode | null = nextCursor.next
     nextCursor.next = currentCursor
     prevCursor = currentCursor
     currentCursor = nextCursor

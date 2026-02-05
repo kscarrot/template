@@ -12,12 +12,14 @@ function firstUniqChar(s: string): number {
     const char = s[i]
     if (map.has(char)) {
       map.get(char)!.push(i)
-    } else {
+    }
+    else {
       map.set(char, [i])
     }
   }
   for (const [_, indices] of map) {
-    if (indices.length === 1) return indices[0]
+    if (indices.length === 1)
+      return indices[0]
   }
   return -1
 }

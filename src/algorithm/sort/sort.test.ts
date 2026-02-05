@@ -1,19 +1,20 @@
-import { randomArray } from 'src/util/randomArray'
 import {
+  binaryInsertionSort,
   bubbleSort,
   cocktailSort,
   heapSort,
   insertionSort,
-  binaryInsertionSort,
   mergeSort,
   quickSort,
-  quickSortES6,
   quickSort3While,
+  quickSortES6,
   selectionSort,
 } from 'src/algorithm/sort/index'
+import { randomArray } from 'src/util/randomArray'
+
 type sortFn = (arr: number[]) => number[]
 
-const ArraySortCmp = (sortFn: sortFn) => {
+function ArraySortCmp(sortFn: sortFn) {
   const rightAnswer = (arr: number[]) => Array.from(arr).sort((a, b) => a - b)
   expect(sortFn([])).toStrictEqual([])
   expect(sortFn([1])).toStrictEqual([1])
@@ -26,42 +27,42 @@ const ArraySortCmp = (sortFn: sortFn) => {
   expect(sortFn(arrL99)).toStrictEqual(rightAnswer(arrL99))
 }
 
-test('test BubbleSort ', () => {
+it('test BubbleSort ', () => {
   ArraySortCmp(bubbleSort)
 })
 
-test('test CocktailSort ', () => {
+it('test CocktailSort ', () => {
   ArraySortCmp(cocktailSort)
 })
 
-test('test HeapSort ', () => {
+it('test HeapSort ', () => {
   ArraySortCmp(heapSort)
 })
 
-test('test InsertionSort ', () => {
+it('test InsertionSort ', () => {
   ArraySortCmp(insertionSort)
 })
 
-test('test BinaryInsertionSort ', () => {
+it('test BinaryInsertionSort ', () => {
   ArraySortCmp(binaryInsertionSort)
 })
 
-test('test MergeSort ', () => {
+it('test MergeSort ', () => {
   ArraySortCmp(mergeSort)
 })
 
-test('test SelectionSort ', () => {
+it('test SelectionSort ', () => {
   ArraySortCmp(selectionSort)
 })
 
-test('test QuickSort ', () => {
+it('test QuickSort ', () => {
   ArraySortCmp(quickSort)
 })
 
-test('test QuickSortES6 ', () => {
+it('test QuickSortES6 ', () => {
   ArraySortCmp(quickSortES6)
 })
 
-test('test QuickSort3While ', () => {
+it('test QuickSort3While ', () => {
   ArraySortCmp(quickSort3While)
 })

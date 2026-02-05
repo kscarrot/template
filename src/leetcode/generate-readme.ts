@@ -1,7 +1,7 @@
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { execSync } from 'node:child_process'
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 interface LeetCodeProblem {
   number: number
@@ -16,10 +16,11 @@ function getUncommittedFiles(): string[] {
     const output = execSync('git status --porcelain', { encoding: 'utf-8' })
     return output
       .split('\n')
-      .filter((line) => line.trim())
-      .map((line) => line.split(' ').pop() || '')
-      .filter((file) => file.startsWith('src/leetcode/LC') && file.endsWith('.ts'))
-  } catch (error) {
+      .filter(line => line.trim())
+      .map(line => line.split(' ').pop() || '')
+      .filter(file => file.startsWith('src/leetcode/LC') && file.endsWith('.ts'))
+  }
+  catch (error) {
     console.error('Error getting git status:', error)
     return []
   }
@@ -53,7 +54,7 @@ function generateReadme() {
 
       const content = readFileSync(join(currentDir, file), 'utf-8')
       const info = extractProblemInfo(content)
-      const number = parseInt(file.replace('LC', '').replace('.ts', ''))
+      const number = Number.parseInt(file.replace('LC', '').replace('.ts', ''))
 
       if (info.name && info.level && info.link) {
         problems.push({
@@ -72,7 +73,7 @@ function generateReadme() {
 
   // 生成表格内容
   const tableHeader = '| 题号 | 题目 | 难度 | 链接 | 解法 |\n|------|------|------|------|------|'
-  const tableRows = problems.map((p) => `| ${p.number} | ${p.name} | ${p.level} | [链接](${p.link}) | ${p.file} |`)
+  const tableRows = problems.map(p => `| ${p.number} | ${p.name} | ${p.level} | [链接](${p.link}) | ${p.file} |`)
 
   const tableContent = [tableHeader, ...tableRows].join('\n')
 

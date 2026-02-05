@@ -1,6 +1,6 @@
-import { ListNode } from './utils'
-import middleNode from './LC876'
+import type { ListNode } from './utils'
 import reverseList from './LC206'
+import middleNode from './LC876'
 
 /**
  * @name: 回文链表
@@ -11,14 +11,17 @@ import reverseList from './LC206'
  * @return {boolean}
  */
 function isPalindrome(head: ListNode | null): boolean {
-  if (!head) return true
-  if (!head.next) return true
+  if (!head)
+    return true
+  if (!head.next)
+    return true
 
-  let middleHead = middleNode(head)
+  const middleHead = middleNode(head)
   let rightHead = reverseList(middleHead)
 
   while (head && rightHead) {
-    if (head.val !== rightHead.val) return false
+    if (head.val !== rightHead.val)
+      return false
     head = head.next
     rightHead = rightHead.next
   }

@@ -1,4 +1,4 @@
-import { TreeNode } from './leetcode-types'
+import type { TreeNode } from './leetcode-types'
 import { levelOrder } from './LC102'
 
 /**
@@ -10,7 +10,8 @@ import { levelOrder } from './LC102'
  * @return {number[][]}
  */
 function levelOrderBottom(root: TreeNode | null): number[][] {
-  if (!root) return []
+  if (!root)
+    return []
   const result = levelOrder(root)
   return result.reverse()
 }

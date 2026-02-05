@@ -10,10 +10,12 @@ import { ListNode } from './utils'
  * @return {ListNode | null}
  */
 function removeElements(head: ListNode | null, val: number): ListNode | null {
-  if (!head) return null
-  if (!head.next) return head.val === val ? null : head
+  if (!head)
+    return null
+  if (!head.next)
+    return head.val === val ? null : head
 
-  let headNode = new ListNode(NaN)
+  const headNode = new ListNode(Number.NaN)
   headNode.next = head
 
   let prevCursor: ListNode | null = headNode
@@ -23,7 +25,8 @@ function removeElements(head: ListNode | null, val: number): ListNode | null {
     if (currentCursor.val === val) {
       ;(prevCursor as unknown as ListNode).next = currentCursor.next
       currentCursor = currentCursor.next
-    } else {
+    }
+    else {
       prevCursor = prevCursor?.next || null
       currentCursor = currentCursor.next
     }

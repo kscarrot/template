@@ -16,9 +16,10 @@ export function chunkArray<T>(arr: T[], size: number): T[][] {
 }
 
 export function arrayToLinkList(arr: number[]): ListNode | null {
-  if (arr.length === 0) return null
-  const arrayNodes = arr.map((val) => new ListNode(val))
-  let head = arrayNodes[0]
+  if (arr.length === 0)
+    return null
+  const arrayNodes = arr.map(val => new ListNode(val))
+  const head = arrayNodes[0]
   arrayNodes.slice(1).reduce((prev, current) => {
     prev.next = current
     return current
@@ -43,11 +44,7 @@ export function linkListToArray(head: ListNode | null): number[] {
  * @param getKey 自定义 key 计算函数
  * @returns 缓存后的函数
  */
-export const memo = <TArgs extends any[], TResult>(
-  fn: (...args: TArgs) => TResult,
-  initCache: Record<string, TResult> = {},
-  getKey: (...args: TArgs) => string = (...args) => JSON.stringify(args),
-) => {
+export function memo<TArgs extends any[], TResult>(fn: (...args: TArgs) => TResult, initCache: Record<string, TResult> = {}, getKey: (...args: TArgs) => string = (...args) => JSON.stringify(args)) {
   const cache = new Map<string, TResult>(Object.entries(initCache))
   const memoizedFn = (...args: TArgs): TResult => {
     const key = getKey(...args)

@@ -1,4 +1,5 @@
 import { cmp } from './index'
+
 function bubbleSort<T>(nums: T[]) {
   if (nums.length === 0 || nums.length === 1) {
     return nums

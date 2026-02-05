@@ -9,8 +9,10 @@ import type { ListNode } from './leetcode-types'
  *  @return {ListNode | null}
  */
 function deleteDuplicates(head: ListNode | null): ListNode | null {
-  if (!head) return null
-  if (!head.next) return head
+  if (!head)
+    return null
+  if (!head.next)
+    return head
 
   let prevCursor: ListNode | null = head
   let currentCursor: ListNode | null = head.next

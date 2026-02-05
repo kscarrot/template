@@ -8,11 +8,12 @@
  * @return {number}
  */
 function combinationSum4(nums: number[], target: number): number {
-  if (nums.length === 1 && nums[0] !== target) return 0
-  const dp = Array(target + 1).fill(0)
+  if (nums.length === 1 && nums[0] !== target)
+    return 0
+  const dp = new Array(target + 1).fill(0)
   dp[0] = 1
   for (let i = 1; i <= target; i++) {
-    dp[i] = nums.filter((x) => x <= i).reduce((sumI, x) => sumI + dp[i - x], 0)
+    dp[i] = nums.filter(x => x <= i).reduce((sumI, x) => sumI + dp[i - x], 0)
   }
   return dp[target]
 }

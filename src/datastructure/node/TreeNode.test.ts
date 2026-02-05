@@ -11,7 +11,7 @@ describe('树节点', () => {
     expect(node.right).toBeNull()
   })
 
-  it('创建二叉树节点', () => {
+  it('创建带 parent/left/right 的二叉树节点', () => {
     const node = new BinaryTreeNode(1, {
       parent: new BinaryTreeNode(2),
       left: new BinaryTreeNode(3),

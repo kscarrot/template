@@ -10,7 +10,8 @@ import { TreeNode } from './leetcode-types'
  * @return {TreeNode | null}
  */
 function buildTree(inorder: number[], postorder: number[]): TreeNode | null {
-  if (inorder.length === 0 || postorder.length === 0) return null
+  if (inorder.length === 0 || postorder.length === 0)
+    return null
   // 后序遍历的最后一个元素是根节点
   const root = new TreeNode(postorder[postorder.length - 1])
   // 找到根节点在中序遍历中的位置

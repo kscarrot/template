@@ -1,4 +1,4 @@
-import { TreeNode } from './leetcode-types'
+import type { TreeNode } from './leetcode-types'
 import { levelOrder } from './LC102'
 
 /**
@@ -10,9 +10,10 @@ import { levelOrder } from './LC102'
  * @return {number[]}
  */
 function rightSideView(root: TreeNode | null): number[] {
-  if (!root) return []
+  if (!root)
+    return []
   const result = levelOrder(root)
-  return result.map((level) => level[level.length - 1])
+  return result.map(level => level[level.length - 1])
 }
 
 export { rightSideView }

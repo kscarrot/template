@@ -18,7 +18,8 @@ function binaryInsertionSort<T>(nums: T[]) {
       const mid = (right + left) >> 1
       if (cmp.lt(nums[i], nums[mid])) {
         right = mid - 1
-      } else {
+      }
+      else {
         left = mid + 1
       }
     }
@@ -30,4 +31,4 @@ function binaryInsertionSort<T>(nums: T[]) {
   return nums
 }
 
-export { insertionSort, binaryInsertionSort }
+export { binaryInsertionSort, insertionSort }

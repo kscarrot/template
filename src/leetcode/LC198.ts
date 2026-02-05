@@ -23,7 +23,7 @@ function rob(nums: number[]): number {
 }
 
 function rob_Dp(nums: number[]): number {
-  const dp = Array(nums.length).fill(0)
+  const dp = Array.from({ length: nums.length }, () => 0)
   dp[0] = nums[0]
   dp[1] = Math.max(nums[0], nums[1])
   for (let i = 2; i < nums.length; i++) {

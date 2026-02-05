@@ -1,6 +1,7 @@
-import { HeapADT } from 'src/datastructure/ADT'
-import { Comparator } from 'src/util/Comparator'
+import type { HeapADT } from 'src/datastructure/ADT'
 import type { compareFunction } from 'src/util/Comparator'
+import { Comparator } from 'src/util/Comparator'
+
 export class Heap<T> implements HeapADT<T> {
   size: number = 0
   #data: T[] = []
@@ -31,7 +32,7 @@ export class Heap<T> implements HeapADT<T> {
 
   private shiftUp(index: number) {
     if (index > 0) {
-      let parent = this.parentIndex(index)
+      const parent = this.parentIndex(index)
       if (this.cmp.lt(this.#data[index], this.#data[parent])) {
         this.swap(index, parent)
         this.shiftUp(parent)
@@ -40,8 +41,8 @@ export class Heap<T> implements HeapADT<T> {
   }
 
   private shiftDown(index: number) {
-    let left = this.leftChildIndex(index)
-    let right = this.rightChildIndex(index)
+    const left = this.leftChildIndex(index)
+    const right = this.rightChildIndex(index)
     let largest = index
     if (left < this.size && this.cmp.lt(this.#data[left], this.#data[largest])) {
       largest = left
@@ -81,7 +82,7 @@ export class Heap<T> implements HeapADT<T> {
     return this.#data[0]
   }
 
-  *traverse() {
+  * traverse() {
     let index = 0
     while (index < this.size) {
       yield this.#data[index]

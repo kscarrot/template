@@ -1,4 +1,4 @@
-import { TreeNode } from './leetcode-types'
+import type { TreeNode } from './leetcode-types'
 
 /**
  * @name: 二叉树的最大深度
@@ -9,7 +9,8 @@ import { TreeNode } from './leetcode-types'
  * @return {number}
  */
 function maxDepth(root: TreeNode | null): number {
-  if (!root) return 0
+  if (!root)
+    return 0
   return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1
 }
 

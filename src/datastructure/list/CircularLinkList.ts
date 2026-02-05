@@ -1,4 +1,4 @@
-import { ListADT } from 'src/datastructure/ADT'
+import type { ListADT } from 'src/datastructure/ADT'
 import { CircularLinkNode } from 'src/datastructure/node/ListNode'
 
 export class CircularLinkList<T> implements ListADT<T> {
@@ -14,7 +14,8 @@ export class CircularLinkList<T> implements ListADT<T> {
       this.tail = insertNode
       insertNode.next = insertNode
       insertNode.prev = insertNode
-    } else {
+    }
+    else {
       const prevNode = this.tail!
       const nextNode = this.head!
 
@@ -37,7 +38,7 @@ export class CircularLinkList<T> implements ListADT<T> {
 
   private getNode(index: number) {
     let count = 0
-    let point = this.traverseNode()
+    const point = this.traverseNode()
     while (count < index) {
       point.next()
       count = count + 1
@@ -100,7 +101,7 @@ export class CircularLinkList<T> implements ListADT<T> {
     return deleteNode.value
   }
 
-  *traverseNode() {
+  * traverseNode() {
     let current = this.head
     while (current) {
       yield current
@@ -108,7 +109,7 @@ export class CircularLinkList<T> implements ListADT<T> {
     }
   }
 
-  *traverse() {
+  * traverse() {
     const traverse = this.traverseNode()
 
     let point = traverse.next()

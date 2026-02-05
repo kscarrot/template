@@ -14,7 +14,7 @@ class MyStack {
 
   push(x: number): void {
     this.queue.push(x)
-    //把入栈的元素始终保持在队首即可
+    // 把入栈的元素始终保持在队首即可
     for (let i = this.size - 1; i > 0; i--) {
       this.queue.push(this.queue.shift() as number)
     }
@@ -23,7 +23,8 @@ class MyStack {
   pop(): number {
     if (this.empty()) {
       throw new Error('Stack is empty')
-    } else {
+    }
+    else {
       return this.queue.shift() as number
     }
   }
@@ -31,7 +32,8 @@ class MyStack {
   top(): number {
     if (this.empty()) {
       throw new Error('Stack is empty')
-    } else {
+    }
+    else {
       return this.queue[0]
     }
   }

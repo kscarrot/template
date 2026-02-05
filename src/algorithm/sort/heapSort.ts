@@ -38,8 +38,11 @@ function sink<T>(arr: T[], index: number, range: number) {
    */
 
   for (let p = index * 2 + 1; p < range; index = p, p = index * 2 + 1) {
-    if (p + 1 < range && cmp.lt(arr[p], arr[p + 1])) p++
-    if (cmp.lt(arr[p], arr[index])) break
+    if (p + 1 < range && cmp.lt(arr[p], arr[p + 1]))
+      p++
+    if (cmp.lt(arr[p], arr[index])) {
+      break
+    }
     ;[arr[index], arr[p]] = [arr[p], arr[index]]
   }
 }

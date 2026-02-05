@@ -10,8 +10,10 @@ import type { ListNode } from './leetcode-types'
  * @return {ListNode}
  */
 function middleNode(head: ListNode | null): ListNode | null {
-  if (!head) return null
-  if (!head.next) return head
+  if (!head)
+    return null
+  if (!head.next)
+    return head
 
   let slowCursor: ListNode | null = head
   let fastCursor: ListNode | null = head

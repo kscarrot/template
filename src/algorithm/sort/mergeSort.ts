@@ -1,7 +1,8 @@
 import { cmp } from './index'
 
 function mergeSort<T>(nums: T[]): T[] {
-  if (nums.length <= 1) return nums
+  if (nums.length <= 1)
+    return nums
   const mid = nums.length >> 1
   const left = nums.slice(0, mid)
   const right = nums.slice(mid)

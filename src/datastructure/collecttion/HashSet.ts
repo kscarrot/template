@@ -1,4 +1,4 @@
-import { HashSetADT } from 'src/datastructure/ADT'
+import type { HashSetADT } from 'src/datastructure/ADT'
 
 import { HashTable } from 'src/datastructure/collecttion/HashTable'
 

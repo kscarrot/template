@@ -10,7 +10,8 @@ import { TreeNode } from './leetcode-types'
  * @return {TreeNode | null}
  */
 function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
-  if (preorder.length === 0 || inorder.length === 0) return null
+  if (preorder.length === 0 || inorder.length === 0)
+    return null
   // 先序遍历的第一个元素是根节点
   const root = new TreeNode(preorder[0])
   // 找到根节点在中序遍历中的位置

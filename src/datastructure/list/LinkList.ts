@@ -1,6 +1,6 @@
-import { ListADT } from 'src/datastructure/ADT'
-import type { LinkHeadNode, LinkTailNode, LinkNodes } from 'src/datastructure/node/ListNode'
-import { isHeadNode, isTailNode, LinkNode, createLinkNodes } from 'src/datastructure/node/ListNode'
+import type { ListADT } from 'src/datastructure/ADT'
+import type { LinkHeadNode, LinkNodes, LinkTailNode } from 'src/datastructure/node/ListNode'
+import { createLinkNodes, isHeadNode, isTailNode, LinkNode } from 'src/datastructure/node/ListNode'
 
 export class LinkList<T> implements ListADT<T> {
   size = 0
@@ -22,7 +22,7 @@ export class LinkList<T> implements ListADT<T> {
   }
 
   private getNode(index: number) {
-    let nodeIterator = this.traverseNode()
+    const nodeIterator = this.traverseNode()
 
     let prevCursor = nodeIterator.next()
     let cursor = nodeIterator.next()
@@ -84,21 +84,23 @@ export class LinkList<T> implements ListADT<T> {
   }
 
   /** 从头节点开始迭代 遇到尾节点退出 返回 头 -> T -> 尾 */
-  *traverseNode() {
+  * traverseNode() {
     let current: LinkNodes<T> = this.head
     while (true) {
       yield current
-      if (isTailNode(current)) return
+      if (isTailNode(current))
+        return
       current = current.next
     }
   }
 
-  *traverse() {
+  * traverse() {
     const traverse = this.traverseNode()
 
     let point = traverse.next()
     whileLoop: while (!point.done) {
-      if (isTailNode(point.value)) return
+      if (isTailNode(point.value))
+        return
 
       if (isHeadNode(point.value)) {
         point = traverse.next()

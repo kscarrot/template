@@ -5,7 +5,7 @@
  * https://www.codewars.com/kata/reviews/5dcf9b2375ffe300014eca53/groups/5dfa75394ebc2000012938d0
  */
 export function tribonacci([a, b, c]: [number, number, number], n: number): number[] {
-  let result = [a, b, c]
+  const result = [a, b, c]
 
   if (n < 3) {
     return result.slice(0, n)

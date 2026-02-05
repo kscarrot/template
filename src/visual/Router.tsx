@@ -1,10 +1,10 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
-import BinaryTreeVisualizer from './components/BinaryTreeVisualizer'
-import FiberTreeVisualizer from './components/FiberTreeVisualizer'
+import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 import { FiberTree } from 'src/datastructure/tree/FiberTree'
 import { SplayTree } from 'src/datastructure/tree/SplayTree'
+import BinaryTreeVisualizer from './components/BinaryTreeVisualizer'
+import FiberTreeVisualizer from './components/FiberTreeVisualizer'
 
 const bt = new BinaryTree([1, 2, 3, 4, 5, 6, 7])
 const fiberTree = new FiberTree(bt)
@@ -19,7 +19,7 @@ const navItems = [
 const Sidebar: React.FC = () => (
   <nav style={{ width: 180, padding: 16, borderRight: '1px solid #eee', height: '100vh', boxSizing: 'border-box' }}>
     <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-      {navItems.map((item) => (
+      {navItems.map(item => (
         <li key={item.path} style={{ margin: '16px 0' }}>
           <Link to={item.path} style={{ textDecoration: 'none', color: '#0074D9', fontWeight: 500 }}>
             {item.label}

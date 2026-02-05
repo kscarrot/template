@@ -11,7 +11,8 @@ function removeDuplicates(s: string): string {
   for (const char of s) {
     if (stack.length > 0 && stack.at(-1) === char) {
       stack.pop()
-    } else {
+    }
+    else {
       stack.push(char)
     }
   }

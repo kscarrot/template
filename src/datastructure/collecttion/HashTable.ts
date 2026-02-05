@@ -1,4 +1,4 @@
-import { HashTableADT } from 'src/datastructure/ADT'
+import type { HashTableADT } from 'src/datastructure/ADT'
 import { DoubleLinkList as List } from 'src/datastructure/list/DoubleLinkList'
 
 interface SelfMap<T> {
@@ -10,7 +10,7 @@ export class HashTable<T> implements HashTableADT<T> {
   size: number = 0
   #table: List<SelfMap<T>>[]
   constructor(initalCapacity: number = 64) {
-    this.#table = new Array(initalCapacity)
+    this.#table = Array.from({ length: initalCapacity })
   }
 
   get capacity() {
@@ -46,7 +46,8 @@ export class HashTable<T> implements HashTableADT<T> {
     const element = this.findSelfMap(key)
     if (element !== null) {
       element.value = value
-    } else {
+    }
+    else {
       this.#table[i].add(item)
       this.size++
     }

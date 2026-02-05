@@ -10,13 +10,15 @@ import type { ListNode } from './leetcode-types'
  */
 
 function deleteMiddle(head: ListNode | null): ListNode | null {
-  let result = head
-  if (!head) return null
-  if (!head.next) return null
+  const result = head
+  if (!head)
+    return null
+  if (!head.next)
+    return null
 
   // 创建一个虚拟头节点
-  let headNode = {
-    val: NaN,
+  const headNode = {
+    val: Number.NaN,
     next: head,
   }
 

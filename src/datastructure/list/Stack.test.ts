@@ -1,5 +1,6 @@
 import { Stack } from 'src/datastructure/list/Stack'
-test('test Stack ', () => {
+
+it('test Stack ', () => {
   const s = new Stack()
   expect(s.size).toBe(0)
   expect(s.isEmpty).toBe(true)

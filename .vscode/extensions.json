@@ -1,3 +1,6 @@
 {
-  "recommendations": ["geddski.macros"]
+  "recommendations": [
+    "geddski.macros",
+    "dbaeumer.vscode-eslint"
+  ]
 }

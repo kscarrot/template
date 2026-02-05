@@ -10,10 +10,11 @@ import { ListNode } from './utils'
  * @return {ListNode | null}
  */
 function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
-  if (!head) return null
+  if (!head)
+    return null
 
   /** 初始化虚拟头节点 */
-  let headNode = new ListNode(NaN)
+  const headNode = new ListNode(Number.NaN)
   headNode.next = head
 
   let prevCursor: ListNode | null = headNode

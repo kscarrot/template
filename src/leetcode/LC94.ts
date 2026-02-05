@@ -1,4 +1,4 @@
-import { TreeNode } from './leetcode-types'
+import type { TreeNode } from './leetcode-types'
 
 /**
  * @name: 二叉树的中序遍历
@@ -11,7 +11,8 @@ import { TreeNode } from './leetcode-types'
 function inorderTraversal(root: TreeNode | null): number[] {
   const result: number[] = []
   const dfs = (root: TreeNode | null) => {
-    if (!root) return
+    if (!root)
+      return
     dfs(root.left)
     result.push(root.val)
     dfs(root.right)

@@ -11,13 +11,13 @@ import { ListNode } from './utils'
  * @return {ListNode | null}
  */
 function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
-  const headNode = new ListNode(NaN)
+  const headNode = new ListNode(Number.NaN)
   let tail = headNode
   let carry = 0
   while (l1 || l2) {
-    let l1_val = l1 ? l1.val : 0
-    let l2_val = l2 ? l2.val : 0
-    let sum = l1_val + l2_val + carry
+    const l1_val = l1 ? l1.val : 0
+    const l2_val = l2 ? l2.val : 0
+    const sum = l1_val + l2_val + carry
     carry = sum >= 10 ? 1 : 0
     tail.next = new ListNode(sum % 10)
     tail = tail.next

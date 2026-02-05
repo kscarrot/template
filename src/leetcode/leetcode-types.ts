@@ -56,6 +56,6 @@ interface Problem {
 }
 
 // 导出所有类型
-export type { ListNode, NTreeNode, GraphNode, InputType, OutputType, TestCase, Solution, Problem }
+export type { GraphNode, InputType, ListNode, NTreeNode, OutputType, Problem, Solution, TestCase }
 
 export { TreeNode }

@@ -1,7 +1,7 @@
 import { DoubleLinkList } from 'src/datastructure/list/DoubleLinkList'
 import { isHeadNode, isTailNode } from 'src/datastructure/node/ListNode'
 
-test('test DoubleLinkList normal add insert', () => {
+it('test DoubleLinkList normal add insert', () => {
   const l = new DoubleLinkList<number>()
   expect(l.isEmpty).toBe(true)
   expect([...l]).toStrictEqual([])
@@ -29,7 +29,7 @@ test('test DoubleLinkList normal add insert', () => {
   expect(() => l.get(l.size)).toThrow()
 })
 
-test('test DoubleLinkList normal delete', () => {
+it('test DoubleLinkList normal delete', () => {
   const l = new DoubleLinkList()
   l.insert(l.size, 1) // H => 1 => T
   l.insert(l.size, 2)
@@ -60,7 +60,7 @@ test('test DoubleLinkList normal delete', () => {
   expect(() => l.delete(100)).toThrow()
 })
 
-test('test Node traverse', () => {
+it('test Node traverse', () => {
   const l = new DoubleLinkList<number>()
   const nodeIterator = l.traverseNode()
   let cursor = nodeIterator.next()
@@ -75,8 +75,8 @@ test('test Node traverse', () => {
   expect(cursor.done).toBe(true)
 })
 
-describe('DoubleLinkList', () => {
-  test('add should append element to the end of list', () => {
+describe('doubleLinkList', () => {
+  it('add should append element to the end of list', () => {
     const list = new DoubleLinkList<number>()
 
     // Test adding to empty list

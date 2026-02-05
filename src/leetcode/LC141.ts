@@ -24,7 +24,8 @@ function hasCycle(head: ListNode | null): boolean {
     slowCursor = slowCursor?.next || null
     // 快游标每次走两步
     fastCursor = fastCursor?.next?.next || null
-    if (fastCursor === slowCursor) return true
+    if (fastCursor === slowCursor)
+      return true
   }
   // 快游标访问到末尾且没有相遇,则无环
   return false

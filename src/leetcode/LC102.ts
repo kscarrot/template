@@ -1,4 +1,4 @@
-import { TreeNode } from './leetcode-types'
+import type { TreeNode } from './leetcode-types'
 
 /**
  * @name: 二叉树的层序遍历
@@ -9,7 +9,8 @@ import { TreeNode } from './leetcode-types'
  * @return {number[][]}
  */
 function levelOrder(root: TreeNode | null): number[][] {
-  if (!root) return []
+  if (!root)
+    return []
   const result: number[][] = []
   let queue: Array<TreeNode | null> = [root]
   while (queue.length > 0) {
@@ -18,8 +19,10 @@ function levelOrder(root: TreeNode | null): number[][] {
     for (const node of queue) {
       if (node) {
         currentLevelValues.push(node.val)
-        if (node.left) nextLevel.push(node.left)
-        if (node.right) nextLevel.push(node.right)
+        if (node.left)
+          nextLevel.push(node.left)
+        if (node.right)
+          nextLevel.push(node.right)
       }
     }
     queue = nextLevel

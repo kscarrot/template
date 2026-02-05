@@ -1,9 +1,9 @@
+import type { BinaryTreeADT } from 'src/datastructure/ADT'
+import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
+import type { compareFunction } from 'src/util/Comparator'
 // SplayTree.ts
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
-import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
-import { BinaryTreeADT } from 'src/datastructure/ADT'
 import { Comparator } from 'src/util/Comparator'
-import type { compareFunction } from 'src/util/Comparator'
 
 export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T> {
   constructor(values: Array<T> = [], comparator?: compareFunction<T>) {
@@ -13,6 +13,7 @@ export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T
       this.insert(value)
     }
   }
+
   /**
    * 右旋操作 (顺时针旋转)
    * y            x
@@ -31,10 +32,12 @@ export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T
     if (p) {
       if (p.left === y) {
         p.left = x
-      } else {
+      }
+      else {
         p.right = x
       }
-    } else {
+    }
+    else {
       this.root = x // 如果 y 是根，x 成为新根
     }
     x.parent = p
@@ -68,10 +71,12 @@ export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T
     if (p) {
       if (p.left === x) {
         p.left = y
-      } else {
+      }
+      else {
         p.right = y
       }
-    } else {
+    }
+    else {
       this.root = y // 如果 x 是根，y 成为新根
     }
     y.parent = p
@@ -100,23 +105,28 @@ export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T
         // Zig (单旋)
         if (p.left === x) {
           this.rotateRight(p)
-        } else {
+        }
+        else {
           this.rotateLeft(p)
         }
-      } else {
+      }
+      else {
         if (g.left === p && p.left === x) {
           // Zig-Zig (左-左情况)
           this.rotateRight(g)
           this.rotateRight(p)
-        } else if (g.right === p && p.right === x) {
+        }
+        else if (g.right === p && p.right === x) {
           // Zig-Zig (右-右情况)
           this.rotateLeft(g)
           this.rotateLeft(p)
-        } else if (g.left === p && p.right === x) {
+        }
+        else if (g.left === p && p.right === x) {
           // Zig-Zag (左-右情况)
           this.rotateLeft(p)
           this.rotateRight(g)
-        } else {
+        }
+        else {
           // Zig-Zag (右-左情况)
           this.rotateRight(p)
           this.rotateLeft(g)
@@ -145,7 +155,6 @@ export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T
   /**
    * 简化的 insert 方法，委托给 insertNode
    * @param value 要插入的值
-   * @param parentNode 父节点
    */
   override insert(value: T): this {
     this.insertNode(value)
@@ -159,7 +168,8 @@ export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T
       // 找到了节点，伸展到根部
       this.splay(node)
       return true
-    } else if (lastNode) {
+    }
+    else if (lastNode) {
       // 没找到，伸展最后访问的节点到根部
       // 这也是伸展树的一个特性，可以让后续相关的查找更快
       this.splay(lastNode)
@@ -171,11 +181,12 @@ export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T
   }
 
   /**
-   * @override 重写删除方法，添加伸展功能
+   * @override
    * @param value 要删除的值
    */
   override delete(value: T): this {
-    if (!this.root) return this
+    if (!this.root)
+      return this
 
     // 使用父类的 searchNodeWithLastVisited 方法查找
     const { node, lastNode } = this.searchNodeWithLastVisited(value, this.root)
@@ -201,7 +212,8 @@ export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T
       if (rightSubtree) {
         rightSubtree.parent = null
       }
-    } else {
+    }
+    else {
       // 断开左子树与原根的连接
       leftSubtree.parent = null
 

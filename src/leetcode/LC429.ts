@@ -1,4 +1,4 @@
-import { NTreeNode } from './leetcode-types'
+import type { NTreeNode } from './leetcode-types'
 
 /**
  * @name: N 叉树的层序遍历
@@ -9,7 +9,8 @@ import { NTreeNode } from './leetcode-types'
  * @return {number[][]}
  */
 function levelOrder(root: NTreeNode | null): number[][] {
-  if (!root) return []
+  if (!root)
+    return []
   const result: number[][] = []
   let queue: NTreeNode[] = [root]
   while (queue.length > 0) {

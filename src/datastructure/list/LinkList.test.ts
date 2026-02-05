@@ -1,7 +1,7 @@
 import { LinkList } from 'src/datastructure/list/LinkList'
 import { isHeadNode, isTailNode } from 'src/datastructure/node/ListNode'
 
-test('test Node traverse', () => {
+it('test Node traverse', () => {
   const l = new LinkList<number>()
   const nodeIterator = l.traverseNode()
   let cursor = nodeIterator.next()
@@ -16,7 +16,7 @@ test('test Node traverse', () => {
   expect(cursor.done).toBe(true)
 })
 
-test('test LinkList normal add insert', () => {
+it('test LinkList normal add insert', () => {
   const l = new LinkList<number>()
   expect(l.isEmpty).toBe(true)
   expect([...l]).toStrictEqual([])
@@ -45,7 +45,7 @@ test('test LinkList normal add insert', () => {
   expect(() => l.get(l.size)).toThrow()
 })
 
-test('test LinkList normal delete', () => {
+it('test LinkList normal delete', () => {
   const l = new LinkList()
   l.insert(l.size, 1) // H => 1 => T
   l.insert(l.size, 2)
@@ -76,8 +76,8 @@ test('test LinkList normal delete', () => {
   expect(() => l.delete(100)).toThrow()
 })
 
-describe('LinkList', () => {
-  test('add should append element to the end of list', () => {
+describe('linkList', () => {
+  it('add should append element to the end of list', () => {
     const list = new LinkList<number>()
 
     // Test adding to empty list

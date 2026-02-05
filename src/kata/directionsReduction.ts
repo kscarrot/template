@@ -16,13 +16,14 @@ export function dirReduc(arr: string[]): string[] {
 
   type directionType = keyof typeof OppositeDirectionMap
 
-  let directionStack: string[] = []
+  const directionStack: string[] = []
 
   for (const element of arr) {
     const topStackElement = directionStack.at(-1)
     if (topStackElement === OppositeDirectionMap[element as directionType]) {
       directionStack.pop()
-    } else {
+    }
+    else {
       directionStack.push(element)
     }
   }

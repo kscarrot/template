@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import cytoscape from 'cytoscape'
-import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
+import React, { useEffect, useRef } from 'react'
 import { traverseBinaryTreeNode } from 'src/datastructure/tree/BinaryTree'
 
 interface BinaryTreeVisualizerProps {
@@ -8,8 +8,8 @@ interface BinaryTreeVisualizerProps {
   style?: React.CSSProperties
 }
 
-type CyNode = { data: { id: string; label: string } }
-type CyEdge = { data: { source: string; target: string; edgeType: 'child' | 'parent' } }
+interface CyNode { data: { id: string, label: string } }
+interface CyEdge { data: { source: string, target: string, edgeType: 'child' | 'parent' } }
 
 /**
  * @description 将二叉树转换为 Cytoscape.js 可视化数据
@@ -26,7 +26,7 @@ function binaryTreeToCytoscapeData(root: BinaryTreeNode<any> | null) {
   for (const node of traverseBinaryTreeNode(root)) {
     let nodeId = nodeMap.get(node)
     if (!nodeId) {
-      nodeId = String(node.value) + '_' + id++
+      nodeId = `${String(node.value)}_${id++}`
       nodeMap.set(node, nodeId)
       nodes.push({ data: { id: nodeId, label: String(node.value) } })
     }
@@ -63,31 +63,32 @@ const BinaryTreeVisualizer: React.FC<BinaryTreeVisualizerProps> = ({ root, style
   const cyInstance = useRef<cytoscape.Core | null>(null)
 
   useEffect(() => {
-    if (!cyRef.current) return
+    if (!cyRef.current)
+      return
     cyRef.current.innerHTML = ''
     const { nodes, edges } = binaryTreeToCytoscapeData(root)
     const cy = cytoscape({
       container: cyRef.current,
-      elements: [...nodes, ...edges.map((e) => ({ data: e.data, classes: e.data.edgeType }))],
+      elements: [...nodes, ...edges.map(e => ({ data: e.data, classes: e.data.edgeType }))],
       style: [
         {
           selector: 'node',
           style: {
-            label: 'data(label)',
+            'label': 'data(label)',
             'background-color': '#2ECC40',
-            color: '#fff',
+            'color': '#fff',
             'text-valign': 'center',
             'text-halign': 'center',
             'font-size': 16,
-            width: 40,
-            height: 40,
+            'width': 40,
+            'height': 40,
           },
         },
         // child
         {
           selector: 'edge.child',
           style: {
-            width: 3,
+            'width': 3,
             'line-color': edgeColors.child,
             'target-arrow-color': edgeColors.child,
             'target-arrow-shape': 'triangle',
@@ -98,7 +99,7 @@ const BinaryTreeVisualizer: React.FC<BinaryTreeVisualizerProps> = ({ root, style
         {
           selector: 'edge.parent',
           style: {
-            width: 2,
+            'width': 2,
             'line-color': edgeColors.parent,
             'target-arrow-color': edgeColors.parent,
             'target-arrow-shape': 'vee',

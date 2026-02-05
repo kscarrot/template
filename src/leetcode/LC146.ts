@@ -18,7 +18,8 @@ class LRUCache {
 
   get(key: number): number {
     const node = this.#cache.get(key)
-    if (!node) return -1
+    if (!node)
+      return -1
     this.#moveToHead(node)
     return node.value
   }
@@ -28,7 +29,8 @@ class LRUCache {
     if (node) {
       node.value = value
       this.#moveToHead(node)
-    } else {
+    }
+    else {
       const newNode = new CacheNode(key, value)
       this.#cache.set(key, newNode)
       this.#addNodeToHead(newNode)

@@ -1,4 +1,4 @@
-import { StackADT } from 'src/datastructure/ADT'
+import type { StackADT } from 'src/datastructure/ADT'
 import { DoubleLinkList as List } from 'src/datastructure/list/DoubleLinkList'
 
 export class Stack<T> implements StackADT<T> {
@@ -32,7 +32,8 @@ export class Stack<T> implements StackADT<T> {
   top() {
     if (this.isEmpty) {
       throw new Error('Stack is empty')
-    } else {
+    }
+    else {
       return this.#l.get(this.size - 1)
     }
   }

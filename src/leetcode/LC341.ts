@@ -5,7 +5,7 @@
  * @description: 给你一个嵌套的整数列表 nestedList 。请你设计一个迭代器，使其能够遍历这个列表中的所有整数。
  */
 
-type NestedInteger = {
+interface NestedInteger {
   isInteger: () => boolean
   getInteger: () => number
   getList: () => NestedInteger[]
@@ -15,7 +15,8 @@ function* NestedIntegerIterator(nestedList: NestedInteger[]): Generator<number> 
   for (const nestedInteger of nestedList) {
     if (nestedInteger.isInteger()) {
       yield nestedInteger.getInteger()
-    } else {
+    }
+    else {
       yield* NestedIntegerIterator(nestedInteger.getList())
     }
   }

@@ -32,15 +32,15 @@ class LinkNode<T> {
  */
 interface LinkHeadNode<T> {
   next: LinkNode<T> | LinkTailNode<T>
-  value: Symbol
+  value: symbol
 }
 
 /**
  * @description: 单向链表尾节点接口
  */
-interface LinkTailNode<T> {
+interface LinkTailNode<_T> {
   next: null
-  value: Symbol
+  value: symbol
 }
 
 /**
@@ -54,7 +54,7 @@ type LinkNodes<T> = LinkHeadNode<T> | LinkNode<T> | LinkTailNode<T>
 interface DoubleLinkHeadNode<T> {
   prev: null
   next: DoubleLinkNode<T> | DoubleLinkTailNode<T>
-  value: Symbol
+  value: symbol
 }
 
 /**
@@ -63,7 +63,7 @@ interface DoubleLinkHeadNode<T> {
 interface DoubleLinkTailNode<T> {
   prev: DoubleLinkNode<T> | DoubleLinkHeadNode<T>
   next: null
-  value: Symbol
+  value: symbol
 }
 
 /**
@@ -88,21 +88,21 @@ class CircularLinkNode<T> {
 /**
  * @description: 判断是否为头节点
  */
-const isHeadNode = <T>(node: LinkNodes<T>): node is LinkHeadNode<T> => {
+function isHeadNode<T>(node: LinkNodes<T>): node is LinkHeadNode<T> {
   return node.value === headSymbol
 }
 
 /**
  * @description: 判断是否为尾节点
  */
-const isTailNode = <T>(node: LinkNodes<T>): node is LinkTailNode<T> => {
+function isTailNode<T>(node: LinkNodes<T>): node is LinkTailNode<T> {
   return node.value === tailSymbol
 }
 
 /**
  * @description: 创建单向链表的头尾节点
  */
-const createLinkNodes = <T>() => {
+function createLinkNodes<T>() {
   const tailNode: LinkTailNode<T> = {
     next: null,
     value: tailSymbol,
@@ -117,7 +117,7 @@ const createLinkNodes = <T>() => {
 /**
  * @description: 创建双向链表的头尾节点
  */
-const createDoubleLinkNodes = <T>() => {
+function createDoubleLinkNodes<T>() {
   const tailNode: DoubleLinkTailNode<T> = {
     prev: null as unknown as DoubleLinkHeadNode<T>, // 下面连接保证
     next: null,
@@ -132,6 +132,6 @@ const createDoubleLinkNodes = <T>() => {
   return { headNode, tailNode }
 }
 
-export type { LinkHeadNode, LinkTailNode, LinkNodes, DoubleLinkHeadNode, DoubleLinkTailNode, DoubleLinkNodes }
+export type { DoubleLinkHeadNode, DoubleLinkNodes, DoubleLinkTailNode, LinkHeadNode, LinkNodes, LinkTailNode }
 
-export { isHeadNode, isTailNode, createLinkNodes, createDoubleLinkNodes, LinkNode, DoubleLinkNode, CircularLinkNode }
+export { CircularLinkNode, createDoubleLinkNodes, createLinkNodes, DoubleLinkNode, isHeadNode, isTailNode, LinkNode }

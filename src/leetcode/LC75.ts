@@ -16,14 +16,16 @@ function sortColors(nums: number[]): number[] {
       ;[nums[i], nums[left]] = [nums[left], nums[i]]
       left++
       i++
-    } else if (nums[i] === 2) {
+    }
+    else if (nums[i] === 2) {
       //  蓝色结尾向后移动
       ;[nums[i], nums[right]] = [nums[right], nums[i]]
       //  换过来的元素颜色是不知道的 不能直接i++ 需要再判断一次
       right--
       //  注意：交换后i位置的新值可能是0、1或2，所以不能i++，需要重新检查
-    } else {
-      //白色中间色
+    }
+    else {
+      // 白色中间色
       i++
     }
   }

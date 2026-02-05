@@ -1,11 +1,11 @@
-import { vi } from 'vitest'
 import {
-  valuesToBinaryTree,
+  BinaryTree,
   traverseBinaryTree,
   traverseBinaryTreeNode,
   TraverseType,
-  BinaryTree,
+  valuesToBinaryTree,
 } from 'src/datastructure/tree/BinaryTree'
+import { vi } from 'vitest'
 
 describe('二叉树', () => {
   it('二叉树的构建和遍历', () => {

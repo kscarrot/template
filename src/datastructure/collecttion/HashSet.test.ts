@@ -1,6 +1,6 @@
 import { HashSet } from 'src/datastructure/collecttion/HashSet'
 
-test('test not string type key', () => {
+it('test not string type key', () => {
   const hs = new HashSet()
   hs.add(1).add(2).add(2)
   expect(hs.size).toBe(2)

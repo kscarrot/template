@@ -5,7 +5,7 @@
  * 2. reduce 除了 sum外还可以用max逻辑 可以少考虑sort的逻辑 (参考solutions调整)
  */
 
-export const high = (str: string): string => {
+export function high(str: string): string {
   const calcWordValue = (word: string) => [...word].reduce((sum, char) => (sum += char.charCodeAt(0) - 96), 0)
   return str.split(' ').reduce((max, word) => (calcWordValue(word) > calcWordValue(max) ? word : max))
 }

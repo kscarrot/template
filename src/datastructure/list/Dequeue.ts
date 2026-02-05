@@ -1,4 +1,4 @@
-import { DequeueADT } from 'src/datastructure/ADT'
+import type { DequeueADT } from 'src/datastructure/ADT'
 import { DoubleLinkList as List } from 'src/datastructure/list/DoubleLinkList'
 
 export class Dequeue<T> implements DequeueADT<T> {

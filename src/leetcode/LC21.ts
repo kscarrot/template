@@ -11,8 +11,10 @@ import type { ListNode } from './leetcode-types'
  */
 function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
   // 两个链表至少有一个元素
-  if (!list1) return list2
-  if (!list2) return list1
+  if (!list1)
+    return list2
+  if (!list2)
+    return list1
 
   // 初始化游标
   let p1: ListNode | null = list1
@@ -24,7 +26,8 @@ function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode
     newHeadNode = p1
     newTailNode = p1
     p1 = p1.next
-  } else {
+  }
+  else {
     newHeadNode = p2
     newTailNode = p2
     p2 = p2.next
@@ -35,7 +38,8 @@ function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode
       newTailNode.next = p1
       newTailNode = newTailNode.next
       p1 = p1.next
-    } else {
+    }
+    else {
       newTailNode.next = p2
       newTailNode = newTailNode.next
       p2 = p2.next

@@ -1,6 +1,6 @@
-import { ListADT } from 'src/datastructure/ADT'
-import type { DoubleLinkHeadNode, DoubleLinkTailNode, DoubleLinkNodes } from 'src/datastructure/node/ListNode'
-import { isHeadNode, isTailNode, DoubleLinkNode, createDoubleLinkNodes } from 'src/datastructure/node/ListNode'
+import type { ListADT } from 'src/datastructure/ADT'
+import type { DoubleLinkHeadNode, DoubleLinkNodes, DoubleLinkTailNode } from 'src/datastructure/node/ListNode'
+import { createDoubleLinkNodes, DoubleLinkNode, isHeadNode, isTailNode } from 'src/datastructure/node/ListNode'
 
 export class DoubleLinkList<T> implements ListADT<T> {
   size = 0
@@ -32,7 +32,7 @@ export class DoubleLinkList<T> implements ListADT<T> {
   }
 
   private getNode(index: number) {
-    let nodeIterator = this.traverseNode()
+    const nodeIterator = this.traverseNode()
 
     nodeIterator.next() // 第一个是头指针 放过去
     let cusor = nodeIterator.next()
@@ -86,8 +86,8 @@ export class DoubleLinkList<T> implements ListADT<T> {
     }
 
     // 控制了index的范围 类型用size保证
-    const deleteNode =
-      index === this.size - 1 ? (this.tail.prev as DoubleLinkNode<T>) : (this.getNode(index) as DoubleLinkNode<T>)
+    const deleteNode
+      = index === this.size - 1 ? (this.tail.prev as DoubleLinkNode<T>) : (this.getNode(index) as DoubleLinkNode<T>)
 
     deleteNode.next.prev = deleteNode.prev
     deleteNode.prev.next = deleteNode.next
@@ -97,21 +97,23 @@ export class DoubleLinkList<T> implements ListADT<T> {
   }
 
   /** 从头节点开始迭代 遇到尾节点退出 返回 头 -> T -> 尾 */
-  *traverseNode() {
+  * traverseNode() {
     let current: DoubleLinkNodes<T> = this.head
     while (true) {
       yield current
-      if (isTailNode<T>(current)) return
+      if (isTailNode<T>(current))
+        return
       current = current.next
     }
   }
 
-  *traverse() {
+  * traverse() {
     const traverse = this.traverseNode()
 
     let point = traverse.next()
     whileLoop: while (!point.done) {
-      if (isTailNode<T>(point.value)) return
+      if (isTailNode<T>(point.value))
+        return
 
       if (isHeadNode<T>(point.value)) {
         point = traverse.next()

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import type { FiberNode } from 'src/datastructure/node/TreeNode'
 import cytoscape from 'cytoscape'
-import { FiberNode } from 'src/datastructure/node/TreeNode'
+import React, { useEffect, useRef } from 'react'
 import { traverseFiberTreeNode } from 'src/datastructure/tree/FiberTree'
 
 interface FiberTreeVisualizerProps {
@@ -8,8 +8,8 @@ interface FiberTreeVisualizerProps {
   style?: React.CSSProperties
 }
 
-type CyNode = { data: { id: string; label: string } }
-type CyEdge = { data: { source: string; target: string; edgeType: 'child' | 'parent' | 'sibling' } }
+interface CyNode { data: { id: string, label: string } }
+interface CyEdge { data: { source: string, target: string, edgeType: 'child' | 'parent' | 'sibling' } }
 
 /**
  * @description 将 FiberTree 转换为 Cytoscape.js 可视化数据
@@ -26,7 +26,7 @@ function fiberTreeToCytoscapeData(root: FiberNode<any> | null) {
   for (const node of traverseFiberTreeNode(root)) {
     let nodeId = nodeMap.get(node)
     if (!nodeId) {
-      nodeId = String(node.value) + '_' + id++
+      nodeId = `${String(node.value)}_${id++}`
       nodeMap.set(node, nodeId)
       nodes.push({ data: { id: nodeId, label: String(node.value) } })
     }
@@ -67,31 +67,32 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
   const cyInstance = useRef<cytoscape.Core | null>(null)
 
   useEffect(() => {
-    if (!cyRef.current) return
+    if (!cyRef.current)
+      return
     cyRef.current.innerHTML = '' // 清空
     const { nodes, edges } = fiberTreeToCytoscapeData(root)
     const cy = cytoscape({
       container: cyRef.current,
-      elements: [...nodes, ...edges.map((e) => ({ data: e.data, classes: e.data.edgeType }))],
+      elements: [...nodes, ...edges.map(e => ({ data: e.data, classes: e.data.edgeType }))],
       style: [
         {
           selector: 'node',
           style: {
-            label: 'data(label)',
+            'label': 'data(label)',
             'background-color': '#0074D9',
-            color: '#fff',
+            'color': '#fff',
             'text-valign': 'center',
             'text-halign': 'center',
             'font-size': 16,
-            width: 40,
-            height: 40,
+            'width': 40,
+            'height': 40,
           },
         },
         // child
         {
           selector: 'edge.child',
           style: {
-            width: 3,
+            'width': 3,
             'line-color': edgeColors.child,
             'target-arrow-color': edgeColors.child,
             'target-arrow-shape': 'triangle',
@@ -102,7 +103,7 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
         {
           selector: 'edge.sibling',
           style: {
-            width: 3,
+            'width': 3,
             'line-color': edgeColors.sibling,
             'target-arrow-color': edgeColors.sibling,
             'target-arrow-shape': 'triangle',
@@ -114,7 +115,7 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
         {
           selector: 'edge.parent',
           style: {
-            width: 2,
+            'width': 2,
             'line-color': edgeColors.parent,
             'target-arrow-color': edgeColors.parent,
             'target-arrow-shape': 'vee',

@@ -1,4 +1,4 @@
-import { NTreeNode } from './leetcode-types'
+import type { NTreeNode } from './leetcode-types'
 /**
  * @name: N 叉树的最大深度
  * @level: 简单
@@ -8,9 +8,11 @@ import { NTreeNode } from './leetcode-types'
  * @return {number}
  */
 function maxDepth(root: NTreeNode | null): number {
-  if (!root) return 0
-  if (root.children.length === 0) return 1
-  return Math.max(...root.children.map((child) => maxDepth(child))) + 1
+  if (!root)
+    return 0
+  if (root.children.length === 0)
+    return 1
+  return Math.max(...root.children.map(child => maxDepth(child))) + 1
 }
 
 export { maxDepth }

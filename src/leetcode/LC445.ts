@@ -1,4 +1,4 @@
-import { ListNode } from './utils'
+import type { ListNode } from './utils'
 import addTwoNumbersInverse from './LC2'
 import reverseList from './LC206'
 
@@ -12,9 +12,9 @@ import reverseList from './LC206'
  * @return {ListNode | null}
  */
 function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
-  let l1Inverse = reverseList(l1)
-  let l2Inverse = reverseList(l2)
-  let result = addTwoNumbersInverse(l1Inverse, l2Inverse)
+  const l1Inverse = reverseList(l1)
+  const l2Inverse = reverseList(l2)
+  const result = addTwoNumbersInverse(l1Inverse, l2Inverse)
   return reverseList(result)
 }
 

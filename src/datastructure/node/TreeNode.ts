@@ -8,12 +8,15 @@ class BinaryTreeNode<T> {
   right: BinaryTreeNode<T> | null = null
   constructor(
     value: T,
-    options: { parent?: BinaryTreeNode<T>; left?: BinaryTreeNode<T>; right?: BinaryTreeNode<T> } = {},
+    options: { parent?: BinaryTreeNode<T>, left?: BinaryTreeNode<T>, right?: BinaryTreeNode<T> } = {},
   ) {
     this.value = value
-    if (options.parent) this.parent = options.parent
-    if (options.left) this.left = options.left
-    if (options.right) this.right = options.right
+    if (options.parent)
+      this.parent = options.parent
+    if (options.left)
+      this.left = options.left
+    if (options.right)
+      this.right = options.right
   }
 
   get isLeaf() {
@@ -34,7 +37,8 @@ class TreeNode<T> {
   children: TreeNode<T>[] = []
   constructor(value: T, parent: TreeNode<T> | null) {
     this.value = value
-    if (parent) this.parent = parent
+    if (parent)
+      this.parent = parent
   }
 
   get isLeaf() {
@@ -52,8 +56,9 @@ class FiberNode<T> {
   child: FiberNode<T> | null = null
   constructor(value: T, parent: FiberNode<T> | null) {
     this.value = value
-    if (parent) this.parent = parent
+    if (parent)
+      this.parent = parent
   }
 }
 
-export { BinaryTreeNode, TreeNode, FiberNode }
+export { BinaryTreeNode, FiberNode, TreeNode }

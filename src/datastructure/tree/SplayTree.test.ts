@@ -39,7 +39,12 @@ describe('二叉搜索树', () => {
     bst.delete(12)
     expect([...bst]).toStrictEqual([3, 4, 9, 10, 11, 13])
     expect([bst.getKth(1), bst.getKth(2), bst.getKth(3), bst.getKth(4), bst.getKth(5), bst.getKth(6)]).toStrictEqual([
-      3, 4, 9, 10, 11, 13,
+      3,
+      4,
+      9,
+      10,
+      11,
+      13,
     ])
     expect([
       bst.getRank(3),

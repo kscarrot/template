@@ -17,10 +17,13 @@ function isValid(s: string): boolean {
   for (const char of s) {
     if (isLeft(char)) {
       stack.push(char)
-    } else {
-      if (stack.length === 0) return false
+    }
+    else {
+      if (stack.length === 0)
+        return false
       const top = stack.pop()
-      if (parenthesesMap[top as keyof typeof parenthesesMap] !== char) return false
+      if (parenthesesMap[top as keyof typeof parenthesesMap] !== char)
+        return false
     }
   }
   return stack.length === 0

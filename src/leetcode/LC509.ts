@@ -17,7 +17,7 @@ function fib(n: number): number {
       0: 0,
       1: 1,
     },
-    //缓存key
+    // 缓存key
     (n: number) => n.toString(),
   )
   return dfs(n)

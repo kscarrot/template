@@ -1,7 +1,8 @@
-import { TreeNode } from './leetcode-types'
+import type { TreeNode } from './leetcode-types'
 
 function invertTree(root: TreeNode | null): TreeNode | null {
-  if (!root) return null
+  if (!root)
+    return null
   const left = invertTree(root.left)
   const right = invertTree(root.right)
   root.left = right

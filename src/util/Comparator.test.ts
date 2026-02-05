@@ -1,6 +1,6 @@
 import { Comparator } from 'src/util/Comparator'
 
-test('test comparator basic', () => {
+it('test comparator basic', () => {
   const cmp = new Comparator()
   expect(cmp.eq(1, 2)).toBe(false)
   expect(cmp.eq(1, 1)).toBe(true)
@@ -18,9 +18,10 @@ test('test comparator basic', () => {
   expect(cmp.lte(1, 1)).toBe(true)
 })
 
-test('test comparator constructor and reverse', () => {
+it('test comparator constructor and reverse', () => {
   const strLengthCompare = (a: string, b: string) => {
-    if (a.length === b.length) return 0
+    if (a.length === b.length)
+      return 0
     return a.length > b.length ? 1 : -1
   }
   const newCmp = new Comparator(strLengthCompare)

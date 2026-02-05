@@ -1,4 +1,5 @@
-import { TreeNode, BinaryTreeNode, FiberNode } from 'src/datastructure/node/TreeNode'
+import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
+import { FiberNode, TreeNode } from 'src/datastructure/node/TreeNode'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 
 /**
@@ -12,7 +13,8 @@ function buildFiberTreeFromBinaryTree<T>(
   parentFiberNode: FiberNode<T> | null,
 ): FiberNode<T> | null {
   // 如果二叉树节点为空，则返回 null
-  if (!binaryNode) return null
+  if (!binaryNode)
+    return null
 
   // 创建当前 Fiber 节点并链接父节点
   const currentFiberNode = new FiberNode<T>(binaryNode.value, parentFiberNode)
@@ -25,7 +27,8 @@ function buildFiberTreeFromBinaryTree<T>(
   currentFiberNode.child = leftChildFiber
   if (leftChildFiber) {
     leftChildFiber.sibling = rightChildFiber
-  } else {
+  }
+  else {
     currentFiberNode.child = rightChildFiber
   }
 
@@ -50,10 +53,11 @@ function buildFiberTreeFromTreeNode<T>(treeNode: TreeNode<T>, parentFiberNode: F
       const childTreeNode = treeNode.children[i]
       // 递归构建 Fiber 节点
       const childFiberNode = buildFiberTreeFromTreeNode(childTreeNode, currentFiberNode)
-      //第一个子节点作为child
+      // 第一个子节点作为child
       if (i === 0) {
         currentFiberNode.child = childFiberNode
-      } else if (previousSibling) {
+      }
+      else if (previousSibling) {
         // 其余子节点作为 child 的兄弟节点F
         previousSibling.sibling = childFiberNode
       }
@@ -76,9 +80,11 @@ function* traverseFiberTreeNode<T>(fiberTree: FiberNode<T> | null): Generator<Fi
     yield current
     if (current.child) {
       current = current.child
-    } else if (current.sibling) {
+    }
+    else if (current.sibling) {
       current = current.sibling
-    } else {
+    }
+    else {
       current = current.parent?.sibling || null
     }
   }
@@ -96,9 +102,11 @@ class FiberTree<T> {
   constructor(tree: BinaryTree<T> | TreeNode<T> | null) {
     if (tree instanceof BinaryTree) {
       this.root = buildFiberTreeFromBinaryTree(tree.root, null)
-    } else if (tree instanceof TreeNode) {
+    }
+    else if (tree instanceof TreeNode) {
       this.root = buildFiberTreeFromTreeNode(tree, null)
-    } else {
+    }
+    else {
       this.root = null
     }
   }
@@ -108,4 +116,4 @@ class FiberTree<T> {
   }
 }
 
-export { traverseFiberTreeNode, FiberTree }
+export { FiberTree, traverseFiberTreeNode }

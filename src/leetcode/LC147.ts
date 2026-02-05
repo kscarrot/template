@@ -9,10 +9,12 @@ import { ListNode } from './utils'
  */
 
 function sortList(head: ListNode | null): ListNode | null {
-  if (!head) return null
-  if (!head.next) return head
+  if (!head)
+    return null
+  if (!head.next)
+    return head
 
-  let newHeadNode = new ListNode(NaN)
+  const newHeadNode = new ListNode(Number.NaN)
   newHeadNode.next = null
   const intertIntoSortedList = (insetNode: ListNode) => {
     let prevCursor: ListNode | null = newHeadNode
@@ -30,7 +32,8 @@ function sortList(head: ListNode | null): ListNode | null {
         prevCursor.next = insetNode
         insetNode.next = currentCursor
         return
-      } else {
+      }
+      else {
         // 比当前元素大 游标后移
         prevCursor = currentCursor
         currentCursor = currentCursor.next

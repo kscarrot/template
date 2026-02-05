@@ -27,7 +27,8 @@ class MyQueue {
   pop(): number {
     if (this.empty()) {
       throw new Error('Queue is empty')
-    } else {
+    }
+    else {
       return this.stack.pop() as number
     }
   }
@@ -35,7 +36,8 @@ class MyQueue {
   peek(): number {
     if (this.empty()) {
       throw new Error('Queue is empty')
-    } else {
+    }
+    else {
       return this.stack[this.stack.length - 1]
     }
   }
