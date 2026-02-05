@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import {
   valuesToBinaryTree,
   traverseBinaryTree,
@@ -75,10 +76,10 @@ describe('二叉树', () => {
 })
 
 describe('打印验证', () => {
-  let consoleSpy: jest.SpyInstance
+  let consoleSpy: ReturnType<typeof vi.spyOn>
 
   beforeEach(() => {
-    consoleSpy = jest.spyOn(console, 'log').mockImplementation()
+    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
   })
 
   afterEach(() => {
