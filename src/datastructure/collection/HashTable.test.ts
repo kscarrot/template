@@ -1,4 +1,4 @@
-import { HashTable } from 'src/datastructure/collecttion/HashTable'
+import { HashTable } from 'src/datastructure/collection/HashTable'
 
 it('test hash function ', () => {
   const ht = new HashTable()

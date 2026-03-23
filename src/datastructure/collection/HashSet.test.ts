@@ -1,4 +1,4 @@
-import { HashSet } from 'src/datastructure/collecttion/HashSet'
+import { HashSet } from 'src/datastructure/collection/HashSet'
 
 it('test not string type key', () => {
   const hs = new HashSet()

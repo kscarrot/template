@@ -1,6 +1,6 @@
 import type { HashSetADT } from 'src/datastructure/ADT'
 
-import { HashTable } from 'src/datastructure/collecttion/HashTable'
+import { HashTable } from 'src/datastructure/collection/HashTable'
 
 export class HashSet<T> implements HashSetADT<T> {
   #h: HashTable<boolean>
