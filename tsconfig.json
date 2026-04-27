@@ -3,11 +3,10 @@
     "target": "ESNext",
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "baseUrl": "./",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
-      "*": ["*"]
+      "*": ["./*"]
     },
     "resolveJsonModule": true,
     "types": ["node", "vitest/globals"],

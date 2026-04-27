@@ -1,11 +1,10 @@
-import type { BinaryTreeADT } from 'src/datastructure/ADT'
 import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import type { compareFunction } from 'src/util/Comparator'
 // SplayTree.ts
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
 import { Comparator } from 'src/util/Comparator'
 
-export class SplayTree<T> extends BinarySearchTree<T> implements BinaryTreeADT<T> {
+export class SplayTree<T> extends BinarySearchTree<T> {
   constructor(values: Array<T> = [], comparator?: compareFunction<T>) {
     super([])
     this.comparator = new Comparator(comparator)

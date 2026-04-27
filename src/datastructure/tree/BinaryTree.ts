@@ -1,4 +1,4 @@
-import type { BinaryTreeADT } from 'src/datastructure/ADT'
+import type { TreeADT } from 'src/datastructure/ADT'
 import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 
 /**
@@ -77,7 +77,7 @@ export function* traverseBinaryTree<T>(
  * @description 二叉树
  * @template T 二叉树的节点类型
  */
-export class BinaryTree<T> implements BinaryTreeADT<T> {
+export class BinaryTree<T> implements TreeADT<T> {
   root: BinaryTreeNode<T> | null = null
   size: number = 0
 

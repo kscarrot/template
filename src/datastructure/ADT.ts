@@ -65,34 +65,34 @@ export interface HeapADT<T> {
   peek: () => T
 }
 
-export interface BinaryTreeADT<T> {
-  /** 二叉树的大小 */
+export interface TreeADT<T> {
+  /** 树的大小 */
   size: number
-  /** 二叉树是否为空 */
+  /** 树是否为空 */
   isEmpty: boolean
-  /** 打印二叉树 */
+  /** 打印树结构 */
   print: (options?: { showNull: boolean }) => void
-  /** 遍历二叉树 */
+  /** 遍历树 */
   [Symbol.iterator]: () => Generator<T>
-  /** 查询一个元素是否在二叉树中 */
+  /** 查询一个元素是否在树中 */
   search: (value: T) => boolean
+  /** 从树中插入一个元素（可选，取决于具体树实现） */
+  insert?: (value: T) => this
+  /** 从树中删除一个元素（可选，取决于具体树实现） */
+  delete?: (value: T) => this
 }
 
-export interface BinarySearchTreeADT<T> extends BinaryTreeADT<T> {
-  /** 从二叉搜索树中插入一个元素 */
-  insert: (value: T) => this
-  /** 从二叉搜索树中删除一个元素 */
-  delete: (value: T) => this
-  /** 查找一个元素在二叉搜索树中的最小值 */
+export interface SearchTreeADT<T> extends TreeADT<T> {
+  /** 查找有序树中的最小值 */
   getMin: () => T | null
-  /** 查找一个元素在二叉搜索树中的最大值 */
+  /** 查找有序树中的最大值 */
   getMax: () => T | null
-  /** 查找一个元素在二叉搜索树中的顺序排名 */
+  /** 查找一个元素在有序树中的顺序排名 */
   getRank: (value: T) => number
-  /** 查找一个元素在二叉搜索树中的前驱 */
+  /** 查找一个元素在有序树中的前驱 */
   getPrev: (value: T) => T | null
-  /** 查找一个元素在二叉搜索树中的后继 */
+  /** 查找一个元素在有序树中的后继 */
   getNext: (value: T) => T | null
-  /** 查找二叉搜索树中的第k大的元素 */
+  /** 查找有序树中的第k个元素 */
   getKth: (k: number) => T | null
 }
