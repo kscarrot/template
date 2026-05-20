@@ -12,8 +12,6 @@ export class CircularLinkList<T> implements ListADT<T> {
     if (this.isEmpty) {
       this.head = insertNode
       this.tail = insertNode
-      insertNode.next = insertNode
-      insertNode.prev = insertNode
     }
     else {
       const prevNode = this.tail!
@@ -55,8 +53,7 @@ export class CircularLinkList<T> implements ListADT<T> {
       throw new Error('get Data out of List size')
     }
 
-    const indexNode = this.getNode(index) as CircularLinkNode<T>
-    return indexNode.value
+    return this.getNode(index).value
   }
 
   insert(index: number, value: T) {

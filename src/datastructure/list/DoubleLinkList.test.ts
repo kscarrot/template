@@ -1,5 +1,4 @@
 import { DoubleLinkList } from 'src/datastructure/list/DoubleLinkList'
-import { isHeadNode, isTailNode } from 'src/datastructure/node/ListNode'
 
 it('test DoubleLinkList normal add insert', () => {
   const l = new DoubleLinkList<number>()
@@ -61,18 +60,21 @@ it('test DoubleLinkList normal delete', () => {
 })
 
 it('test Node traverse', () => {
+  const empty = new DoubleLinkList<number>()
+  let it = empty.traverseNode()
+  expect(it.next().done).toBe(true)
+
   const l = new DoubleLinkList<number>()
-  const nodeIterator = l.traverseNode()
-  let cursor = nodeIterator.next()
-  if (cursor.value) {
-    expect(isHeadNode<number>(cursor.value)).toBe(true)
-  }
-  cursor = nodeIterator.next()
-  if (cursor.value) {
-    expect(isTailNode<number>(cursor.value)).toBe(true)
-  }
-  cursor = nodeIterator.next()
-  expect(cursor.done).toBe(true)
+  l.add(1).add(2)
+  it = l.traverseNode()
+  let step = it.next()
+  expect(step.done).toBe(false)
+  expect(step.value?.value).toBe(1)
+  step = it.next()
+  expect(step.done).toBe(false)
+  expect(step.value?.value).toBe(2)
+  step = it.next()
+  expect(step.done).toBe(true)
 })
 
 describe('doubleLinkList', () => {

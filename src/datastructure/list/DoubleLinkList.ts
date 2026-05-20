@@ -1,6 +1,6 @@
 import type { ListADT } from 'src/datastructure/ADT'
-import type { DoubleLinkHeadNode, DoubleLinkNodes, DoubleLinkTailNode } from 'src/datastructure/node/ListNode'
-import { createDoubleLinkNodes, DoubleLinkNode, isHeadNode, isTailNode } from 'src/datastructure/node/ListNode'
+import type { DoubleLinkHeadNode, DoubleLinkTailNode } from 'src/datastructure/node/ListNode'
+import { createDoubleLinkNodes, DoubleLinkNode, isTailNode } from 'src/datastructure/node/ListNode'
 
 export class DoubleLinkList<T> implements ListADT<T> {
   size = 0
@@ -13,35 +13,27 @@ export class DoubleLinkList<T> implements ListADT<T> {
     this.tail = tailNode
   }
 
-  add(value: T) {
-    const insertNode = new DoubleLinkNode(value)
-    const prevNode = this.tail.prev
-
-    prevNode.next = insertNode
-    insertNode.prev = prevNode
-
-    this.tail.prev = insertNode
-    insertNode.next = this.tail
-
-    this.size = this.size + 1
-    return this
-  }
-
   get isEmpty() {
     return this.size === 0
   }
 
-  private getNode(index: number) {
-    const nodeIterator = this.traverseNode()
-
-    nodeIterator.next() // 第一个是头指针 放过去
-    let cusor = nodeIterator.next()
-    let count = 0
-    while (count < index) {
-      cusor = nodeIterator.next()
-      count = count + 1
+  /** 从首数据节点起迭代，不含头尾哨兵；到达尾前结束，不产出尾节点 */
+  * traverseNode(): Generator<DoubleLinkNode<T>, void, unknown> {
+    let current: DoubleLinkNode<T> | DoubleLinkTailNode<T> = this.head.next
+    while (!isTailNode<T>(current)) {
+      yield current
+      current = current.next
     }
-    return cusor.value
+  }
+
+  private getNode(index: number) {
+    let i = 0
+    for (const node of this.traverseNode()) {
+      if (i === index)
+        return node
+      i++
+    }
+    throw new Error('getNode index out of list size')
   }
 
   get(index: number) {
@@ -53,8 +45,7 @@ export class DoubleLinkList<T> implements ListADT<T> {
       throw new Error('get Data out of List size')
     }
 
-    const indexNode = this.getNode(index) as DoubleLinkNode<T>
-    return indexNode.value
+    return this.getNode(index).value
   }
 
   insert(index: number, value: T) {
@@ -63,8 +54,11 @@ export class DoubleLinkList<T> implements ListADT<T> {
     }
 
     const insertNode = new DoubleLinkNode(value)
-    const nextNode = this.getNode(index) as DoubleLinkNode<T> | DoubleLinkTailNode<T>
-    const prevNode = nextNode.prev
+
+    const isTailInsert = index === this.size
+
+    const nextNode = isTailInsert ? this.tail : this.getNode(index)
+    const prevNode = isTailInsert ? this.tail.prev : nextNode.prev
 
     prevNode.next = insertNode
     insertNode.prev = prevNode
@@ -76,6 +70,10 @@ export class DoubleLinkList<T> implements ListADT<T> {
     return this
   }
 
+  add(value: T) {
+    return this.insert(this.size, value)
+  }
+
   delete(index: number) {
     if (this.isEmpty) {
       throw new Error('Cant delete empty list')
@@ -85,9 +83,7 @@ export class DoubleLinkList<T> implements ListADT<T> {
       throw new Error('delete Data out of List size')
     }
 
-    // 控制了index的范围 类型用size保证
-    const deleteNode
-      = index === this.size - 1 ? (this.tail.prev as DoubleLinkNode<T>) : (this.getNode(index) as DoubleLinkNode<T>)
+    const deleteNode = this.getNode(index)
 
     deleteNode.next.prev = deleteNode.prev
     deleteNode.prev.next = deleteNode.next
@@ -96,32 +92,9 @@ export class DoubleLinkList<T> implements ListADT<T> {
     return deleteNode.value
   }
 
-  /** 从头节点开始迭代 遇到尾节点退出 返回 头 -> T -> 尾 */
-  * traverseNode() {
-    let current: DoubleLinkNodes<T> = this.head
-    while (true) {
-      yield current
-      if (isTailNode<T>(current))
-        return
-      current = current.next
-    }
-  }
-
   * traverse() {
-    const traverse = this.traverseNode()
-
-    let point = traverse.next()
-    whileLoop: while (!point.done) {
-      if (isTailNode<T>(point.value))
-        return
-
-      if (isHeadNode<T>(point.value)) {
-        point = traverse.next()
-        continue whileLoop
-      }
-
-      yield point.value.value
-      point = traverse.next()
+    for (const node of this.traverseNode()) {
+      yield node.value
     }
   }
 
