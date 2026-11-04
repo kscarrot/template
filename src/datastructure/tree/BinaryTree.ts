@@ -7,8 +7,7 @@ import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
  * @returns 二叉树的根节点
  */
 export function valuesToBinaryTree<T>(values: Array<T | null>): BinaryTreeNode<T> | null {
-  // 如果数组为空，则返回 null
-  if (values.length === 0)
+  if (values.length === 0 || values[0] === null)
     return null
   // 创建根节点
   const root = new BinaryTreeNode(values[0] as T)
@@ -83,7 +82,7 @@ export class BinaryTree<T> implements TreeADT<T> {
 
   constructor(values: Array<T | null>) {
     this.root = valuesToBinaryTree(values)
-    this.size = values.filter(Boolean).length
+    this.size = [...traverseBinaryTreeNode(this.root)].length
   }
 
   get isEmpty() {

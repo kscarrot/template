@@ -112,6 +112,27 @@ describe('伸展树', () => {
     expect(tree.root?.value).toBe(13)
   })
 
+  it('删除不存在的值会把最后访问节点伸展到根节点', () => {
+    const tree = new SplayTree([10, 5, 15, 3, 7, 13, 17])
+    tree.delete(6)
+    expect(tree.root?.value).toBe(5)
+    expect(tree.size).toBe(7)
+    expect([...tree]).toStrictEqual([3, 5, 7, 10, 13, 15, 17])
+  })
+
+  it('删除有左子树的节点后，其前驱成为新根', () => {
+    const tree = new SplayTree([10, 5, 15, 3, 7, 13, 17])
+    tree.delete(10)
+    expect(tree.root?.value).toBe(7)
+    expect(tree.root?.parent).toBeNull()
+  })
+
+  it('构造时传入的比较器生效', () => {
+    const descending = (a: number, b: number) => (a === b ? 0 : a < b ? 1 : -1)
+    const tree = new SplayTree([1, 3, 2], descending)
+    expect([...tree]).toStrictEqual([3, 2, 1])
+  })
+
   it('连续删除直到空树', () => {
     const tree = new SplayTree([2, 1, 3])
     tree.delete(2).delete(1).delete(3)

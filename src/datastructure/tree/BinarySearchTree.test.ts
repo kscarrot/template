@@ -1,4 +1,32 @@
+import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
+
+class TaggedNode<T> extends BinaryTreeNode<T> {}
+
+/** 暴露受保护的原语，并记录公开方法被调用的次数 */
+class ProbeTree extends BinarySearchTree<number> {
+  deleteCalls = 0
+
+  override delete(value: number) {
+    this.deleteCalls++
+    return super.delete(value)
+  }
+
+  protected override createNode(value: number, parent: BinaryTreeNode<number> | null) {
+    return new TaggedNode(value, parent ? { parent } : {})
+  }
+
+  removeByValue(value: number) {
+    return this.removeNode(this.searchNode(value, this.root) as BinaryTreeNode<number>)
+  }
+}
+
+function buildProbeTree(values: number[]) {
+  const tree = new ProbeTree()
+  for (const value of values)
+    tree.insert(value)
+  return tree
+}
 
 describe('二叉搜索树', () => {
   it('创建二叉搜索树', () => {
@@ -78,5 +106,49 @@ describe('二叉搜索树', () => {
     expect([...bst]).toStrictEqual([1, 2, 4])
     bst.delete(4)
     expect([...bst]).toStrictEqual([1, 2])
+  })
+
+  it('重复值插入到右侧，中序遍历保留全部重复值', () => {
+    const bst = new BinarySearchTree([5, 3, 5, 5])
+    expect([...bst]).toStrictEqual([3, 5, 5, 5])
+  })
+
+  it('删除只有一个孩子的根节点后，孩子成为新根', () => {
+    const bst = new BinarySearchTree([10, 5, 3])
+    bst.delete(10)
+    expect(bst.root?.value).toBe(5)
+    expect(bst.root?.parent).toBe(null)
+  })
+})
+
+describe('二叉搜索树扩展点', () => {
+  it('删除有两个孩子的节点时，子类重写的 delete 只被调用一次', () => {
+    const tree = buildProbeTree([10, 5, 15, 12])
+    tree.delete(10)
+    expect(tree.deleteCalls).toBe(1)
+  })
+
+  it('插入的所有节点都由 createNode 创建', () => {
+    const tree = buildProbeTree([10, 5, 15])
+    const nodes = [tree.root, tree.root?.left, tree.root?.right]
+    expect(nodes.every(node => node instanceof TaggedNode)).toBe(true)
+  })
+
+  it('removeNode 删除有两个孩子的节点时，物理摘除的是后继节点', () => {
+    const tree = buildProbeTree([10, 5, 15, 12])
+    const { removed, child, parent } = tree.removeByValue(10)
+    expect([removed.value, child, parent?.value]).toStrictEqual([12, null, 15])
+  })
+
+  it('removeNode 删除只有一个孩子的节点时，返回顶替它的孩子和原父节点', () => {
+    const tree = buildProbeTree([10, 5, 3])
+    const { removed, child, parent } = tree.removeByValue(5)
+    expect([removed.value, child?.value, parent?.value, child?.parent]).toStrictEqual([5, 3, 10, tree.root])
+  })
+
+  it('removeNode 之后树的结构和 size 保持正确', () => {
+    const tree = buildProbeTree([10, 5, 15, 12])
+    tree.removeByValue(10)
+    expect([[...tree], tree.size, tree.root?.value]).toStrictEqual([[5, 12, 15], 3, 12])
   })
 })

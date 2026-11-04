@@ -73,6 +73,18 @@ describe('二叉树', () => {
     const nodeIterator2 = traverseBinaryTreeNode(binaryTree.root)
     expect(nodeIterator2.next().value?.value).toBe(8)
   })
+
+  it('首个值为 null 时得到空树', () => {
+    expect(valuesToBinaryTree([null, 1, 2])).toBeNull()
+  })
+
+  it('值为 0 等假值的节点也计入 size', () => {
+    expect(new BinaryTree([0, 1, 2]).size).toBe(3)
+  })
+
+  it('挂在空位下面的值不会被建出，也不计入 size', () => {
+    expect(new BinaryTree([1, null, 3, 4]).size).toBe(2)
+  })
 })
 
 describe('打印验证', () => {
