@@ -13,7 +13,9 @@ class ProbeTree extends BinarySearchTree<number> {
   }
 
   protected override createNode(value: number, parent: BinaryTreeNode<number> | null) {
-    return new TaggedNode(value, parent ? { parent } : {})
+    return new TaggedNode(value, parent
+      ? { parent }
+      : {})
   }
 
   removeByValue(value: number) {
@@ -72,7 +74,14 @@ describe('二叉搜索树', () => {
     expect(bst.getKth(1)).toBe(3)
     bst.delete(12)
     expect([...bst]).toStrictEqual([3, 4, 9, 10, 11, 13])
-    expect([bst.getKth(1), bst.getKth(2), bst.getKth(3), bst.getKth(4), bst.getKth(5), bst.getKth(6)]).toStrictEqual([
+    expect([
+      bst.getKth(1),
+      bst.getKth(2),
+      bst.getKth(3),
+      bst.getKth(4),
+      bst.getKth(5),
+      bst.getKth(6),
+    ]).toStrictEqual([
       3,
       4,
       9,
@@ -143,12 +152,25 @@ describe('二叉搜索树扩展点', () => {
   it('removeNode 删除只有一个孩子的节点时，返回顶替它的孩子和原父节点', () => {
     const tree = buildProbeTree([10, 5, 3])
     const { removed, child, parent } = tree.removeByValue(5)
-    expect([removed.value, child?.value, parent?.value, child?.parent]).toStrictEqual([5, 3, 10, tree.root])
+    expect([
+      removed.value,
+      child?.value,
+      parent?.value,
+      child?.parent,
+    ]).toStrictEqual([5, 3, 10, tree.root])
   })
 
   it('removeNode 之后树的结构和 size 保持正确', () => {
     const tree = buildProbeTree([10, 5, 15, 12])
     tree.removeByValue(10)
-    expect([[...tree], tree.size, tree.root?.value]).toStrictEqual([[5, 12, 15], 3, 12])
+    expect([
+      [...tree],
+      tree.size,
+      tree.root?.value,
+    ]).toStrictEqual([
+      [5, 12, 15],
+      3,
+      12,
+    ])
   })
 })

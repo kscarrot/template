@@ -54,7 +54,9 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
 
   /** 创建新节点，子类可重写以使用带额外字段的节点类型 */
   protected createNode(value: T, parent: BinaryTreeNode<T> | null): BinaryTreeNode<T> {
-    return new BinaryTreeNode(value, parent ? { parent } : {})
+    return new BinaryTreeNode(value, parent
+      ? { parent }
+      : {})
   }
 
   /** 按 BST 规则挂上一个新叶子并返回它，重复值放到右侧 */
@@ -63,7 +65,9 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
     let current = this.root
     while (current) {
       parent = current
-      current = this.comparator.lt(value, current.value) ? current.left : current.right
+      current = this.comparator.lt(value, current.value)
+        ? current.left
+        : current.right
     }
 
     const node = this.createNode(value, parent)

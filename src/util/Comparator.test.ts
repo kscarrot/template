@@ -22,7 +22,9 @@ it('test comparator constructor and reverse', () => {
   const strLengthCompare = (a: string, b: string) => {
     if (a.length === b.length)
       return 0
-    return a.length > b.length ? 1 : -1
+    return a.length > b.length
+      ? 1
+      : -1
   }
   const newCmp = new Comparator(strLengthCompare)
   expect(newCmp.eq('hello', 'world')).toBe(true)

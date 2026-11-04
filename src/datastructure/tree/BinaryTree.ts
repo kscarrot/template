@@ -82,7 +82,9 @@ export class BinaryTree<T> implements TreeADT<T> {
 
   constructor(values: Array<T | null>) {
     this.root = valuesToBinaryTree(values)
-    this.size = [...traverseBinaryTreeNode(this.root)].length
+    this.size = [
+      ...traverseBinaryTreeNode(this.root),
+    ].length
   }
 
   get isEmpty() {

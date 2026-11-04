@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-一个 TypeScript 数据结构与算法仓库，包含 LeetCode / Codewar 题解，以及基于 React 的树结构可视化应用。使用 pnpm 作为包管理器，Volta 锁定 Node 版本（Node 24.1.0）。
+一个 TypeScript 数据结构与算法仓库，包含 LeetCode / Codewar 题解，以及基于 React 的树结构可视化应用。使用 pnpm 作为包管理器（版本由 `packageManager` 字段经 corepack 锁定），Node 要求 >= 26（`engines` 字段）。
 
 ## 常用命令
 
@@ -15,8 +15,8 @@
 - **带覆盖率测试**：`pnpm test:coverage`（覆盖范围限定在 `src/algorithm/`、`src/datastructure/`、`src/util/`）
 - **Lint 检查**：`pnpm lint:check`
 - **Lint 修复**：`pnpm lint`
-- **类型检查**：`pnpm tc`（使用 `tsgo --noEmit`，原生 TypeScript 编译器预览版）
-- **构建（库）**：`pnpm build`（SWC 编译输出到 `dist/`）
+- **类型检查**：`pnpm tc`（使用 TypeScript 7 原生编译器，依赖别名 `typescript-7`；`typescript` 包固定在 6.x，供 typescript-eslint 等需要 JS API 的工具使用）
+- **调试单个文件**：在 VS Code 中打开文件按 F5（`.vscode/launch.json` 的 Debug 配置）。Node 直接剥离类型运行 TS，`scripts/resolve-hooks.ts` 负责解析 `src/` 别名和省略扩展名的相对导入，因此源码不能使用 enum、namespace 等需要编译生成代码的语法
 - **启动开发服务器（可视化）**：`pnpm dev`（Vite，入口在 `src/visual/`）
 - **构建可视化应用**：`pnpm build-view`
 
@@ -42,7 +42,7 @@
 ### 关键模式
 
 - **ADT 接口**：所有数据结构均实现 `src/datastructure/ADT.ts` 中的 TypeScript 接口。新增结构应遵循此模式。
-- **模块导入**：使用 `src/` 前缀路径（如 `import { Comparator } from 'src/util/Comparator'`），通过 tsconfig `paths` 和 SWC `baseUrl` 解析。
+- **模块导入**：使用 `src/` 前缀路径（如 `import { Comparator } from 'src/util/Comparator'`），通过 tsconfig `paths`、Vite `resolve.alias` 和 `scripts/resolve-hooks.ts`（Node 直接运行时）解析。
 - **测试就近放置**：测试文件与源文件同目录，命名为 `*.test.ts`。Vitest 全局变量（`describe`、`it`、`expect`）无需手动导入。
 - **Comparator 模式**：需要排序能力的数据结构使用 `src/util/Comparator` 类，支持自定义比较函数和反向排序。
 

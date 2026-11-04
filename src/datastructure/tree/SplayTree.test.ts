@@ -38,7 +38,14 @@ describe('二叉搜索树', () => {
 
     bst.delete(12)
     expect([...bst]).toStrictEqual([3, 4, 9, 10, 11, 13])
-    expect([bst.getKth(1), bst.getKth(2), bst.getKth(3), bst.getKth(4), bst.getKth(5), bst.getKth(6)]).toStrictEqual([
+    expect([
+      bst.getKth(1),
+      bst.getKth(2),
+      bst.getKth(3),
+      bst.getKth(4),
+      bst.getKth(5),
+      bst.getKth(6),
+    ]).toStrictEqual([
       3,
       4,
       9,
@@ -128,7 +135,11 @@ describe('伸展树', () => {
   })
 
   it('构造时传入的比较器生效', () => {
-    const descending = (a: number, b: number) => (a === b ? 0 : a < b ? 1 : -1)
+    const descending = (a: number, b: number) => (a === b
+      ? 0
+      : a < b
+        ? 1
+        : -1)
     const tree = new SplayTree([1, 3, 2], descending)
     expect([...tree]).toStrictEqual([3, 2, 1])
   })

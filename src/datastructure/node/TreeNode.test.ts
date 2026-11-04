@@ -50,7 +50,9 @@ describe('二叉树节点旋转', () => {
   it('左旋后中序序列不变', () => {
     const { n10 } = buildTree()
     const top = n10.rotateLeft()
-    expect([...traverseBinaryTree(top)]).toStrictEqual([5, 10, 15, 20, 25])
+    expect([
+      ...traverseBinaryTree(top),
+    ]).toStrictEqual([5, 10, 15, 20, 25])
   })
 
   it('左旋后中间子树改挂到下沉节点的右边', () => {

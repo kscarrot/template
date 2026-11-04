@@ -17,8 +17,9 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
+    "erasableSyntaxOnly": true,
     "skipLibCheck": true
   },
-  "include": ["src", "src/**/*.ts", "types.d.ts"],
+  "include": ["src", "src/**/*.ts", "scripts", "types.d.ts", "vite.config.ts"],
   "exclude": ["node_modules", "dist", "src/visual/dist"]
 }

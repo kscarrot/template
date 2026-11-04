@@ -3,7 +3,9 @@ import { traverseBinaryTreeNode } from 'src/datastructure/tree/BinaryTree'
 import { ScapegoatTree } from 'src/datastructure/tree/ScapegoatTree'
 
 function heightOf<T>(node: BinaryTreeNode<T> | null): number {
-  return node ? 1 + Math.max(heightOf(node.left), heightOf(node.right)) : 0
+  return node
+    ? 1 + Math.max(heightOf(node.left), heightOf(node.right))
+    : 0
 }
 
 function range(start: number, end: number) {
@@ -36,7 +38,11 @@ describe('替罪羊树', () => {
     for (const value of range(1, 50).filter(value => value % 3 === 0))
       tree.delete(value)
     tree.insert(9).insert(0)
-    const expected = [0, ...range(1, 50).filter(value => value % 3 !== 0), 9].sort((a, b) => a - b)
+    const expected = [
+      0,
+      ...range(1, 50).filter(value => value % 3 !== 0),
+      9,
+    ].sort((a, b) => a - b)
     expect([...tree]).toStrictEqual(expected)
   })
 
@@ -44,7 +50,9 @@ describe('替罪羊树', () => {
     const tree = new ScapegoatTree(range(1, 50))
     for (const value of range(1, 40))
       tree.delete(value)
-    const nodes = [...traverseBinaryTreeNode(tree.root)]
+    const nodes = [
+      ...traverseBinaryTreeNode(tree.root),
+    ]
     const isLinked = (node: BinaryTreeNode<number>) => [node.left, node.right].every(child => !child || child.parent === node)
     expect(tree.root?.parent === null && nodes.every(isLinked)).toBe(true)
   })
@@ -58,7 +66,13 @@ describe('替罪羊树', () => {
   it('删除不存在的值不改变树', () => {
     const tree = new ScapegoatTree([2, 1, 3])
     tree.delete(99)
-    expect([tree.size, [...tree]]).toStrictEqual([3, [1, 2, 3]])
+    expect([
+      tree.size,
+      [...tree],
+    ]).toStrictEqual([
+      3,
+      [1, 2, 3],
+    ])
   })
 
   it('连续删除直到空树', () => {
@@ -69,11 +83,21 @@ describe('替罪羊树', () => {
 
   it('重建后排名查询仍然正确', () => {
     const tree = new ScapegoatTree(range(1, 20))
-    expect([tree.getKth(1), tree.getKth(10), tree.getRank(15), tree.getPrev(8), tree.getNext(8)]).toStrictEqual([1, 10, 15, 7, 9])
+    expect([
+      tree.getKth(1),
+      tree.getKth(10),
+      tree.getRank(15),
+      tree.getPrev(8),
+      tree.getNext(8),
+    ]).toStrictEqual([1, 10, 15, 7, 9])
   })
 
   it('构造时传入的比较器生效', () => {
-    const descending = (a: number, b: number) => (a === b ? 0 : a < b ? 1 : -1)
+    const descending = (a: number, b: number) => (a === b
+      ? 0
+      : a < b
+        ? 1
+        : -1)
     const tree = new ScapegoatTree([1, 3, 2, 5, 4], descending)
     expect([...tree]).toStrictEqual([5, 4, 3, 2, 1])
   })

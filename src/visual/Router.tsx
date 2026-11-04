@@ -17,7 +17,14 @@ const navItems = [
 ]
 
 const Sidebar: React.FC = () => (
-  <nav style={{ width: 180, padding: 16, borderRight: '1px solid #eee', height: '100vh', boxSizing: 'border-box' }}>
+  <nav style={{
+    width: 180,
+    padding: 16,
+    borderRight: '1px solid #eee',
+    height: '100vh',
+    boxSizing: 'border-box',
+  }}
+  >
     <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
       {navItems.map(item => (
         <li key={item.path} style={{ margin: '16px 0' }}>

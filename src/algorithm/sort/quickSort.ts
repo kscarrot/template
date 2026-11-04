@@ -14,7 +14,9 @@ function quickSort<T>(arr: T[]): T[] {
   const leftarr = []
   const rightarr = []
   for (let i = 1; i < arr.length; i++) {
-    cmp.lt(arr[0], arr[i]) ? rightarr.push(arr[i]) : leftarr.push(arr[i])
+    cmp.lt(arr[0], arr[i])
+      ? rightarr.push(arr[i])
+      : leftarr.push(arr[i])
   }
   return quickSort(leftarr).concat(arr[0]).concat(quickSort(rightarr))
 }

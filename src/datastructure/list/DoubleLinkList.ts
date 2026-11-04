@@ -57,7 +57,9 @@ export class DoubleLinkList<T> implements ListADT<T> {
 
     const isTailInsert = index === this.size
 
-    const nextNode = isTailInsert ? this.tail : this.getNode(index)
+    const nextNode = isTailInsert
+      ? this.tail
+      : this.getNode(index)
     const prevNode = isTailInsert ? this.tail.prev : nextNode.prev
 
     prevNode.next = insertNode

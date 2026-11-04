@@ -13,9 +13,13 @@ function merge<T>(a: T[], b: T[]) {
   const temp = []
   let [i, j] = [0, 0]
   while (i < a.length && j < b.length) {
-    cmp.lt(a[i], b[j]) ? temp.push(a[i++]) : temp.push(b[j++])
+    cmp.lt(a[i], b[j])
+      ? temp.push(a[i++])
+      : temp.push(b[j++])
   }
-  return temp.concat(i < a.length ? a.slice(i) : b.slice(j))
+  return temp.concat(i < a.length
+    ? a.slice(i)
+    : b.slice(j))
 }
 
 export default mergeSort

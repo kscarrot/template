@@ -7,5 +7,7 @@
 
 export function high(str: string): string {
   const calcWordValue = (word: string) => [...word].reduce((sum, char) => (sum += char.charCodeAt(0) - 96), 0)
-  return str.split(' ').reduce((max, word) => (calcWordValue(word) > calcWordValue(max) ? word : max))
+  return str.split(' ').reduce((max, word) => (calcWordValue(word) > calcWordValue(max)
+    ? word
+    : max))
 }

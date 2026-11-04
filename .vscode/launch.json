@@ -9,10 +9,9 @@
       "request": "launch",
       "name": "Debug",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/${relativeFile}",
-      "outFiles": ["${workspaceFolder}/**/*.js"],
-      "preLaunchTask": "npm: build",
-      "runtimeExecutable": "/Users/ks/.volta/tools/image/node/24.1.0/bin/node"
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": ["--import", "./scripts/resolve-hooks.ts"]
     }
   ]
 }

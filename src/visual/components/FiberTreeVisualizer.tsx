@@ -28,7 +28,12 @@ function fiberTreeToCytoscapeData(root: FiberNode<any> | null) {
     if (!nodeId) {
       nodeId = `${String(node.value)}_${id++}`
       nodeMap.set(node, nodeId)
-      nodes.push({ data: { id: nodeId, label: String(node.value) } })
+      nodes.push({
+        data: {
+          id: nodeId,
+          label: String(node.value),
+        },
+      })
     }
   }
   // 第二次遍历：收集所有边
@@ -37,17 +42,23 @@ function fiberTreeToCytoscapeData(root: FiberNode<any> | null) {
     // parent 边（箭头应从子指向父）
     if (node.parent) {
       const parentId = nodeMap.get(node.parent)!
-      edges.push({ data: { source: nodeId, target: parentId, edgeType: 'parent' } })
+      edges.push({
+        data: { source: nodeId, target: parentId, edgeType: 'parent' },
+      })
     }
     // child 边
     if (node.child) {
       const childId = nodeMap.get(node.child)!
-      edges.push({ data: { source: nodeId, target: childId, edgeType: 'child' } })
+      edges.push({
+        data: { source: nodeId, target: childId, edgeType: 'child' },
+      })
     }
     // sibling 边
     if (node.sibling) {
       const siblingId = nodeMap.get(node.sibling)!
-      edges.push({ data: { source: nodeId, target: siblingId, edgeType: 'sibling' } })
+      edges.push({
+        data: { source: nodeId, target: siblingId, edgeType: 'sibling' },
+      })
     }
   }
   return { nodes, edges }
@@ -64,7 +75,7 @@ const edgeColors = {
  */
 const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }) => {
   const cyRef = useRef<HTMLDivElement>(null)
-  const cyInstance = useRef<cytoscape.Core | null>(null)
+  const cyInstanceRef = useRef<cytoscape.Core | null>(null)
 
   useEffect(() => {
     if (!cyRef.current)
@@ -73,7 +84,10 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
     const { nodes, edges } = fiberTreeToCytoscapeData(root)
     const cy = cytoscape({
       container: cyRef.current,
-      elements: [...nodes, ...edges.map(e => ({ data: e.data, classes: e.data.edgeType }))],
+      elements: [
+        ...nodes,
+        ...edges.map(e => ({ data: e.data, classes: e.data.edgeType })),
+      ],
       style: [
         {
           selector: 'node',
@@ -131,7 +145,7 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
         spacingFactor: 1.2,
       },
     })
-    cyInstance.current = cy
+    cyInstanceRef.current = cy
     cy.center()
     cy.fit(undefined, 40)
     return () => {
@@ -139,7 +153,18 @@ const FiberTreeVisualizer: React.FC<FiberTreeVisualizerProps> = ({ root, style }
     }
   }, [root])
 
-  return <div ref={cyRef} style={{ width: '100%', height: '100%', minHeight: 0, minWidth: 0, ...style }} />
+  return (
+    <div
+      ref={cyRef}
+      style={{
+        width: '100%',
+        height: '100%',
+        minHeight: 0,
+        minWidth: 0,
+        ...style,
+      }}
+    />
+  )
 }
 
 export default FiberTreeVisualizer

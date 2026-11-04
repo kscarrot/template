@@ -12,7 +12,20 @@ describe('二叉树', () => {
     expect(valuesToBinaryTree([])).toBeNull()
 
     // 构建和验证二叉树
-    const root = valuesToBinaryTree([1, 2, 3, 4, 5, 8, null, null, null, 6, 7, 9])
+    const root = valuesToBinaryTree([
+      1,
+      2,
+      3,
+      4,
+      5,
+      8,
+      null,
+      null,
+      null,
+      6,
+      7,
+      9,
+    ])
     expect(root).toBeDefined()
     expect(root?.left?.value).toBe(2)
     expect(root?.left?.left?.isLeaf).toBe(true)
@@ -177,7 +190,23 @@ describe('打印验证', () => {
   })
 
   it('打印大型二叉树', () => {
-    const tree = new BinaryTree([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+    const tree = new BinaryTree([
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+    ])
     tree.print()
 
     expect(consoleSpy).toHaveBeenCalledWith('└─1')

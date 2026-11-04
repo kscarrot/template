@@ -21,7 +21,11 @@ it('test min heap basic', () => {
 })
 
 it('test max heap', () => {
-  const h = new Heap((a: number, b: number) => (b === a ? 0 : b > a ? 1 : -1))
+  const h = new Heap((a: number, b: number) => (b === a
+    ? 0
+    : b > a
+      ? 1
+      : -1))
   h.insert(3)
   h.insert(2)
   h.insert(1)

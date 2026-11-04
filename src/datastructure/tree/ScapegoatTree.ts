@@ -83,7 +83,9 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
     let childSize = 1
     while (child.parent) {
       const parent = child.parent
-      const sibling = parent.left === child ? parent.right : parent.left
+      const sibling = parent.left === child
+        ? parent.right
+        : parent.left
       const parentSize = childSize + this.getNodeSize(sibling) + 1
       if (childSize > this.alpha * parentSize)
         return parent
@@ -98,7 +100,9 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
     const subtreeParent = subtreeRoot.parent
     const isLeftChild = subtreeParent?.left === subtreeRoot
 
-    const top = buildBalanced([...traverseBinaryTreeNode(subtreeRoot)]) as BinaryTreeNode<T>
+    const top = buildBalanced([
+      ...traverseBinaryTreeNode(subtreeRoot),
+    ]) as BinaryTreeNode<T>
     top.parent = subtreeParent
     if (!subtreeParent)
       this.root = top

@@ -28,7 +28,12 @@ function binaryTreeToCytoscapeData(root: BinaryTreeNode<any> | null) {
     if (!nodeId) {
       nodeId = `${String(node.value)}_${id++}`
       nodeMap.set(node, nodeId)
-      nodes.push({ data: { id: nodeId, label: String(node.value) } })
+      nodes.push({
+        data: {
+          id: nodeId,
+          label: String(node.value),
+        },
+      })
     }
   }
   // 第二次遍历：收集所有边
@@ -37,14 +42,22 @@ function binaryTreeToCytoscapeData(root: BinaryTreeNode<any> | null) {
     // child 边（不区分左右）
     if (node.left) {
       const childId = nodeMap.get(node.left)!
-      edges.push({ data: { source: nodeId, target: childId, edgeType: 'child' } })
+      edges.push({
+        data: { source: nodeId, target: childId, edgeType: 'child' },
+      })
       // parent 边（子指向父）
-      edges.push({ data: { source: childId, target: nodeId, edgeType: 'parent' } })
+      edges.push({
+        data: { source: childId, target: nodeId, edgeType: 'parent' },
+      })
     }
     if (node.right) {
       const childId = nodeMap.get(node.right)!
-      edges.push({ data: { source: nodeId, target: childId, edgeType: 'child' } })
-      edges.push({ data: { source: childId, target: nodeId, edgeType: 'parent' } })
+      edges.push({
+        data: { source: nodeId, target: childId, edgeType: 'child' },
+      })
+      edges.push({
+        data: { source: childId, target: nodeId, edgeType: 'parent' },
+      })
     }
   }
   return { nodes, edges }
@@ -60,7 +73,7 @@ const edgeColors = {
  */
 const BinaryTreeVisualizer: React.FC<BinaryTreeVisualizerProps> = ({ root, style }) => {
   const cyRef = useRef<HTMLDivElement>(null)
-  const cyInstance = useRef<cytoscape.Core | null>(null)
+  const cyInstanceRef = useRef<cytoscape.Core | null>(null)
 
   useEffect(() => {
     if (!cyRef.current)
@@ -69,7 +82,10 @@ const BinaryTreeVisualizer: React.FC<BinaryTreeVisualizerProps> = ({ root, style
     const { nodes, edges } = binaryTreeToCytoscapeData(root)
     const cy = cytoscape({
       container: cyRef.current,
-      elements: [...nodes, ...edges.map(e => ({ data: e.data, classes: e.data.edgeType }))],
+      elements: [
+        ...nodes,
+        ...edges.map(e => ({ data: e.data, classes: e.data.edgeType })),
+      ],
       style: [
         {
           selector: 'node',
@@ -115,7 +131,7 @@ const BinaryTreeVisualizer: React.FC<BinaryTreeVisualizerProps> = ({ root, style
         spacingFactor: 1.2,
       },
     })
-    cyInstance.current = cy
+    cyInstanceRef.current = cy
     cy.center()
     cy.fit(undefined, 40)
     return () => {
@@ -123,7 +139,18 @@ const BinaryTreeVisualizer: React.FC<BinaryTreeVisualizerProps> = ({ root, style
     }
   }, [root])
 
-  return <div ref={cyRef} style={{ width: '100%', height: '100%', minHeight: 0, minWidth: 0, ...style }} />
+  return (
+    <div
+      ref={cyRef}
+      style={{
+        width: '100%',
+        height: '100%',
+        minHeight: 0,
+        minWidth: 0,
+        ...style,
+      }}
+    />
+  )
 }
 
 export default BinaryTreeVisualizer

@@ -1,22 +1,23 @@
 import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
-/// <reference types="vitest/config" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+  ],
   build: {
     outDir: 'dist',
   },
   root: 'src/visual',
   resolve: {
     alias: {
-      src: resolve(__dirname, './src'),
+      src: resolve(import.meta.dirname, './src'),
     },
   },
   test: {
-    root: resolve(__dirname, '.'),
-    include: ['src/**/*.test.{ts,tsx}'],
+    root: resolve(import.meta.dirname, '.'),
+    include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
     exclude: ['node_modules', 'dist'],
     environment: 'node',
     globals: true,
@@ -24,7 +25,13 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html'],
       include: ['src/algorithm/**', 'src/datastructure/**', 'src/util/**'],
-      exclude: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', 'node_modules', 'dist', '**/dist/**'],
+      exclude: [
+        '**/*.test.{ts,tsx}',
+        '**/*.spec.{ts,tsx}',
+        'node_modules',
+        'dist',
+        '**/dist/**',
+      ],
     },
   },
 })
