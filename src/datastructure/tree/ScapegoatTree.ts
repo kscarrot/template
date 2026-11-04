@@ -20,14 +20,19 @@ function depthOf<T>(node: BinaryTreeNode<T>): number {
  */
 function buildBalanced<T>(nodes: BinaryTreeNode<T>[]): BinaryTreeNode<T> | null {
   const build = (start: number, end: number, parent: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null => {
-    if (start > end)
+    if (start > end) {
+      // 区间为空：没有节点
       return null
-    const mid = Math.floor((start + end) / 2)
-    const node = nodes[mid]
-    node.parent = parent
-    node.left = build(start, mid - 1, node)
-    node.right = build(mid + 1, end, node)
-    return node
+    }
+    else {
+      // 取中点为根，左右两半递归成左右子树
+      const mid = Math.floor((start + end) / 2)
+      const node = nodes[mid]
+      node.parent = parent
+      node.left = build(start, mid - 1, node)
+      node.right = build(mid + 1, end, node)
+      return node
+    }
   }
   return build(0, nodes.length - 1, null)
 }
@@ -45,7 +50,7 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
 
   constructor(values: Array<T> = [], comparator?: compareFunction<T>, alpha = 0.7) {
     super([], comparator)
-    if (alpha < 0.5 || alpha >= 1)
+    if (!(alpha >= 0.5 && alpha < 1))
       throw new Error(`ScapegoatTree: alpha must be in [0.5, 1), got ${alpha}`)
     this.alpha = alpha
     for (const value of values)
@@ -55,16 +60,25 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
   override insert(value: T): this {
     const node = this.insertNode(value)
     this.maxSize = Math.max(this.maxSize, this.size)
-    if (this.isTooDeep(node))
+    if (this.isTooDeep(node)) {
+      // 新节点太深：重建路径上的替罪羊子树
       this.rebuild(this.findScapegoat(node))
+    }
+    else {
+      // 深度在允许范围内：无需重建
+    }
     return this
   }
 
   override delete(value: T): this {
     super.delete(value)
     if (this.root && this.size < this.alpha * this.maxSize) {
+      // 节点数降得太多：重建整棵树，并以当前节点数重新计算 maxSize
       this.rebuild(this.root)
       this.maxSize = this.size
+    }
+    else {
+      // 树已空，或节点数仍在允许范围内：无需重建
     }
     return this
   }
@@ -87,10 +101,15 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
         ? parent.right
         : parent.left
       const parentSize = childSize + this.getNodeSize(sibling) + 1
-      if (childSize > this.alpha * parentSize)
+      if (childSize > this.alpha * parentSize) {
+        // parent 失衡：它就是替罪羊
         return parent
-      child = parent
-      childSize = parentSize
+      }
+      else {
+        // parent 仍平衡：继续往上找
+        child = parent
+        childSize = parentSize
+      }
     }
     throw new Error(`ScapegoatTree: no scapegoat found above a node at depth ${depthOf(node)}`)
   }
@@ -104,11 +123,17 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
       ...traverseBinaryTreeNode(subtreeRoot),
     ]) as BinaryTreeNode<T>
     top.parent = subtreeParent
-    if (!subtreeParent)
+    if (!subtreeParent) {
+      // 重建的是整棵树：新子树根成为树根
       this.root = top
-    else if (isLeftChild)
+    }
+    else if (isLeftChild) {
+      // 原子树是左孩子：接回父节点的左侧
       subtreeParent.left = top
-    else
+    }
+    else {
+      // 原子树是右孩子：接回父节点的右侧
       subtreeParent.right = top
+    }
   }
 }

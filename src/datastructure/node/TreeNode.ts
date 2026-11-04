@@ -115,6 +115,33 @@ class BinaryTreeNode<T> {
 }
 
 /**
+ * 树堆节点：value 参与二叉搜索序，priority 参与最小堆序，size 是子树节点数
+ * merge / split 和旋转都会改写 left / right，调用 resize 后 size 才有效
+ */
+class TreapNode<T> extends BinaryTreeNode<T> {
+  override parent: TreapNode<T> | null
+  override left: TreapNode<T> | null
+  override right: TreapNode<T> | null
+  readonly priority: number
+  size = 1
+
+  constructor(value: T, priority: number, parent: TreapNode<T> | null = null) {
+    super(value, parent
+      ? { parent }
+      : {})
+    this.priority = priority
+    this.parent = parent
+    this.left = null
+    this.right = null
+  }
+
+  resize(): this {
+    this.size = 1 + (this.left?.size ?? 0) + (this.right?.size ?? 0)
+    return this
+  }
+}
+
+/**
  * @description: 多叉树节点
  */
 class TreeNode<T> {
@@ -147,4 +174,4 @@ class FiberNode<T> {
   }
 }
 
-export { BinaryTreeNode, FiberNode, TreeNode }
+export { BinaryTreeNode, FiberNode, TreapNode, TreeNode }

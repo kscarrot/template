@@ -102,7 +102,7 @@ describe('替罪羊树', () => {
     expect([...tree]).toStrictEqual([5, 4, 3, 2, 1])
   })
 
-  it.each([0.4, 1])('α 为 %s 时超出 [0.5, 1) 范围，构造时抛错', (alpha) => {
+  it.each([0.4, 1, Number.NaN])('α 为 %s 时超出 [0.5, 1) 范围，构造时抛错', (alpha) => {
     expect(() => new ScapegoatTree([], undefined, alpha)).toThrow('alpha')
   })
 })

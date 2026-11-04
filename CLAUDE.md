@@ -25,9 +25,9 @@
 ### 源码目录结构（`src/`）
 
 - **`datastructure/`** — 通用数据结构实现，均实现 `ADT.ts` 中定义的接口：
-  - `node/` — 节点类型（`ListNode`、`BinaryTreeNode`），供所有结构共用
+  - `node/` — 节点类型（`ListNode`、`BinaryTreeNode`、`TreapNode`），供所有结构共用
   - `list/` — LinkList、DoubleLinkList、CircularLinkList、Stack、Queue、Dequeue
-  - `tree/` — BinaryTree、BinarySearchTree、SplayTree、FiberTree
+  - `tree/` — BinaryTree、BinarySearchTree、SplayTree、ScapegoatTree、Treap、TreapRotate、FiberTree
   - `heap/` — Min/Max Heap
   - `collection/` — HashTable、HashSet
   - `graph/` — 空目录，待实现

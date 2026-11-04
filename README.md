@@ -23,6 +23,8 @@
 - [Fiber树](./src/datastructure/tree/FiberTree.ts)
 - [Splay树](./src/datastructure/tree/SplayTree.ts)
 - [替罪羊树](./src/datastructure/tree/ScapegoatTree.ts)
+- [树堆](./src/datastructure/tree/Treap.ts)
+- [旋转树堆](./src/datastructure/tree/TreapRotate.ts)
 
 ## 习题
 
