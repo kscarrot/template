@@ -48,13 +48,15 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
   /** 上次整树重建以来的最大节点数 */
   private maxSize = 0
 
-  constructor(values: Array<T> = [], comparator?: compareFunction<T>, alpha = 0.7) {
-    super([], comparator)
+  constructor(options: {
+    comparator?: compareFunction<T>
+    alpha?: number
+  } = {}) {
+    super(options.comparator)
+    const alpha = options.alpha ?? 0.7
     if (!(alpha >= 0.5 && alpha < 1))
       throw new Error(`ScapegoatTree: alpha must be in [0.5, 1), got ${alpha}`)
     this.alpha = alpha
-    for (const value of values)
-      this.insert(value)
   }
 
   override insert(value: T): this {
@@ -121,7 +123,9 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
 
     const top = buildBalanced([
       ...traverseBinaryTreeNode(subtreeRoot),
-    ]) as BinaryTreeNode<T>
+    ])
+    if (!top)
+      throw new Error('ScapegoatTree: cannot rebuild an empty subtree')
     top.parent = subtreeParent
     if (!subtreeParent) {
       // 重建的是整棵树：新子树根成为树根

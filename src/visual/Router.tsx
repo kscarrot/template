@@ -6,9 +6,9 @@ import { SplayTree } from 'src/datastructure/tree/SplayTree'
 import BinaryTreeVisualizer from './components/BinaryTreeVisualizer'
 import FiberTreeVisualizer from './components/FiberTreeVisualizer'
 
-const bt = new BinaryTree([1, 2, 3, 4, 5, 6, 7])
+const bt = BinaryTree.from([1, 2, 3, 4, 5, 6, 7])
 const fiberTree = new FiberTree(bt)
-const splayTree = new SplayTree([10, 12, 3, 4, 13, 9, 11])
+const splayTree = new SplayTree().from([10, 12, 3, 4, 13, 9, 11])
 
 const navItems = [
   { path: '/binary-tree', label: '二叉树可视化' },

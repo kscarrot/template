@@ -1,3 +1,4 @@
+import { list, random } from 'radash'
 import {
   binaryInsertionSort,
   bubbleSort,
@@ -10,7 +11,6 @@ import {
   quickSortES6,
   selectionSort,
 } from 'src/algorithm/sort/index'
-import { randomArray } from 'src/util/randomArray'
 
 type sortFn = (arr: number[]) => number[]
 
@@ -21,9 +21,9 @@ function ArraySortCmp(sortFn: sortFn) {
   expect(sortFn([2, 1])).toStrictEqual([1, 2])
   expect(sortFn([999, 99, 9])).toStrictEqual([9, 99, 999])
   expect(sortFn([11, 11, 11, 11, 11])).toStrictEqual([11, 11, 11, 11, 11])
-  const arrL10 = randomArray(10)
+  const arrL10 = list(1, 10).map(() => random(0, 99))
   expect(sortFn(arrL10)).toStrictEqual(rightAnswer(arrL10))
-  const arrL99 = randomArray(99)
+  const arrL99 = list(1, 99).map(() => random(0, 99))
   expect(sortFn(arrL99)).toStrictEqual(rightAnswer(arrL99))
 }
 

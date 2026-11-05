@@ -7,12 +7,12 @@ describe('fiberTree', () => {
     const fiberTree = new FiberTree(null)
     expect(fiberTree.root).toBeNull()
 
-    const bt = new BinaryTree([1])
+    const bt = BinaryTree.from([1])
     const fiberTreeOneElement = new FiberTree(bt)
     expect(fiberTreeOneElement.root).toBeDefined()
     expect(fiberTreeOneElement.root?.value).toBe(1)
 
-    const bt2 = new BinaryTree([1, 2, 3])
+    const bt2 = BinaryTree.from([1, 2, 3])
     const fiberTreeThreeElements = new FiberTree(bt2)
     expect([...fiberTreeThreeElements]).toStrictEqual([1, 2, 3])
 
@@ -29,7 +29,7 @@ describe('fiberTree', () => {
   })
 
   it('从二叉树创建FiberTree并遍历', () => {
-    const bt = new BinaryTree([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    const bt = BinaryTree.from([1, 2, 3, 4, 5, 6, 7, 8, 9])
     const fiberTree = new FiberTree(bt)
     expect(fiberTree).toBeDefined()
 

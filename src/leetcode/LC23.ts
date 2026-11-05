@@ -1,6 +1,6 @@
 import type { ListNode } from './leetcode-types'
+import { cluster } from 'radash'
 import mergeTwoLists from './LC21'
-import { chunkArray } from './utils'
 
 /**
  * @name: 合并 K 个升序链表
@@ -16,7 +16,7 @@ function mergeKLists(lists: Array<ListNode | null>): ListNode | null {
     return null
   if (lists.length === 1)
     return lists[0]
-  const chunkedLists = chunkArray(lists, 2)
+  const chunkedLists = cluster(lists, 2)
   const mergedLists = chunkedLists.map(chunk => mergeTwoLists(chunk[0], chunk[1] || null))
   return mergeKLists(mergedLists)
 }

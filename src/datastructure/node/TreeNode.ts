@@ -1,14 +1,20 @@
 /**
- * @description: 二叉树节点
+ * 普通节点的孩子仍是普通节点。
+ * 默认参数不能直接写 BinaryTreeNode<T>，那是循环默认值。
  */
-class BinaryTreeNode<T> {
+type PlainNode<T> = BinaryTreeNode<T, PlainNode<T>>
+
+/**
+ * @description: 二叉树节点。N 是 parent / left / right 的类型
+ */
+class BinaryTreeNode<T, N extends BinaryTreeNode<T, N> = PlainNode<T>> {
   value: T
-  parent: BinaryTreeNode<T> | null = null
-  left: BinaryTreeNode<T> | null = null
-  right: BinaryTreeNode<T> | null = null
+  parent: N | null = null
+  left: N | null = null
+  right: N | null = null
   constructor(
     value: T,
-    options: { parent?: BinaryTreeNode<T>, left?: BinaryTreeNode<T>, right?: BinaryTreeNode<T> } = {},
+    options: { parent?: N, left?: N, right?: N } = {},
   ) {
     this.value = value
     if (options.parent)
@@ -27,90 +33,34 @@ class BinaryTreeNode<T> {
     return this.parent === null
   }
 
-  /**
-   * 左旋：当前节点下沉为右孩子的左孩子，右孩子升上来
-   * ```
-   *     x                y
-   *    / \              / \
-   *   A   y     =>     x   C
-   *      / \          / \
-   *     B   C        A   B
-   * ```
-   * 不会更新树的 root 引用，旋转根节点时需由调用方处理
-   * @returns 升上来的新子树根
-   */
-  rotateLeft(): BinaryTreeNode<T> {
-    const y = this.right
-    if (!y)
-      throw new Error('rotateLeft: node has no right child')
+  /** 子树高度，空孩子按 0，叶子是 1 */
+  getHeight(): number {
+    return 1 + Math.max(this.left?.getHeight() ?? 0, this.right?.getHeight() ?? 0)
+  }
+}
 
-    const p = this.parent
-    this.right = y.left
-    if (y.left)
-      y.left.parent = this
+/**
+ * AVL 节点：value 参与二叉搜索序，height 是子树高度，叶子为 1
+ * 平衡因子是左子树高度减去右子树高度
+ * 旋转会改写 left / right，调用 updateHeight 后 height 才有效
+ */
+class AVLNode<T> extends BinaryTreeNode<T, AVLNode<T>> {
+  height = 1
 
-    y.left = this
-    this.parent = y
-
-    y.parent = p
-    if (p) {
-      if (p.left === this)
-        p.left = y
-      else
-        p.right = y
-    }
-    return y
+  constructor(value: T, parent: AVLNode<T> | null = null) {
+    super(value, parent
+      ? { parent }
+      : {})
   }
 
-  /**
-   * 右旋：当前节点下沉为左孩子的右孩子，左孩子升上来
-   * ```
-   *       y            x
-   *      / \          / \
-   *     x   C   =>   A   y
-   *    / \              / \
-   *   A   B            B   C
-   * ```
-   * 不会更新树的 root 引用，旋转根节点时需由调用方处理
-   * @returns 升上来的新子树根
-   */
-  rotateRight(): BinaryTreeNode<T> {
-    const x = this.left
-    if (!x)
-      throw new Error('rotateRight: node has no left child')
-
-    const p = this.parent
-    this.left = x.right
-    if (x.right)
-      x.right.parent = this
-
-    x.right = this
-    this.parent = x
-
-    x.parent = p
-    if (p) {
-      if (p.left === this)
-        p.left = x
-      else
-        p.right = x
-    }
-    return x
-  }
-
-  /**
-   * 把当前节点上提一层：是左孩子则对父节点右旋，是右孩子则对父节点左旋
-   * 不会更新树的 root 引用，旋转根节点时需由调用方处理
-   */
-  rotateUp(): this {
-    const p = this.parent
-    if (!p)
-      throw new Error('rotateUp: node is already root')
-
-    if (p.left === this)
-      p.rotateRight()
-    else
-      p.rotateLeft()
+  updateHeight(): this {
+    this.height = 1 + Math.max(this.left?.height ?? 0, this.right?.height ?? 0)
     return this
+  }
+
+  /** 左子树高度减去右子树高度，空孩子按 0 */
+  balanceFactor(): number {
+    return (this.left?.height ?? 0) - (this.right?.height ?? 0)
   }
 }
 
@@ -118,10 +68,7 @@ class BinaryTreeNode<T> {
  * 树堆节点：value 参与二叉搜索序，priority 参与最小堆序，size 是子树节点数
  * merge / split 和旋转都会改写 left / right，调用 resize 后 size 才有效
  */
-class TreapNode<T> extends BinaryTreeNode<T> {
-  override parent: TreapNode<T> | null
-  override left: TreapNode<T> | null
-  override right: TreapNode<T> | null
+class TreapNode<T> extends BinaryTreeNode<T, TreapNode<T>> {
   readonly priority: number
   size = 1
 
@@ -130,9 +77,6 @@ class TreapNode<T> extends BinaryTreeNode<T> {
       ? { parent }
       : {})
     this.priority = priority
-    this.parent = parent
-    this.left = null
-    this.right = null
   }
 
   resize(): this {
@@ -174,4 +118,4 @@ class FiberNode<T> {
   }
 }
 
-export { BinaryTreeNode, FiberNode, TreapNode, TreeNode }
+export { AVLNode, BinaryTreeNode, FiberNode, TreapNode, TreeNode }

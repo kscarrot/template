@@ -1,5 +1,5 @@
-import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import type { compareFunction } from 'src/util/Comparator'
+import { rotateUp } from 'src/datastructure/node/rotate'
 import { TreapNode } from 'src/datastructure/node/TreeNode'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
 
@@ -10,33 +10,32 @@ import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
  *   两个孩子优先级相同时上提左孩子。不用后继覆盖值，否则值会和优先级拆开
  * 期望树高 O(log n)。旋转之后沿被改写的节点调用 resize，size 仍然是 O(1) 读取
  */
-export class TreapRotate<T> extends BinarySearchTree<T> {
-  override root: TreapNode<T> | null = null
+export class TreapRotate<T> extends BinarySearchTree<T, TreapNode<T>> {
   private readonly random: () => number
 
-  constructor(values: Array<T> = [], comparator?: compareFunction<T>, random: () => number = Math.random) {
-    super([], comparator)
-    this.random = random
-    for (const value of values)
-      this.insert(value)
+  constructor(options: {
+    comparator?: compareFunction<T>
+    random?: () => number
+  } = {}) {
+    super(options.comparator)
+    this.random = options.random ?? Math.random
+  }
+
+  protected createNode(value: T, parent: TreapNode<T> | null): TreapNode<T> {
+    return new TreapNode(value, this.random(), parent)
   }
 
   override insert(value: T): this {
     const node = this.insertNode(value)
-    if (node instanceof TreapNode) {
-      // 先把新叶子算进沿途的 size，再旋转；旋转只改变参与的两个节点
-      this.refreshUp(node)
-      this.bubble(node)
-    }
-    else {
-      throw new Error('TreapRotate: expected a TreapNode')
-    }
+    // 先把新叶子算进沿途的 size，再旋转；旋转只改变参与的两个节点
+    this.refreshUp(node)
+    this.bubble(node)
     return this
   }
 
   override delete(value: T): this {
     const node = this.searchNode(value, this.root)
-    if (node instanceof TreapNode) {
+    if (node) {
       // 命中：旋成叶子再摘除，值和优先级一起离开
       this.sink(node)
       this.detach(node)
@@ -46,19 +45,6 @@ export class TreapRotate<T> extends BinarySearchTree<T> {
       // 未命中：树不变
     }
     return this
-  }
-
-  protected override createNode(value: T, parent: BinaryTreeNode<T> | null): TreapNode<T> {
-    const priority = this.random()
-    if (!Number.isFinite(priority)) {
-      throw new TypeError(`TreapRotate: priority must be a finite number, got ${priority}`)
-    }
-    else if (parent instanceof TreapNode || parent === null) {
-      return new TreapNode(value, priority, parent)
-    }
-    else {
-      throw new Error('TreapRotate: expected a TreapNode')
-    }
   }
 
   /** 直接读缓存的子树大小；null 是 0 */
@@ -71,7 +57,7 @@ export class TreapRotate<T> extends BinarySearchTree<T> {
     while (node.parent && node.priority < node.parent.priority) {
       // 子节点优先级更高：上提一层。先重算沉下去的父节点，再重算升上来的节点
       const parent = node.parent
-      node.rotateUp()
+      rotateUp(node)
       parent.resize()
       node.resize()
     }
@@ -88,7 +74,7 @@ export class TreapRotate<T> extends BinarySearchTree<T> {
   private sink(node: TreapNode<T>): void {
     while (node.left || node.right) {
       const child = this.childToPromote(node)
-      child.rotateUp()
+      rotateUp(child)
       // node 现在在 child 下面，先算 node 再算 child
       node.resize()
       child.resize()

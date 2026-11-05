@@ -1,5 +1,6 @@
 import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
+import { expectTypeOf } from 'vitest'
 
 class TaggedNode<T> extends BinaryTreeNode<T> {}
 
@@ -62,7 +63,7 @@ describe('二叉搜索树', () => {
   })
 
   it('插入验证', () => {
-    const bst = new BinarySearchTree([10, 12, 3, 4, 13, 9, 11])
+    const bst = new BinarySearchTree().from([10, 12, 3, 4, 13, 9, 11])
     expect(bst.size).toBe(7)
     /**
      *             10
@@ -118,12 +119,12 @@ describe('二叉搜索树', () => {
   })
 
   it('重复值插入到右侧，中序遍历保留全部重复值', () => {
-    const bst = new BinarySearchTree([5, 3, 5, 5])
+    const bst = new BinarySearchTree().from([5, 3, 5, 5])
     expect([...bst]).toStrictEqual([3, 5, 5, 5])
   })
 
   it('删除只有一个孩子的根节点后，孩子成为新根', () => {
-    const bst = new BinarySearchTree([10, 5, 3])
+    const bst = new BinarySearchTree().from([10, 5, 3])
     bst.delete(10)
     expect(bst.root?.value).toBe(5)
     expect(bst.root?.parent).toBe(null)
@@ -172,5 +173,16 @@ describe('二叉搜索树扩展点', () => {
       3,
       12,
     ])
+  })
+})
+
+describe('节点类型', () => {
+  it('root 的类型是普通二叉节点', () => {
+    const tree = new BinarySearchTree<number>()
+    expectTypeOf(tree.root).toEqualTypeOf<BinaryTreeNode<number> | null>()
+  })
+
+  it('from 返回普通二叉搜索树', () => {
+    expectTypeOf(new BinarySearchTree<number>().from([1])).toEqualTypeOf<BinarySearchTree<number>>()
   })
 })

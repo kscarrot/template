@@ -25,14 +25,14 @@
 ### 源码目录结构（`src/`）
 
 - **`datastructure/`** — 通用数据结构实现，均实现 `ADT.ts` 中定义的接口：
-  - `node/` — 节点类型（`ListNode`、`BinaryTreeNode`、`TreapNode`），供所有结构共用
+  - `node/` — 节点类型（`ListNode`、`BinaryTreeNode`、`AVLNode`、`TreapNode`），供所有结构共用
   - `list/` — LinkList、DoubleLinkList、CircularLinkList、Stack、Queue、Dequeue
-  - `tree/` — BinaryTree、BinarySearchTree、SplayTree、ScapegoatTree、Treap、TreapRotate、FiberTree
+  - `tree/` — BinaryTree、BinarySearchTree、AVLTree、SplayTree、ScapegoatTree、Treap、TreapRotate、FiberTree
   - `heap/` — Min/Max Heap
   - `collection/` — HashTable、HashSet
   - `graph/` — 空目录，待实现
 - **`algorithm/sort/`** — 排序算法实现（bubble、cocktail、heap、insertion、merge、quick、selection），统一签名 `(arr: number[]) => number[]`
-- **`util/`** — 共享工具：`Comparator`（通用比较类，供数据结构和排序使用）、`randomArray`（测试辅助函数）
+- **`util/`** — 共享工具：`Comparator`（通用比较类，供数据结构和排序使用）、`Iter`（生成器映射，以及按数组顺序取值）
 - **`leetcode/`** — LeetCode 题解，以 `LC{编号}.ts` 命名；不纳入 ESLint 检查
 - **`kata/`** — Codewar kata 题解
 - **`math/`** — 数学相关模块（当前为空）

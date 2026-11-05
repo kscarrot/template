@@ -44,29 +44,29 @@ export const TraverseType = {
  * @param type 遍历类型
  * @returns 遍历结果
  */
-export function* traverseBinaryTreeNode<T>(
-  root: BinaryTreeNode<T> | null,
+export function* traverseBinaryTreeNode<N extends BinaryTreeNode<unknown, N>>(
+  root: N | null,
   type: ValueOf<typeof TraverseType> = TraverseType.IN_ORDER,
-) {
-  function* order(root: BinaryTreeNode<T> | null): Generator<BinaryTreeNode<T>> {
-    if (root) {
+): Generator<N> {
+  function* order(current: N | null): Generator<N> {
+    if (current) {
       if (type === TraverseType.PRE_ORDER)
-        yield root
-      yield* order(root.left)
+        yield current
+      yield* order(current.left)
       if (type === TraverseType.IN_ORDER)
-        yield root
-      yield* order(root.right)
+        yield current
+      yield* order(current.right)
       if (type === TraverseType.POST_ORDER)
-        yield root
+        yield current
     }
   }
   yield* order(root)
 }
 
-export function* traverseBinaryTree<T>(
-  root: BinaryTreeNode<T> | null,
+export function* traverseBinaryTree<N extends BinaryTreeNode<unknown, N>>(
+  root: N | null,
   type: ValueOf<typeof TraverseType> = TraverseType.IN_ORDER,
-) {
+): Generator<N['value']> {
   for (const node of traverseBinaryTreeNode(root, type)) {
     yield node.value
   }
@@ -76,15 +76,20 @@ export function* traverseBinaryTree<T>(
  * @description 二叉树
  * @template T 二叉树的节点类型
  */
-export class BinaryTree<T> implements TreeADT<T> {
-  root: BinaryTreeNode<T> | null = null
-  size: number = 0
+export class BinaryTree<T, N extends BinaryTreeNode<T, N> = BinaryTreeNode<T>> implements TreeADT<T> {
+  root: N | null
+  size: number
 
-  constructor(values: Array<T | null>) {
-    this.root = valuesToBinaryTree(values)
+  constructor(root: N | null = null) {
+    this.root = root
     this.size = [
-      ...traverseBinaryTreeNode(this.root),
+      ...traverseBinaryTreeNode(root),
     ].length
+  }
+
+  /** 按层序数组建树，null 表示空位。节点类型固定为 BinaryTreeNode */
+  static from<T>(values: Array<T | null>): BinaryTree<T> {
+    return new BinaryTree(valuesToBinaryTree(values))
   }
 
   get isEmpty() {
@@ -109,7 +114,7 @@ export class BinaryTree<T> implements TreeADT<T> {
       return
     }
 
-    const visualizeNode = (node: BinaryTreeNode<T> | null, prefix: string = '', isLast: boolean = true): void => {
+    const visualizeNode = (node: N | null, prefix: string = '', isLast: boolean = true): void => {
       if (!node) {
         if (showNull) {
           console.log(`${prefix}${isLast ? '└─' : '├─'}null`)

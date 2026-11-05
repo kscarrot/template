@@ -1,4 +1,5 @@
 import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
+import { rotateUp } from 'src/datastructure/node/rotate'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
 
 export class SplayTree<T> extends BinarySearchTree<T> {
@@ -83,17 +84,17 @@ export class SplayTree<T> extends BinarySearchTree<T> {
       const isZigZig = grandparent !== null && (grandparent.left === parent) === (parent.left === x)
       if (!grandparent) {
         // Zig：父节点是根，上提 x 一次
-        x.rotateUp()
+        rotateUp(x)
       }
       else if (isZigZig) {
         // Zig-Zig：x 与父节点同侧，先上提父节点，再上提 x
-        parent.rotateUp()
-        x.rotateUp()
+        rotateUp(parent)
+        rotateUp(x)
       }
       else {
         // Zig-Zag：x 与父节点异侧，连续上提 x 两次
-        x.rotateUp()
-        x.rotateUp()
+        rotateUp(x)
+        rotateUp(x)
       }
     }
     return x

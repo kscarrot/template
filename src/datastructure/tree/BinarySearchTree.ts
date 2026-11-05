@@ -4,29 +4,38 @@ import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 import { Comparator } from 'src/util/Comparator'
 
-export interface RemovedNodeInfo<T> {
-  removed: BinaryTreeNode<T>
-  child: BinaryTreeNode<T> | null
-  parent: BinaryTreeNode<T> | null
+export interface RemovedNodeInfo<N> {
+  removed: N
+  child: N | null
+  parent: N | null
 }
 
-export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<T> {
+/** 二叉搜索树。节点默认是普通二叉节点，带额外字段的子类覆盖 createNode */
+export class BinarySearchTree<T, N extends BinaryTreeNode<T, N> = BinaryTreeNode<T>>
+  extends BinaryTree<T, N>
+  implements SearchTreeADT<T> {
   comparator: Comparator<T>
 
-  /**
-   * 构造时会逐个调用 this.insert，此时子类的字段初始化器还没执行；
-   * 子类若有带初始值的字段，需自定义构造函数：先 super([], comparator)，赋值字段后再插入
-   */
-  constructor(values: Array<T> = [], comparator?: compareFunction<T>) {
-    /** 搜索树有顺序 不适用按索引的初始化 */
-    super([])
+  constructor(comparator?: compareFunction<T>) {
+    super()
     this.comparator = new Comparator(comparator)
-    for (const value of values) {
-      this.insert(value)
-    }
   }
 
-  protected searchMinNode(currentNode: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
+  /** 造一个普通二叉节点。子类节点带额外字段时覆盖它 */
+  protected createNode(value: T, parent: N | null): N {
+    return new BinaryTreeNode(value, parent
+      ? { parent }
+      : {}) as unknown as N
+  }
+
+  /** 按比较顺序逐个 insert。比较器和树自己的状态在构造时已经写好 */
+  from(values: readonly T[] = []): this {
+    for (const value of values)
+      this.insert(value)
+    return this
+  }
+
+  protected searchMinNode(currentNode: N | null): N | null {
     let minNode = currentNode
     while (minNode?.left) {
       minNode = minNode.left
@@ -39,7 +48,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
     return minNode?.value ?? null
   }
 
-  protected searchMaxNode(currentNode: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
+  protected searchMaxNode(currentNode: N | null): N | null {
     let maxNode = currentNode
     while (maxNode?.right) {
       maxNode = maxNode.right
@@ -52,16 +61,9 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
     return maxNode?.value ?? null
   }
 
-  /** 创建新节点，子类可重写以使用带额外字段的节点类型 */
-  protected createNode(value: T, parent: BinaryTreeNode<T> | null): BinaryTreeNode<T> {
-    return new BinaryTreeNode(value, parent
-      ? { parent }
-      : {})
-  }
-
   /** 按 BST 规则挂上一个新叶子并返回它，重复值放到右侧 */
-  protected insertNode(value: T): BinaryTreeNode<T> {
-    let parent: BinaryTreeNode<T> | null = null
+  protected insertNode(value: T): N {
+    let parent: N | null = null
     let current = this.root
     while (current) {
       parent = current
@@ -86,7 +88,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
     return this
   }
 
-  protected searchNode(value: T, currentNode: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
+  protected searchNode(value: T, currentNode: N | null): N | null {
     const result = this.searchNodeWithLastVisited(value, currentNode)
     return result.node
   }
@@ -102,10 +104,10 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
    */
   protected searchNodeWithLastVisited(
     value: T,
-    currentNode: BinaryTreeNode<T> | null,
+    currentNode: N | null,
   ): {
-    node: BinaryTreeNode<T> | null
-    lastNode: BinaryTreeNode<T> | null
+    node: N | null
+    lastNode: N | null
   } {
     if (currentNode === null) {
       return {
@@ -157,10 +159,10 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
    * - child：顶替 removed 位置的孩子，可能为 null
    * - parent：removed 原来的父节点，平衡回溯从这里开始
    */
-  protected removeNode(node: BinaryTreeNode<T>): RemovedNodeInfo<T> {
+  protected removeNode(node: N): RemovedNodeInfo<N> {
     let removed = node
     if (node.left && node.right) {
-      removed = this.searchMinNode(node.right) as BinaryTreeNode<T>
+      removed = this.searchMinNode(node.right) as N
       node.value = removed.value
     }
 
@@ -178,7 +180,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
     return { removed, child, parent }
   }
 
-  protected getNodeSize(currentNode: BinaryTreeNode<T> | null): number {
+  protected getNodeSize(currentNode: N | null): number {
     if (currentNode === null) {
       return 0
     }
@@ -190,7 +192,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
     }
   }
 
-  protected getKthNode(currentNode: BinaryTreeNode<T> | null, index: number): BinaryTreeNode<T> | null {
+  protected getKthNode(currentNode: N | null, index: number): N | null {
     if (currentNode === null) {
       return null
     }
@@ -217,7 +219,7 @@ export class BinarySearchTree<T> extends BinaryTree<T> implements SearchTreeADT<
     return node?.value ?? null
   }
 
-  protected getNodeRank(currentNode: BinaryTreeNode<T> | null, value: T): number {
+  protected getNodeRank(currentNode: N | null, value: T): number {
     if (currentNode === null) {
       return 0
     }

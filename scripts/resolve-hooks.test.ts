@@ -11,7 +11,7 @@ function runWithHooks(args: string[]) {
 
 describe('node 直接运行 ts 的解析钩子', () => {
   it('解析 src/ 路径别名', () => {
-    const code = `import { ScapegoatTree } from 'src/datastructure/tree/ScapegoatTree'; console.log([...new ScapegoatTree([3, 1, 2])].join())`
+    const code = `import { ScapegoatTree } from 'src/datastructure/tree/ScapegoatTree'; console.log([...new ScapegoatTree().from([3, 1, 2])].join())`
     expect(runWithHooks(['--input-type=module', '-e', code]).trim()).toBe('1,2,3')
   })
 

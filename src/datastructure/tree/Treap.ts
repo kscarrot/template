@@ -1,4 +1,3 @@
-import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import type { compareFunction } from 'src/util/Comparator'
 import { TreapNode } from 'src/datastructure/node/TreeNode'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
@@ -11,15 +10,19 @@ import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
  * - splitV：按值切开，小于 value 的和大于等于 value 的
  * 调用方保证 merge 的左树每个值都不大于右树
  */
-export class Treap<T> extends BinarySearchTree<T> {
-  override root: TreapNode<T> | null = null
+export class Treap<T> extends BinarySearchTree<T, TreapNode<T>> {
   private readonly random: () => number
 
-  constructor(values: Array<T> = [], comparator?: compareFunction<T>, random: () => number = Math.random) {
-    super([], comparator)
-    this.random = random
-    for (const value of values)
-      this.insert(value)
+  constructor(options: {
+    comparator?: compareFunction<T>
+    random?: () => number
+  } = {}) {
+    super(options.comparator)
+    this.random = options.random ?? Math.random
+  }
+
+  protected createNode(value: T, parent: TreapNode<T> | null): TreapNode<T> {
+    return new TreapNode(value, this.random(), parent)
   }
 
   /**
@@ -100,7 +103,6 @@ export class Treap<T> extends BinarySearchTree<T> {
   }
 
   override insert(value: T): this {
-    // 先建节点：优先级非法时树还没被 split
     const node = this.createNode(value, null)
     const [left, right] = this.split(this.root, this.getRank(value))
     this.root = this.merge(this.merge(left, node), right)
@@ -127,16 +129,6 @@ export class Treap<T> extends BinarySearchTree<T> {
     this.root = this.merge(left, right)
     this.adoptRoot()
     return removed?.value ?? null
-  }
-
-  protected override createNode(value: T, _parent: BinaryTreeNode<T> | null): TreapNode<T> {
-    const priority = this.random()
-    if (Number.isFinite(priority)) {
-      return new TreapNode(value, priority)
-    }
-    else {
-      throw new Error(`Treap: priority must be a finite number, got ${priority}`)
-    }
   }
 
   /** 直接读缓存的子树大小；null 是 0 */

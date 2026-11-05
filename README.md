@@ -20,6 +20,7 @@
 - [HashSet](./src/datastructure/collection/HashSet.ts)
 - [二叉树](./src/datastructure/tree/BinaryTree.ts)
 - [二叉搜索树](./src/datastructure/tree/BinarySearchTree.ts)
+- [AVL树](./src/datastructure/tree/AVLTree.ts)
 - [Fiber树](./src/datastructure/tree/FiberTree.ts)
 - [Splay树](./src/datastructure/tree/SplayTree.ts)
 - [替罪羊树](./src/datastructure/tree/ScapegoatTree.ts)

@@ -60,3 +60,14 @@ export function* mapGenerator<TIn, TOut, TReturn, TNext>(
     source.return(undefined as any)
   }
 }
+
+/** 按数组顺序返回优先级。数组取完再要下一个时抛错 */
+export function priorities(values: readonly number[]): () => number {
+  function* sequence(): Generator<number, never> {
+    for (const value of values)
+      yield value
+    throw new Error('priorities exhausted')
+  }
+  const source = sequence()
+  return () => source.next().value
+}

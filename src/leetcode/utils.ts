@@ -7,14 +7,6 @@ export class ListNode {
   }
 }
 
-export function chunkArray<T>(arr: T[], size: number): T[][] {
-  const result: T[][] = []
-  for (let i = 0; i < arr.length; i += size) {
-    result.push(arr.slice(i, i + size))
-  }
-  return result
-}
-
 export function arrayToLinkList(arr: number[]): ListNode | null {
   if (arr.length === 0)
     return null

@@ -1,4 +1,6 @@
+import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
 import { SplayTree } from 'src/datastructure/tree/SplayTree'
+import { expectTypeOf } from 'vitest'
 
 describe('二叉搜索树', () => {
   it('创建二叉搜索树', () => {
@@ -23,7 +25,7 @@ describe('二叉搜索树', () => {
   })
 
   it('插入验证', () => {
-    const bst = new SplayTree([10, 12, 3, 4, 13, 9, 11])
+    const bst = new SplayTree().from([10, 12, 3, 4, 13, 9, 11])
     expect(bst.size).toBe(7)
     /**
      *             10
@@ -96,21 +98,21 @@ describe('二叉搜索树', () => {
 
 describe('伸展树', () => {
   it('查找命中会把目标节点伸展到根节点', () => {
-    const tree = new SplayTree([10, 5, 15, 3, 7, 13, 17])
+    const tree = new SplayTree().from([10, 5, 15, 3, 7, 13, 17])
     expect(tree.search(7)).toBe(true)
     expect(tree.root?.value).toBe(7)
     expect([...tree]).toStrictEqual([3, 5, 7, 10, 13, 15, 17])
   })
 
   it('查找未命中会把最后访问节点伸展到根节点', () => {
-    const tree = new SplayTree([10, 5, 15, 3, 7, 13, 17])
+    const tree = new SplayTree().from([10, 5, 15, 3, 7, 13, 17])
     expect(tree.search(6)).toBe(false)
     expect(tree.root?.value).toBe(5)
     expect([...tree]).toStrictEqual([3, 5, 7, 10, 13, 15, 17])
   })
 
   it('删除根节点后仍保持有序且根节点可用', () => {
-    const tree = new SplayTree([10, 5, 15, 3, 7, 13, 17])
+    const tree = new SplayTree().from([10, 5, 15, 3, 7, 13, 17])
     tree.delete(10)
     expect(tree.size).toBe(6)
     expect([...tree]).toStrictEqual([3, 5, 7, 13, 15, 17])
@@ -120,7 +122,7 @@ describe('伸展树', () => {
   })
 
   it('删除不存在的值会把最后访问节点伸展到根节点', () => {
-    const tree = new SplayTree([10, 5, 15, 3, 7, 13, 17])
+    const tree = new SplayTree().from([10, 5, 15, 3, 7, 13, 17])
     tree.delete(6)
     expect(tree.root?.value).toBe(5)
     expect(tree.size).toBe(7)
@@ -128,7 +130,7 @@ describe('伸展树', () => {
   })
 
   it('删除有左子树的节点后，其前驱成为新根', () => {
-    const tree = new SplayTree([10, 5, 15, 3, 7, 13, 17])
+    const tree = new SplayTree().from([10, 5, 15, 3, 7, 13, 17])
     tree.delete(10)
     expect(tree.root?.value).toBe(7)
     expect(tree.root?.parent).toBeNull()
@@ -140,16 +142,25 @@ describe('伸展树', () => {
       : a < b
         ? 1
         : -1)
-    const tree = new SplayTree([1, 3, 2], descending)
+    const tree = new SplayTree(descending).from([1, 3, 2])
     expect([...tree]).toStrictEqual([3, 2, 1])
   })
 
   it('连续删除直到空树', () => {
-    const tree = new SplayTree([2, 1, 3])
+    const tree = new SplayTree().from([2, 1, 3])
     tree.delete(2).delete(1).delete(3)
     expect(tree.size).toBe(0)
     expect(tree.root).toBe(null)
     expect(tree.getMin()).toBe(null)
     expect(tree.getMax()).toBe(null)
+  })
+
+  it('root 的类型是普通二叉节点', () => {
+    const tree = new SplayTree<number>()
+    expectTypeOf(tree.root).toEqualTypeOf<BinaryTreeNode<number> | null>()
+  })
+
+  it('from 返回伸展树', () => {
+    expectTypeOf(new SplayTree<number>().from([1])).toEqualTypeOf<SplayTree<number>>()
   })
 })
