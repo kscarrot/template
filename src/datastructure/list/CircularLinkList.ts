@@ -1,124 +1,119 @@
 import type { ListADT } from 'src/datastructure/ADT'
-import { CircularLinkNode } from 'src/datastructure/node/ListNode'
+import type { DoublyItem, DoublyNil, DoublyNode } from 'src/datastructure/node/Node'
+import { createDoublyNil, createDoublyNode, isNil } from 'src/datastructure/node/Node'
 
 export class CircularLinkList<T> implements ListADT<T> {
-  size = 0
-  head: null | CircularLinkNode<T> = null
-  tail: null | CircularLinkNode<T> = null
+  #head: DoublyItem<T>
+  #nil: DoublyNil
+  #size = 0
+  constructor() {
+    this.#nil = createDoublyNil()
+    this.#head = this.#nil
+  }
 
-  add(value: T) {
-    const insertNode = new CircularLinkNode(value)
-
-    if (this.isEmpty) {
-      this.head = insertNode
-      this.tail = insertNode
-    }
-    else {
-      const prevNode = this.tail!
-      const nextNode = this.head!
-
-      prevNode.next = insertNode
-      insertNode.prev = prevNode
-
-      nextNode.prev = insertNode
-      insertNode.next = nextNode
-
-      this.tail = insertNode
-    }
-
-    this.size = this.size + 1
-    return this
+  get size() {
+    return this.#size
   }
 
   get isEmpty() {
-    return this.size === 0
+    return this.#size === 0
   }
 
-  private getNode(index: number) {
-    let count = 0
-    const point = this.traverseNode()
-    while (count < index) {
-      point.next()
-      count = count + 1
-    }
-    return point.next().value as CircularLinkNode<T>
-  }
-
-  get(index: number) {
+  add(value: T) {
+    const nextNode = createDoublyNode(value, this.#nil, this.#nil)
     if (this.isEmpty) {
-      throw new Error('List is Empty')
+      this.#head = nextNode
+      this.#head.next = this.#head
+      this.#head.prev = this.#head
     }
-
-    if (index < 0) {
-      throw new Error('get Data out of List size')
+    else {
+      const tailNode = this.#head.prev
+      tailNode.next = nextNode
+      nextNode.prev = tailNode
+      nextNode.next = this.#head
+      this.#head.prev = nextNode
     }
-
-    return this.getNode(index).value
-  }
-
-  insert(index: number, value: T) {
-    if (this.isEmpty) {
-      this.head = new CircularLinkNode(value)
-      this.size = this.size + 1
-      return this
-    }
-
-    const insertNode = new CircularLinkNode(value)
-    const nextNode = this.getNode(index)
-    const prevNode = nextNode.prev
-
-    prevNode.next = insertNode
-    insertNode.prev = prevNode
-
-    nextNode.prev = insertNode
-    insertNode.next = nextNode
-
-    this.size = this.size + 1
+    this.#size++
     return this
   }
 
-  delete(index: number) {
-    if (this.isEmpty) {
-      throw new Error('Cant delete empty list')
-    }
-
-    if (this.size === 1) {
-      const returnValue = this.head!.value
-      this.head = null
-      this.size = this.size - 1
-      return returnValue
-    }
-
-    const deleteNode = this.getNode(index)
-
-    deleteNode.next.prev = deleteNode.prev
-    deleteNode.prev.next = deleteNode.next
-
-    this.size = this.size - 1
-    return deleteNode.value
-  }
-
-  * traverseNode() {
-    let current = this.head
-    while (current) {
+  * traverseNodes() {
+    let current = this.#head
+    for (let count = 0; count < this.#size && !isNil(current); count++) {
       yield current
       current = current.next
     }
   }
 
   * traverse() {
-    const traverse = this.traverseNode()
-
-    let point = traverse.next()
-
-    let count = 0
-    while (!point.done && count < this.size) {
-      yield point.value.value
-      point = traverse.next()
-
-      count++
-    }
+    for (const node of this.traverseNodes())
+      yield node.value
   }
 
   [Symbol.iterator] = this.traverse
+
+  #getNodeAt(index: number) {
+    if (this.isEmpty)
+      throw new RangeError('List is empty')
+    if (!Number.isInteger(index))
+      throw new RangeError(`Index must be an integer: index=${index}`)
+
+    const mod = ((index % this.#size) + this.#size) % this.#size
+    let step = 0
+    for (const node of this.traverseNodes()) {
+      if (step === mod)
+        return node
+      step++
+    }
+    throw new RangeError('Out of bounds: Node is nil')
+  }
+
+  get(index: number) {
+    return this.#getNodeAt(index).value
+  }
+
+  insert(index: number, value: T) {
+    if (!Number.isInteger(index))
+      throw new RangeError(`Index must be an integer: index=${index}`)
+    if (this.isEmpty)
+      return this.add(value)
+
+    const nextNode = this.#getNodeAt(index)
+    const prevNode = nextNode.prev as DoublyItem<T>
+
+    const insertNode = createDoublyNode(value, this.#nil, this.#nil)
+
+    prevNode.next = insertNode
+    insertNode.prev = prevNode
+    nextNode.prev = insertNode
+    insertNode.next = nextNode
+
+    if (nextNode === this.#head)
+      this.#head = insertNode
+
+    this.#size++
+    return this
+  }
+
+  delete(index: number) {
+    if (this.isEmpty)
+      throw new RangeError('Cant delete empty list')
+
+    const deleteNode = this.#getNodeAt(index)
+    if (this.#size === 1) {
+      this.#head = this.#nil
+    }
+    else {
+      const prevNode = deleteNode.prev as DoublyNode<T>
+      const nextNode = deleteNode.next as DoublyNode<T>
+
+      prevNode.next = nextNode
+      nextNode.prev = prevNode
+      if (this.#head === deleteNode)
+        this.#head = nextNode
+    }
+
+    this.#size--
+    return deleteNode.value
+  }
 }

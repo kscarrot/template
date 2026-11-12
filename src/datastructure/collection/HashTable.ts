@@ -1,5 +1,5 @@
 import type { HashTableADT } from 'src/datastructure/ADT'
-import { DoubleLinkList as List } from 'src/datastructure/list/DoubleLinkList'
+import { DoublyLinkList as List } from 'src/datastructure/list/DoublyLinkList'
 
 interface SelfMap<T> {
   key: any

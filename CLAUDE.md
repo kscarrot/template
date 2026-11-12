@@ -11,7 +11,7 @@
 - **安装依赖**：`pnpm install`
 - **运行全部测试**：`pnpm test`（vitest run）
 - **监听模式测试**：`pnpm test:watch`
-- **运行单个测试文件**：`pnpm test -- src/datastructure/list/LinkList.test.ts`
+- **运行单个测试文件**：`pnpm test -- src/datastructure/list/SinglyLinkList.test.ts`
 - **带覆盖率测试**：`pnpm test:coverage`（覆盖范围限定在 `src/algorithm/`、`src/datastructure/`、`src/util/`）
 - **Lint 检查**：`pnpm lint:check`
 - **Lint 修复**：`pnpm lint`
@@ -26,7 +26,7 @@
 
 - **`datastructure/`** — 通用数据结构实现，均实现 `ADT.ts` 中定义的接口：
   - `node/` — 节点类型（`ListNode`、`BinaryTreeNode`、`AVLNode`、`TreapNode`），供所有结构共用
-  - `list/` — LinkList、DoubleLinkList、CircularLinkList、Stack、Queue、Dequeue
+  - `list/` — SinglyLinkList、DoublyLinkList、CircularLinkList、Stack、Queue、Dequeue
   - `tree/` — BinaryTree、BinarySearchTree、AVLTree、SplayTree、ScapegoatTree、Treap、TreapRotate、FiberTree
   - `heap/` — Min/Max Heap
   - `collection/` — HashTable、HashSet

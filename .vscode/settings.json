@@ -1,6 +1,6 @@
 {
   "json.schemaDownload.enable": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "editor.fontLigatures": true,
   "editor.fontFamily": "Fira Code,Microsoft Yahei UI, monospace",
   "terminal.integrated.fontFamily": "Menlo, Monaco, 'Courier New', monospace",

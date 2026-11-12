@@ -1,5 +1,5 @@
 import type { QueueADT } from 'src/datastructure/ADT'
-import { DoubleLinkList as List } from 'src/datastructure/list/DoubleLinkList'
+import { DoublyLinkList as List } from 'src/datastructure/list/DoublyLinkList'
 
 export class Queue<T> implements QueueADT<T> {
   #l: List<T>

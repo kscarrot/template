@@ -1,17 +1,32 @@
-import { DoubleLinkList } from 'src/datastructure/list/DoubleLinkList'
+import { SinglyLinkList } from 'src/datastructure/list/SinglyLinkList'
+import { isNil } from 'src/datastructure/node/Node'
 
-it('test DoubleLinkList normal add insert', () => {
-  const l = new DoubleLinkList<number>()
+it('空链表遍历只遇到哨兵', () => {
+  const l = new SinglyLinkList<number>()
+  const nodes = [
+    ...l.traverseNodes(),
+  ]
+  expect(nodes.map(node => isNil(node))).toStrictEqual([true])
+})
+
+it('空链表按下标读取会报错', () => {
+  const l = new SinglyLinkList<number>()
+  expect(() => l.get(0)).toThrow(new RangeError('Out of bounds: List is empty'))
+})
+
+it('插入、追加和按下标读取', () => {
+  const l = new SinglyLinkList<number>()
   expect(l.isEmpty).toBe(true)
   expect([...l]).toStrictEqual([])
   expect(() => l.get(0)).toThrow()
   expect(() => l.get(1)).toThrow()
   l.insert(0, 77)
+  expect([...l]).toStrictEqual([77])
   expect(l.delete(0)).toBe(77)
   expect([...l]).toStrictEqual([])
   expect(() => l.delete(0)).toThrow()
 
-  l.insert(l.size, 1) // H => 1 => T
+  l.insert(l.size, 1)
   l.insert(l.size, 2)
   l.insert(l.size, 3)
   expect([...l]).toStrictEqual([1, 2, 3])
@@ -28,9 +43,9 @@ it('test DoubleLinkList normal add insert', () => {
   expect(() => l.get(l.size)).toThrow()
 })
 
-it('test DoubleLinkList normal delete', () => {
-  const l = new DoubleLinkList()
-  l.insert(l.size, 1) // H => 1 => T
+it('删除头部、中间和尾部', () => {
+  const l = new SinglyLinkList()
+  l.insert(l.size, 1)
   l.insert(l.size, 2)
   l.insert(l.size, 3)
   l.insert(l.size, 4)
@@ -59,39 +74,18 @@ it('test DoubleLinkList normal delete', () => {
   expect(() => l.delete(100)).toThrow()
 })
 
-it('test Node traverse', () => {
-  const empty = new DoubleLinkList<number>()
-  let it = empty.traverseNode()
-  expect(it.next().done).toBe(true)
+describe('单向链表', () => {
+  it('add 追加到末尾，并支持链式调用', () => {
+    const list = new SinglyLinkList<number>()
 
-  const l = new DoubleLinkList<number>()
-  l.add(1).add(2)
-  it = l.traverseNode()
-  let step = it.next()
-  expect(step.done).toBe(false)
-  expect(step.value?.value).toBe(1)
-  step = it.next()
-  expect(step.done).toBe(false)
-  expect(step.value?.value).toBe(2)
-  step = it.next()
-  expect(step.done).toBe(true)
-})
-
-describe('doubleLinkList', () => {
-  it('add should append element to the end of list', () => {
-    const list = new DoubleLinkList<number>()
-
-    // Test adding to empty list
     list.add(1)
     expect(list.size).toBe(1)
     expect([...list]).toEqual([1])
 
-    // Test adding multiple elements
     list.add(2).add(3)
     expect(list.size).toBe(3)
     expect([...list]).toEqual([1, 2, 3])
 
-    // Test chaining add calls
     const result = list.add(4)
     expect(result).toBe(list)
     expect(list.size).toBe(4)

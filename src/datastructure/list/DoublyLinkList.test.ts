@@ -1,23 +1,28 @@
-import { LinkList } from 'src/datastructure/list/LinkList'
-import { isHeadNode, isTailNode } from 'src/datastructure/node/ListNode'
+import { DoublyLinkList } from 'src/datastructure/list/DoublyLinkList'
 
-it('test Node traverse', () => {
-  const l = new LinkList<number>()
-  const nodeIterator = l.traverseNode()
-  let cursor = nodeIterator.next()
-  if (cursor.value) {
-    expect(isHeadNode(cursor.value)).toBe(true)
-  }
-  cursor = nodeIterator.next()
-  if (cursor.value) {
-    expect(isTailNode(cursor.value)).toBe(true)
-  }
-  cursor = nodeIterator.next()
-  expect(cursor.done).toBe(true)
+it('空链表遍历没有节点', () => {
+  const l = new DoublyLinkList<number>()
+  expect([
+    ...l.traverseNodes(),
+  ]).toStrictEqual([])
 })
 
-it('test LinkList normal add insert', () => {
-  const l = new LinkList<number>()
+it('空链表按下标读取会报错', () => {
+  const l = new DoublyLinkList<number>()
+  expect(() => l.get(0)).toThrow(new RangeError('Out of bounds: List is empty'))
+})
+
+it('遍历只得到数据节点', () => {
+  const l = new DoublyLinkList<number>()
+  l.add(1).add(2)
+  const nodes = [
+    ...l.traverseNodes(),
+  ]
+  expect(nodes.map(node => node.value)).toStrictEqual([1, 2])
+})
+
+it('插入、追加和按下标读取', () => {
+  const l = new DoublyLinkList<number>()
   expect(l.isEmpty).toBe(true)
   expect([...l]).toStrictEqual([])
   expect(() => l.get(0)).toThrow()
@@ -28,7 +33,7 @@ it('test LinkList normal add insert', () => {
   expect([...l]).toStrictEqual([])
   expect(() => l.delete(0)).toThrow()
 
-  l.insert(l.size, 1) // H => 1 => T
+  l.insert(l.size, 1)
   l.insert(l.size, 2)
   l.insert(l.size, 3)
   expect([...l]).toStrictEqual([1, 2, 3])
@@ -45,9 +50,9 @@ it('test LinkList normal add insert', () => {
   expect(() => l.get(l.size)).toThrow()
 })
 
-it('test LinkList normal delete', () => {
-  const l = new LinkList()
-  l.insert(l.size, 1) // H => 1 => T
+it('删除头部、中间和尾部', () => {
+  const l = new DoublyLinkList()
+  l.insert(l.size, 1)
   l.insert(l.size, 2)
   l.insert(l.size, 3)
   l.insert(l.size, 4)
@@ -76,21 +81,18 @@ it('test LinkList normal delete', () => {
   expect(() => l.delete(100)).toThrow()
 })
 
-describe('linkList', () => {
-  it('add should append element to the end of list', () => {
-    const list = new LinkList<number>()
+describe('双向链表', () => {
+  it('add 追加到末尾，并支持链式调用', () => {
+    const list = new DoublyLinkList<number>()
 
-    // Test adding to empty list
     list.add(1)
     expect(list.size).toBe(1)
     expect([...list]).toEqual([1])
 
-    // Test adding multiple elements
     list.add(2).add(3)
     expect(list.size).toBe(3)
     expect([...list]).toEqual([1, 2, 3])
 
-    // Test chaining add calls
     const result = list.add(4)
     expect(result).toBe(list)
     expect(list.size).toBe(4)

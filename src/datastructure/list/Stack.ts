@@ -1,5 +1,5 @@
 import type { StackADT } from 'src/datastructure/ADT'
-import { DoubleLinkList as List } from 'src/datastructure/list/DoubleLinkList'
+import { DoublyLinkList as List } from 'src/datastructure/list/DoublyLinkList'
 
 export class Stack<T> implements StackADT<T> {
   #l: List<T>
