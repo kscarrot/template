@@ -6,7 +6,7 @@ it('空循环链表遍历没有节点', () => {
     ...l.traverseNodes(),
   ]).toStrictEqual([])
   expect([
-    ...l.traverse(),
+    ...l,
   ]).toStrictEqual([])
 })
 
@@ -31,7 +31,7 @@ it('遍历在一圈后停止', () => {
   ]
   expect(nodes.map(node => node.value)).toStrictEqual([1, 2, 3])
   expect([
-    ...l.traverse(),
+    ...l,
   ]).toStrictEqual([1, 2, 3])
 })
 

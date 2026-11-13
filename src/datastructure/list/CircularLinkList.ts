@@ -1,6 +1,8 @@
 import type { ListADT } from 'src/datastructure/ADT'
-import type { DoublyItem, DoublyNil, DoublyNode } from 'src/datastructure/node/Node'
-import { createDoublyNil, createDoublyNode, isNil } from 'src/datastructure/node/Node'
+import type { DoublyItem, DoublyNil, DoublyNode } from 'src/datastructure/Node'
+import { createDoublyNil, createDoublyNode } from 'src/datastructure/Node'
+import { traverseLines } from 'src/datastructure/traverse'
+import { mapGenerator } from 'src/util/Iter'
 
 export class CircularLinkList<T> implements ListADT<T> {
   #head: DoublyItem<T>
@@ -37,20 +39,9 @@ export class CircularLinkList<T> implements ListADT<T> {
     return this
   }
 
-  * traverseNodes() {
-    let current = this.#head
-    for (let count = 0; count < this.#size && !isNil(current); count++) {
-      yield current
-      current = current.next
-    }
-  }
+  traverseNodes = () => traverseLines(this.#head, this.#size);
 
-  * traverse() {
-    for (const node of this.traverseNodes())
-      yield node.value
-  }
-
-  [Symbol.iterator] = this.traverse
+  [Symbol.iterator] = () => mapGenerator(this.traverseNodes(), node => node.value)
 
   #getNodeAt(index: number) {
     if (this.isEmpty)

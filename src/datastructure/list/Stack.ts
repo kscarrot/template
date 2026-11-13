@@ -16,10 +16,6 @@ export class Stack<T> implements StackADT<T> {
     return this.#l.isEmpty
   }
 
-  traverse() {
-    return this.#l.traverse()
-  }
-
   push(value: T) {
     this.#l.add(value)
     return this
@@ -38,5 +34,5 @@ export class Stack<T> implements StackADT<T> {
     }
   }
 
-  [Symbol.iterator] = this.traverse
+  [Symbol.iterator] = () => this.#l[Symbol.iterator]()
 }

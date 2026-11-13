@@ -15,10 +15,6 @@ export class Queue<T> implements QueueADT<T> {
     return this.#l.isEmpty
   }
 
-  traverse() {
-    return this.#l.traverse()
-  }
-
   enqueue(value: T) {
     this.#l.add(value)
     return this
@@ -38,5 +34,5 @@ export class Queue<T> implements QueueADT<T> {
     return this.#l.get(0)
   }
 
-  [Symbol.iterator] = this.traverse
+  [Symbol.iterator] = () => this.#l[Symbol.iterator]()
 }

@@ -58,7 +58,7 @@ export class HashTable<T> implements HashTableADT<T> {
   delete(key: any) {
     const i = this.position(key)
     const targetList = this.#table[i]
-    const iterator = targetList.traverse()
+    const iterator = targetList[Symbol.iterator]()
     let node = iterator.next()
     let listIndex = 0
     while (!node.done) {

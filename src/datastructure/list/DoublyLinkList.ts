@@ -1,7 +1,9 @@
 import type { ListADT } from 'src/datastructure/ADT'
-import type { DoublyItem, DoublyNil, DoublyNode } from 'src/datastructure/node/Node'
-import { createDoublyNil, createDoublyNode, isNil } from 'src/datastructure/node/Node'
+import type { DoublyItem, DoublyNil, DoublyNode } from 'src/datastructure/Node'
+import { createDoublyNil, createDoublyNode, isNil } from 'src/datastructure/Node'
+import { traverseLines } from 'src/datastructure/traverse'
 import { assertIndex } from 'src/util/common'
+import { mapGenerator } from 'src/util/Iter'
 
 export class DoublyLinkList<T> implements ListADT<T> {
   #head: DoublyItem<T>
@@ -40,20 +42,9 @@ export class DoublyLinkList<T> implements ListADT<T> {
     return this
   }
 
-  * traverseNodes() {
-    let current = this.#head
-    while (!isNil(current)) {
-      yield current
-      current = current.next
-    }
-  }
+  traverseNodes = () => traverseLines(this.#head, this.#size);
 
-  * traverse() {
-    for (const node of this.traverseNodes())
-      yield node.value
-  }
-
-  [Symbol.iterator] = this.traverse
+  [Symbol.iterator] = () => mapGenerator(this.traverseNodes(), node => node.value)
 
   #getNodeAt(index: number) {
     if (this.isEmpty)
@@ -64,13 +55,13 @@ export class DoublyLinkList<T> implements ListADT<T> {
     if (index === this.#size - 1)
       return this.#tail as DoublyNode<T>
 
-    let current = this.#head
-    for (let i = 0; i < index; i++) {
-      current = current.next
+    let step = 0
+    for (const node of this.traverseNodes()) {
+      if (step === index)
+        return node
+      step++
     }
-    if (isNil(current))
-      throw new RangeError('Out of bounds: Node is nil')
-    return current
+    throw new RangeError('Out of bounds: Node is nil')
   }
 
   get(index: number) {

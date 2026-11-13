@@ -1,4 +1,4 @@
-import { createBinaryNil, createDoublyNil, createMultiNil, createSinglyNil } from 'src/datastructure/node/Node'
+import { createBinaryNil, createDoublyNil, createMultiNil, createSinglyNil } from 'src/datastructure/Node'
 
 describe('空节点', () => {
   it('单向哨兵的 next 只指向自己', () => {

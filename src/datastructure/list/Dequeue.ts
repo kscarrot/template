@@ -15,10 +15,6 @@ export class Dequeue<T> implements DequeueADT<T> {
     return this.#l.isEmpty
   }
 
-  traverse() {
-    return this.#l.traverse()
-  }
-
   push(value: T) {
     this.#l.add(value)
     return this
@@ -57,5 +53,5 @@ export class Dequeue<T> implements DequeueADT<T> {
     return this.#l.get(this.size - 1)
   }
 
-  [Symbol.iterator] = this.traverse
+  [Symbol.iterator] = () => this.#l[Symbol.iterator]()
 }

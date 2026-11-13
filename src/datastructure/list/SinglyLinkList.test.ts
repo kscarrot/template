@@ -1,16 +1,11 @@
 import { SinglyLinkList } from 'src/datastructure/list/SinglyLinkList'
-import { isNil } from 'src/datastructure/node/Node'
 
-it('空链表遍历只遇到哨兵', () => {
+it('空链表遍历和读取', () => {
   const l = new SinglyLinkList<number>()
   const nodes = [
     ...l.traverseNodes(),
   ]
-  expect(nodes.map(node => isNil(node))).toStrictEqual([true])
-})
-
-it('空链表按下标读取会报错', () => {
-  const l = new SinglyLinkList<number>()
+  expect(nodes).toStrictEqual([])
   expect(() => l.get(0)).toThrow(new RangeError('Out of bounds: List is empty'))
 })
 
