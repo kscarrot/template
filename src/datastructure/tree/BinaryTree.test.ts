@@ -1,19 +1,41 @@
-import { AVLNode } from 'src/datastructure/node/TreeNode'
-import {
-  BinaryTree,
-  traverseBinaryTree,
-  traverseBinaryTreeNode,
-  TraverseType,
-  valuesToBinaryTree,
-} from 'src/datastructure/tree/BinaryTree'
+import type { BinaryNode } from 'src/datastructure/Node'
+import type { TraverseType } from 'src/datastructure/traverse'
+import type { MockInstance } from 'vitest'
+import { isNil } from 'src/datastructure/Node'
+import { E_TraverseType } from 'src/datastructure/traverse'
+import { BinaryTree, countNodes, heightOf } from 'src/datastructure/tree/BinaryTree'
 import { expectTypeOf, vi } from 'vitest'
 
-describe('二叉树', () => {
-  it('二叉树的构建和遍历', () => {
-    expect(valuesToBinaryTree([])).toBeNull()
+function valuesOf(tree: BinaryTree<number>, type: TraverseType = E_TraverseType.IN_ORDER) {
+  return tree.traverseNodes(type).map(node => node.value).toArray()
+}
 
-    // 构建和验证二叉树
-    const root = valuesToBinaryTree([
+describe('二叉树', () => {
+  it('空数组和根为 null 都得到空树', () => {
+    for (const values of [
+      [],
+      [null, 1, 2],
+    ]) {
+      const tree = BinaryTree.from<number>(values)
+      expect(tree.size).toBe(0)
+      expect(tree.isEmpty).toBe(true)
+      expect(isNil(tree.root)).toBe(true)
+      expect([...tree]).toStrictEqual([])
+      expect(tree.search(1)).toBe(false)
+    }
+  })
+
+  it('按层序数组建树，三种遍历', () => {
+    /**
+     *            1
+     *         /     \
+     *        2       3
+     *      /   \    /
+     *     4     5  8
+     *          / \ /
+     *         6  7 9
+     */
+    const tree = BinaryTree.from([
       1,
       2,
       3,
@@ -27,38 +49,12 @@ describe('二叉树', () => {
       7,
       9,
     ])
-    expect(root).toBeDefined()
-    expect(root?.left?.value).toBe(2)
-    expect(root?.left?.left?.isLeaf).toBe(true)
-    expect(root?.left?.right?.value).toBe(5)
-    expect(root?.left?.right?.left?.value).toBe(6)
-    expect(root?.left?.right?.right?.value).toBe(7)
-
-    expect(root?.right?.left?.value).toBe(8)
-    expect(root?.right?.left?.left?.value).toBe(9)
-    expect(root?.right?.left?.left?.isLeaf).toBe(true)
-
-    // 前序遍历
-    const preOrder = Array.from(traverseBinaryTree(root, TraverseType.PRE_ORDER))
-    expect(preOrder).toStrictEqual([1, 2, 4, 5, 6, 7, 3, 8, 9])
-
-    // 中序遍历
-    const inOrder = Array.from(traverseBinaryTree(root))
-    expect(inOrder).toStrictEqual([4, 2, 6, 5, 7, 1, 9, 8, 3])
-
-    // 后序遍历
-    const postOrder = Array.from(traverseBinaryTree(root, TraverseType.POST_ORDER))
-    expect(postOrder).toStrictEqual([4, 6, 7, 5, 2, 9, 8, 3, 1])
+    expect(valuesOf(tree, E_TraverseType.PRE_ORDER)).toStrictEqual([1, 2, 4, 5, 6, 7, 3, 8, 9])
+    expect(valuesOf(tree)).toStrictEqual([4, 2, 6, 5, 7, 1, 9, 8, 3])
+    expect(valuesOf(tree, E_TraverseType.POST_ORDER)).toStrictEqual([4, 6, 7, 5, 2, 9, 8, 3, 1])
   })
 
-  it('二叉树类 基本功能测试', () => {
-    // 空二叉树
-    const emptyBinaryTree = BinaryTree.from([])
-    expect(emptyBinaryTree.size).toBe(0)
-    expect(emptyBinaryTree.isEmpty).toBe(true)
-    expect([...emptyBinaryTree]).toStrictEqual([])
-
-    // 构建和验证普通二叉树
+  it('迭代器默认中序', () => {
     /**
      *       1
      *      / \
@@ -68,41 +64,59 @@ describe('二叉树', () => {
      *  / \
      * 8   9
      */
-    const binaryTree = BinaryTree.from([1, 2, 3, 4, 5, 6, 7, 8, 9])
-    // 默认中序遍历
-    expect([...binaryTree]).toStrictEqual([8, 4, 9, 2, 5, 1, 6, 3, 7])
-
-    // 搜索
-    expect(binaryTree.search(1)).toBe(true)
-    expect(binaryTree.search(10)).toBe(false)
-
-    const preOrder = Array.from(traverseBinaryTree(binaryTree.root, TraverseType.PRE_ORDER))
-    expect(preOrder).toStrictEqual([1, 2, 4, 8, 9, 5, 3, 6, 7])
-
-    expect(binaryTree.size).toBe(9)
-    expect(binaryTree.isEmpty).toBe(false)
-
-    const nodeIterator = traverseBinaryTreeNode(binaryTree.root, TraverseType.PRE_ORDER)
-    expect(nodeIterator.next().value?.value).toBe(1)
-    const nodeIterator2 = traverseBinaryTreeNode(binaryTree.root)
-    expect(nodeIterator2.next().value?.value).toBe(8)
+    const tree = BinaryTree.from([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    expect(tree.size).toBe(9)
+    expect(tree.isEmpty).toBe(false)
+    expect([...tree]).toStrictEqual([8, 4, 9, 2, 5, 1, 6, 3, 7])
   })
 
-  it('首个值为 null 时得到空树', () => {
-    expect(valuesToBinaryTree([null, 1, 2])).toBeNull()
+  it('搜索', () => {
+    const tree = BinaryTree.from([1, 2, 3])
+    expect(tree.search(3)).toBe(true)
+    expect(tree.search(10)).toBe(false)
+  })
+
+  it('空位用哨兵补齐，挂在空位下面的值不会被建出', () => {
+    const tree = BinaryTree.from([1, null, 3, 4])
+    expect(tree.size).toBe(2)
+
+    const [root, right] = tree.traverseNodes(E_TraverseType.PRE_ORDER)
+    expect(tree.root).toBe(root)
+    expect(isNil(root.parent)).toBe(true)
+    expect(isNil(root.left)).toBe(true)
+    expect(root.right).toBe(right)
+    expect(right.parent).toBe(root)
+    expect(isNil(right.left)).toBe(true)
+    expect(isNil(right.right)).toBe(true)
   })
 
   it('值为 0 等假值的节点也计入 size', () => {
     expect(BinaryTree.from([0, 1, 2]).size).toBe(3)
   })
 
-  it('挂在空位下面的值不会被建出，也不计入 size', () => {
-    expect(BinaryTree.from([1, null, 3, 4]).size).toBe(2)
+  it('树高：空树 0，叶子 1，取较高一侧加 1', () => {
+    expect(BinaryTree.from([]).height).toBe(0)
+    expect(BinaryTree.from([1]).height).toBe(1)
+    expect(BinaryTree.from([2, 1, 3, null, null, null, 4]).height).toBe(3)
+  })
+
+  it('子树高度和节点数', () => {
+    const tree = BinaryTree.from([1, 2, 3, 4])
+    const [, left] = tree.traverseNodes(E_TraverseType.POST_ORDER)
+    expect(left.value).toBe(2)
+    expect(heightOf(left)).toBe(2)
+    expect(countNodes(left)).toBe(2)
+    expect(countNodes(tree.root)).toBe(4)
+  })
+
+  it('遍历得到的是数据节点', () => {
+    const tree = BinaryTree.from([1])
+    expectTypeOf(tree.traverseNodes()).toEqualTypeOf<Generator<BinaryNode<number>>>()
   })
 })
 
 describe('打印验证', () => {
-  let consoleSpy: ReturnType<typeof vi.spyOn>
+  let consoleSpy: MockInstance<typeof console.log>
 
   beforeEach(() => {
     consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
@@ -112,158 +126,101 @@ describe('打印验证', () => {
     consoleSpy.mockRestore()
   })
 
-  it('空树打印', () => {
-    const emptyTree = BinaryTree.from([])
-    emptyTree.print()
+  function printed() {
+    return consoleSpy.mock.calls.map(([line]) => line)
+  }
 
-    expect(consoleSpy).toHaveBeenCalledWith('(空树)')
+  it('空树打印', () => {
+    BinaryTree.from([]).print()
+    expect(printed()).toStrictEqual(['(空树)'])
   })
 
   it('普通二叉树打印', () => {
-    const tree = BinaryTree.from([1, 2, 3, 4, 5, null, 7])
-    tree.print()
-
-    expect(consoleSpy).toHaveBeenCalledWith('└─1')
-    expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  └─7')
-    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+    BinaryTree.from([1, 2, 3, 4, 5, null, 7]).print()
+    expect(printed()).toStrictEqual([
+      '└─1',
+      '   ├─3',
+      '   │  └─7',
+      '   └─2',
+      '      ├─5',
+      '      └─4',
+    ])
   })
 
   it('打印包含空节点的二叉树', () => {
-    const tree = BinaryTree.from([1, 2, 3, 4, 5, null, 7])
-    tree.print({ showNull: true })
-
-    expect(consoleSpy).toHaveBeenCalledWith('└─1')
-    expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  └─7')
-    expect(consoleSpy).toHaveBeenCalledWith('   │     └─null')
-    expect(consoleSpy).toHaveBeenCalledWith('   │     └─null')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  └─null')
-    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-    expect(consoleSpy).toHaveBeenCalledWith('      │  └─null')
-    expect(consoleSpy).toHaveBeenCalledWith('      │  └─null')
-    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-    expect(consoleSpy).toHaveBeenCalledWith('         └─null')
-    expect(consoleSpy).toHaveBeenCalledWith('         └─null')
+    BinaryTree.from([1, 2, 3, 4, 5, null, 7]).print({ showNull: true })
+    expect(printed()).toStrictEqual([
+      '└─1',
+      '   ├─3',
+      '   │  └─7',
+      '   │     └─null',
+      '   │     └─null',
+      '   │  └─null',
+      '   └─2',
+      '      ├─5',
+      '      │  └─null',
+      '      │  └─null',
+      '      └─4',
+      '         └─null',
+      '         └─null',
+    ])
   })
 
   it('打印平衡二叉树', () => {
-    const tree = BinaryTree.from([1, 2, 3, 4, 5, 6, 7])
-    tree.print()
-
-    expect(consoleSpy).toHaveBeenCalledWith('└─1')
-    expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  ├─7')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  └─6')
-    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+    BinaryTree.from([1, 2, 3, 4, 5, 6, 7]).print()
+    expect(printed()).toStrictEqual([
+      '└─1',
+      '   ├─3',
+      '   │  ├─7',
+      '   │  └─6',
+      '   └─2',
+      '      ├─5',
+      '      └─4',
+    ])
   })
 
   it('打印左偏树', () => {
-    const tree = BinaryTree.from([1, 2, null, 4, 5])
-    tree.print()
-
-    expect(consoleSpy).toHaveBeenCalledWith('└─1')
-    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
+    BinaryTree.from([1, 2, null, 4, 5]).print()
+    expect(printed()).toStrictEqual([
+      '└─1',
+      '   └─2',
+      '      ├─5',
+      '      └─4',
+    ])
   })
 
   it('打印右偏树', () => {
-    const tree = BinaryTree.from([1, null, 3, null, null, 6, 7])
-    tree.print()
-
-    expect(consoleSpy).toHaveBeenCalledWith('└─1')
-    expect(consoleSpy).toHaveBeenCalledWith('   └─3')
-    expect(consoleSpy).toHaveBeenCalledWith('      ├─7')
-    expect(consoleSpy).toHaveBeenCalledWith('      └─6')
+    BinaryTree.from([1, null, 3, null, null, 6, 7]).print()
+    expect(printed()).toStrictEqual([
+      '└─1',
+      '   └─3',
+      '      ├─7',
+      '      └─6',
+    ])
   })
 
   it('打印单节点树', () => {
-    const tree = BinaryTree.from([42])
-    tree.print()
-
-    expect(consoleSpy).toHaveBeenCalledWith('└─42')
+    BinaryTree.from([42]).print()
+    expect(printed()).toStrictEqual(['└─42'])
   })
 
-  it('打印大型二叉树', () => {
-    const tree = BinaryTree.from([
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-    ])
-    tree.print()
-
-    expect(consoleSpy).toHaveBeenCalledWith('└─1')
-    expect(consoleSpy).toHaveBeenCalledWith('   ├─3')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  ├─7')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  │  ├─15')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  │  └─14')
-    expect(consoleSpy).toHaveBeenCalledWith('   │  └─6')
-    expect(consoleSpy).toHaveBeenCalledWith('   │     ├─13')
-    expect(consoleSpy).toHaveBeenCalledWith('   │     └─12')
-    expect(consoleSpy).toHaveBeenCalledWith('   └─2')
-    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-    expect(consoleSpy).toHaveBeenCalledWith('      │  ├─11')
-    expect(consoleSpy).toHaveBeenCalledWith('      │  └─10')
-    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-    expect(consoleSpy).toHaveBeenCalledWith('         ├─9')
-    expect(consoleSpy).toHaveBeenCalledWith('         └─8')
-  })
-
-  it('使用默认选项', () => {
-    const tree = BinaryTree.from([1, 2, 3])
-    tree.print()
-
-    // 应该不显示null节点（默认showNull: false）
+  it('默认不打印空位', () => {
+    BinaryTree.from([1, 2, 3]).print()
     expect(consoleSpy).not.toHaveBeenCalledWith(expect.stringContaining('null'))
   })
 
-  it('处理只有空值的树', () => {
-    const tree = BinaryTree.from([null])
-    tree.print()
-
-    expect(consoleSpy).toHaveBeenCalledWith('(空树)')
-  })
-
-  it('测试showNull为true且isLast为false的情况', () => {
-    // 构造一个树：根节点有左右两个子节点，右子节点为null，左子节点有值
-    // [1, 2, null, 4, 5] 表示：
-    //       1
-    //      / \
-    //     2   null
-    //    / \
-    //   4   5
-    const tree = BinaryTree.from([1, 2, null, 4, 5])
-    tree.print({ showNull: true })
-
-    expect(consoleSpy).toHaveBeenCalledWith('└─1')
-    expect(consoleSpy).toHaveBeenCalledWith('   ├─null') // 右子节点，isLast=false
-    expect(consoleSpy).toHaveBeenCalledWith('   └─2') // 左子节点，isLast=true
-    expect(consoleSpy).toHaveBeenCalledWith('      ├─5')
-    expect(consoleSpy).toHaveBeenCalledWith('      └─4')
-  })
-})
-
-describe('遍历的节点类型', () => {
-  it('遍历 AVL 根得到 AVL 节点', () => {
-    const root = new AVLNode(1)
-    expectTypeOf(traverseBinaryTreeNode(root)).toEqualTypeOf<Generator<AVLNode<number>>>()
+  it('右孩子为空、左孩子有值时，showNull 把右侧的 null 画成非最后一项', () => {
+    BinaryTree.from([1, 2, null, 4, 5]).print({ showNull: true })
+    expect(printed()).toStrictEqual([
+      '└─1',
+      '   ├─null',
+      '   └─2',
+      '      ├─5',
+      '      │  └─null',
+      '      │  └─null',
+      '      └─4',
+      '         └─null',
+      '         └─null',
+    ])
   })
 })

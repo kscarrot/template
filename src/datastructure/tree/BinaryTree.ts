@@ -1,147 +1,85 @@
 import type { TreeADT } from 'src/datastructure/ADT'
-import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
+import type { BinaryItem, BinaryNil, EmptyMeta } from 'src/datastructure/Node'
+import type { TraverseType } from 'src/datastructure/traverse'
+import { createBinaryNil, createBinaryNode, isNil } from 'src/datastructure/Node'
+import { E_TraverseType, traverseBinaryTreeNode } from 'src/datastructure/traverse'
+import { mapGenerator } from 'src/util/Iter'
 
-/**
- * @description 将数组转换为二叉树
- * @param values 数组
- * @returns 二叉树的根节点
- */
-export function valuesToBinaryTree<T>(values: Array<T | null>): BinaryTreeNode<T> | null {
-  if (values.length === 0 || values[0] === null)
-    return null
-  // 创建根节点
-  const root = new BinaryTreeNode(values[0] as T)
-  // 创建二叉树
-  const binaryTreeBuilder = (root: BinaryTreeNode<T>, index: number, values: Array<T | null>) => {
-    const leftIndex = 2 * index + 1
-    const rightIndex = 2 * index + 2
-    // 如果左子节点存在，则创建左子节点
-    if (leftIndex < values.length && values[leftIndex] !== null) {
-      root.left = binaryTreeBuilder(new BinaryTreeNode(values[leftIndex] as T, { parent: root }), leftIndex, values)
-    }
-    // 如果右子节点存在，则创建右子节点
-    if (rightIndex < values.length && values[rightIndex] !== null) {
-      root.right = binaryTreeBuilder(new BinaryTreeNode(values[rightIndex] as T, { parent: root }), rightIndex, values)
-    }
-    return root
-  }
-  // 构建二叉树
-  return binaryTreeBuilder(root, 0, values)
+/** 子树高度，哨兵是 0，叶子是 1 */
+export function heightOf<T, Meta>(node: BinaryItem<T, Meta>): number {
+  return isNil(node)
+    ? 0
+    : 1 + Math.max(heightOf(node.left), heightOf(node.right))
 }
 
-export const TraverseType = {
-  /** 前序遍历 */
-  PRE_ORDER: 'preOrder',
-  /** 中序遍历 */
-  IN_ORDER: 'inOrder',
-  /** 后序遍历 */
-  POST_ORDER: 'postOrder',
-} as const
-
-/**
- * @description 遍历二叉树
- * @param root 二叉树的根节点
- * @param type 遍历类型
- * @returns 遍历结果
- */
-export function* traverseBinaryTreeNode<N extends BinaryTreeNode<unknown, N>>(
-  root: N | null,
-  type: ValueOf<typeof TraverseType> = TraverseType.IN_ORDER,
-): Generator<N> {
-  function* order(current: N | null): Generator<N> {
-    if (current) {
-      if (type === TraverseType.PRE_ORDER)
-        yield current
-      yield* order(current.left)
-      if (type === TraverseType.IN_ORDER)
-        yield current
-      yield* order(current.right)
-      if (type === TraverseType.POST_ORDER)
-        yield current
-    }
-  }
-  yield* order(root)
-}
-
-export function* traverseBinaryTree<N extends BinaryTreeNode<unknown, N>>(
-  root: N | null,
-  type: ValueOf<typeof TraverseType> = TraverseType.IN_ORDER,
-): Generator<N['value']> {
-  for (const node of traverseBinaryTreeNode(root, type)) {
-    yield node.value
-  }
+/** 子树节点数 */
+export function countNodes<T, Meta>(node: BinaryItem<T, Meta>): number {
+  return traverseBinaryTreeNode(node).reduce(count => count + 1, 0)
 }
 
 /**
- * @description 二叉树
- * @template T 二叉树的节点类型
+ * 二叉树。空位都指向同一个哨兵 nil
+ * @template Meta 节点上的附加数据，比如 AVL 的高度、树堆的优先级
  */
-export class BinaryTree<T, N extends BinaryTreeNode<T, N> = BinaryTreeNode<T>> implements TreeADT<T> {
-  root: N | null
-  size: number
+export class BinaryTree<T, Meta = EmptyMeta> implements TreeADT<T> {
+  protected readonly nil: BinaryNil = createBinaryNil()
+  root: BinaryItem<T, Meta> = this.nil
+  protected _size = 0
 
-  constructor(root: N | null = null) {
-    this.root = root
-    this.size = [
-      ...traverseBinaryTreeNode(root),
-    ].length
+  /** 按层序数组建树，null 表示空位，挂在空位下面的值不会被建出 */
+  static from<T>(values: Array<T | null>) {
+    const tree = new BinaryTree<T>()
+    const build = (index: number, parent: BinaryItem<T>): BinaryItem<T> => {
+      const value = values[index]
+      if (index >= values.length || value === null)
+        return tree.nil
+      const node = createBinaryNode<T>(value, {}, parent, tree.nil, tree.nil)
+      node.left = build(2 * index + 1, node)
+      node.right = build(2 * index + 2, node)
+      tree._size++
+      return node
+    }
+    tree.root = build(0, tree.nil)
+    return tree
   }
 
-  /** 按层序数组建树，null 表示空位。节点类型固定为 BinaryTreeNode */
-  static from<T>(values: Array<T | null>): BinaryTree<T> {
-    return new BinaryTree(valuesToBinaryTree(values))
+  get size() {
+    return this._size
   }
 
   get isEmpty() {
-    return this.size === 0
+    return this._size === 0
   }
 
-  [Symbol.iterator] = () => traverseBinaryTree(this.root)
-
-  search(value: T) {
-    for (const node of traverseBinaryTreeNode(this.root)) {
-      if (node.value === value)
-        return true
-    }
-    return false
+  get height() {
+    return heightOf(this.root)
   }
+
+  traverseNodes = (type: TraverseType = E_TraverseType.IN_ORDER) => traverseBinaryTreeNode(this.root, type);
+
+  [Symbol.iterator] = () => mapGenerator(this.traverseNodes(), node => node.value)
+
+  search = (value: T) => this.traverseNodes().some(node => node.value === value)
 
   print(options = { showNull: false }) {
     const { showNull } = options
-
     if (this.isEmpty) {
       console.log('(空树)')
       return
     }
 
-    const visualizeNode = (node: N | null, prefix: string = '', isLast: boolean = true): void => {
-      if (!node) {
-        if (showNull) {
-          console.log(`${prefix}${isLast ? '└─' : '├─'}null`)
-        }
+    const visualizeNode = (node: BinaryItem<T, Meta>, prefix = '', isLast = true): void => {
+      const branch = isLast ? '└─' : '├─'
+      if (isNil(node)) {
+        if (showNull)
+          console.log(`${prefix}${branch}null`)
         return
       }
-
-      const currentPrefix = isLast ? '└─' : '├─'
-      console.log(`${prefix}${currentPrefix}${node.value}`)
-
-      const newPrefix = prefix + (isLast ? '   ' : '│  ')
-
-      // 先处理右子节点（为了正确的显示顺序）
-      if (node.right) {
-        visualizeNode(node.right, newPrefix, node.left === null)
-      }
-      else if (showNull) {
-        visualizeNode(null, newPrefix, node.left === null)
-      }
-
-      // 再处理左子节点
-      if (node.left) {
-        visualizeNode(node.left, newPrefix, true)
-      }
-      else if (showNull) {
-        visualizeNode(null, newPrefix, true)
-      }
+      console.log(`${prefix}${branch}${node.value}`)
+      const childPrefix = prefix + (isLast ? '   ' : '│  ')
+      // 先右后左，打印出来右子树在上
+      visualizeNode(node.right, childPrefix, isNil(node.left))
+      visualizeNode(node.left, childPrefix, true)
     }
 
     visualizeNode(this.root)

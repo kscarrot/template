@@ -1,18 +1,17 @@
-import type { BinaryTreeNode, TreapNode } from 'src/datastructure/node/TreeNode'
 import type { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
+import type { TreapItem, TreapMeta, TreapOptions } from 'src/datastructure/tree/Treap'
 import { list } from 'radash'
-import { traverseBinaryTree } from 'src/datastructure/tree/BinaryTree'
+import { isNil } from 'src/datastructure/Node'
+import { E_TraverseType, traverseBinaryTreeNode } from 'src/datastructure/traverse'
 import { Treap } from 'src/datastructure/tree/Treap'
 import { TreapRotate } from 'src/datastructure/tree/TreapRotate'
 import { priorities } from 'src/util/Iter'
 import { expectTypeOf } from 'vitest'
 
-type TreapOptions = ConstructorParameters<typeof Treap<number>>[0]
-
 /** 两种树堆对外的查询、插入、删除相同，只是维持堆序的办法不同 */
 const treaps: Array<{
   name: string
-  create: (options?: TreapOptions) => BinarySearchTree<number, TreapNode<number>>
+  create: (options?: TreapOptions<number>) => BinarySearchTree<number, TreapMeta>
 }> = [
   {
     name: '树堆',
@@ -24,24 +23,30 @@ const treaps: Array<{
   },
 ]
 
-function valuesOf<T>(node: BinaryTreeNode<T> | null): T[] {
-  return [
-    ...traverseBinaryTree(node),
-  ]
+function valuesOf<T>(node: TreapItem<T>) {
+  return traverseBinaryTreeNode(node).map(item => item.value).toArray()
+}
+
+/** 值互不相同时，先序序列唯一确定树形 */
+function preOrderOf<T>(node: TreapItem<T>) {
+  return traverseBinaryTreeNode(node, E_TraverseType.PRE_ORDER).map(item => item.value).toArray()
 }
 
 /** 父指针、最小堆、子树 size 三者同时成立 */
-function structureOk<T>(root: TreapNode<T> | null): boolean {
-  const visit = (node: TreapNode<T> | null, parent: TreapNode<T> | null): boolean => {
-    if (!node)
+function structureOk<T>(root: TreapItem<T>): boolean {
+  const sizeOf = (node: TreapItem<T>) => isNil(node)
+    ? 0
+    : node.meta.size
+  const visit = (node: TreapItem<T>, parent: TreapItem<T>): boolean => {
+    if (isNil(node))
       return true
     if (node.parent !== parent)
       return false
-    const sizeOk = node.size === 1 + (node.left?.size ?? 0) + (node.right?.size ?? 0)
-    const heapOk = [node.left, node.right].every(child => !child || node.priority <= child.priority)
+    const sizeOk = node.meta.size === 1 + sizeOf(node.left) + sizeOf(node.right)
+    const heapOk = [node.left, node.right].every(child => isNil(child) || node.meta.priority <= child.meta.priority)
     return sizeOk && heapOk && visit(node.left, node) && visit(node.right, node)
   }
-  return visit(root, null)
+  return isNil(root) || (isNil(root.parent) && visit(root, root.parent))
 }
 
 describe.each(treaps)('$name', ({ create }) => {
@@ -50,7 +55,7 @@ describe.each(treaps)('$name', ({ create }) => {
     expect([
       tree.isEmpty,
       tree.size,
-      tree.root,
+      isNil(tree.root),
       tree.search(1),
       tree.getMin(),
       tree.getMax(),
@@ -58,7 +63,7 @@ describe.each(treaps)('$name', ({ create }) => {
     ]).toStrictEqual([
       true,
       0,
-      null,
+      true,
       false,
       null,
       null,
@@ -69,12 +74,12 @@ describe.each(treaps)('$name', ({ create }) => {
   it('查找命中的值返回真，未命中返回假', () => {
     const tree = create().from([3, 2, 1, -1])
     expect([
-      tree.search(3),
-      tree.search(2),
-      tree.search(1),
-      tree.search(-1),
-      tree.search(4),
-    ]).toStrictEqual([
+      3,
+      2,
+      1,
+      -1,
+      4,
+    ].map(value => tree.search(value))).toStrictEqual([
       true,
       true,
       true,
@@ -95,23 +100,16 @@ describe.each(treaps)('$name', ({ create }) => {
 
   it('只有一个节点时，删掉根的值后树变空', () => {
     const tree = create()
-    expect([
-      tree.isEmpty,
-      tree.root,
-    ]).toStrictEqual([
-      true,
-      null,
-    ])
     tree.insert(1)
-    expect(tree.root?.value).toBe(1)
+    expect(preOrderOf(tree.root)).toStrictEqual([1])
     tree.delete(1)
     expect([
       tree.isEmpty,
-      tree.root,
+      isNil(tree.root),
       tree.size,
     ]).toStrictEqual([
       true,
-      null,
+      true,
       0,
     ])
   })
@@ -122,15 +120,9 @@ describe.each(treaps)('$name', ({ create }) => {
     }).from([1, 2, 3])
     const root = tree.root
     tree.delete(0).delete(2.5).delete(99)
-    expect([
-      tree.root,
-      tree.size,
-      [...tree],
-    ]).toStrictEqual([
-      root,
-      3,
-      [1, 2, 3],
-    ])
+    expect(tree.root).toBe(root)
+    expect(tree.size).toBe(3)
+    expect([...tree]).toStrictEqual([1, 2, 3])
   })
 
   it('重复值按二叉搜索树规则放在右侧，并能逐个删除', () => {
@@ -139,18 +131,11 @@ describe.each(treaps)('$name', ({ create }) => {
     }).from([1, 1, 1])
     expect([...tree]).toStrictEqual([1, 1, 1])
     tree.delete(1).delete(1)
-    expect([
-      tree.size,
-      [...tree],
-    ]).toStrictEqual([
-      1,
-      [1],
-    ])
+    expect(tree.size).toBe(1)
+    expect([...tree]).toStrictEqual([1])
     tree.delete(1)
-    expect([
-      tree.size,
-      tree.root,
-    ]).toStrictEqual([0, null])
+    expect(tree.size).toBe(0)
+    expect(isNil(tree.root)).toBe(true)
   })
 
   it('连续插入和删除后，中序与大小仍正确', () => {
@@ -206,25 +191,21 @@ describe.each(treaps)('$name', ({ create }) => {
     const bound = Math.ceil(4.311 * Math.log(values.length) + 15)
     const ascending = create().from(values)
     const descending = create().from([...values].reverse())
-    expect(ascending.root?.getHeight() ?? 0).toBeLessThanOrEqual(bound)
-    expect(descending.root?.getHeight() ?? 0).toBeLessThanOrEqual(bound)
+    expect(ascending.height).toBeLessThanOrEqual(bound)
+    expect(descending.height).toBeLessThanOrEqual(bound)
     expect(structureOk(ascending.root) && structureOk(descending.root)).toBe(true)
   })
 
   it('构造时传入的比较器生效', () => {
-    const descending = (a: number, b: number) => (a === b
-      ? 0
-      : a < b
-        ? 1
-        : -1)
+    const descending = (a: number, b: number) => Math.sign(b - a) as -1 | 0 | 1
     const tree = create({ comparator: descending }).from([1, 3, 2, 5, 4])
     expect([...tree]).toStrictEqual([5, 4, 3, 2, 1])
     expect(structureOk(tree.root)).toBe(true)
   })
 
-  it('root 的类型是树堆节点', () => {
+  it('root 的类型带树堆的优先级和子树大小', () => {
     const tree = create()
-    expectTypeOf(tree.root).toEqualTypeOf<TreapNode<number> | null>()
+    expectTypeOf(tree.root).toEqualTypeOf<TreapItem<number>>()
   })
 })
 
@@ -238,19 +219,8 @@ describe('树堆', () => {
     }).from([3, 4])
     const merged = left.merge(left.root, right.root)
     // 1(0.1) 留下；3(0.2) 比 2(0.4) 更优先，成为 1 的右孩子，2 并到 3 的左边
-    expect([
-      merged?.value,
-      merged?.right?.value,
-      merged?.right?.left?.value,
-      merged?.right?.right?.value,
-      valuesOf(merged),
-    ]).toStrictEqual([
-      1,
-      3,
-      2,
-      4,
-      [1, 2, 3, 4],
-    ])
+    expect(preOrderOf(merged)).toStrictEqual([1, 3, 2, 4])
+    expect(valuesOf(merged)).toStrictEqual([1, 2, 3, 4])
     expect(structureOk(merged)).toBe(true)
   })
 
@@ -258,10 +228,7 @@ describe('树堆', () => {
     const tree = new Treap({
       random: priorities([0.5, 0.5]),
     }).from([1, 2])
-    expect([
-      tree.root?.value,
-      tree.root?.left?.value,
-    ]).toStrictEqual([2, 1])
+    expect(preOrderOf(tree.root)).toStrictEqual([2, 1])
     expect(structureOk(tree.root)).toBe(true)
   })
 
@@ -318,17 +285,9 @@ describe('树堆', () => {
     }).from([1])
     tree.insert(2)
     // 2 的优先级 0.1 更高，merge 后成为根，1 落到左边
-    expect([
-      tree.root?.value,
-      tree.root?.left?.value,
-      [...tree],
-      tree.size,
-    ]).toStrictEqual([
-      2,
-      1,
-      [1, 2],
-      2,
-    ])
+    expect(preOrderOf(tree.root)).toStrictEqual([2, 1])
+    expect([...tree]).toStrictEqual([1, 2])
+    expect(tree.size).toBe(2)
     expect(structureOk(tree.root)).toBe(true)
   })
 
@@ -340,6 +299,12 @@ describe('树堆', () => {
     expect([...tree]).toStrictEqual([1, 3, 4])
     expect(tree.size).toBe(3)
     expect(structureOk(tree.root)).toBe(true)
+  })
+
+  it('deleteKth 越界时返回 null 且树不变', () => {
+    const tree = new Treap<number>().from([1, 2])
+    expect(tree.deleteKth(5)).toBe(null)
+    expect([...tree]).toStrictEqual([1, 2])
   })
 
   it('删除存在的值时摘掉它的最后一次出现', () => {
@@ -396,30 +361,16 @@ describe('旋转树堆', () => {
     const tree = new TreapRotate({
       random: priorities([0.1, 0.5, 0.4]),
     }).from([2, 1, 3])
-    expect([
-      tree.root?.value,
-      tree.root?.left?.value,
-      tree.root?.right?.value,
-    ]).toStrictEqual([2, 1, 3])
+    expect(preOrderOf(tree.root)).toStrictEqual([2, 1, 3])
     expect(structureOk(tree.root)).toBe(true)
   })
 
   it('新节点优先级更高时上提到堆序允许的位置', () => {
-    // 2(0.5) 先入；1(0.1) 上提成根；3(0.2) 只上提过 2，停在 1 的右孩子
+    // 2(0.5) 先入；1(0.1) 上提成根；3(0.2) 只上提过 2，停在 1 的右孩子，2 落到 3 的左边
     const tree = new TreapRotate({
       random: priorities([0.5, 0.1, 0.2]),
     }).from([2, 1, 3])
-    expect([
-      tree.root?.value,
-      tree.root?.right?.value,
-      tree.root?.right?.left?.value,
-      tree.root?.left,
-    ]).toStrictEqual([
-      1,
-      3,
-      2,
-      null,
-    ])
+    expect(preOrderOf(tree.root)).toStrictEqual([1, 3, 2])
     expect(structureOk(tree.root)).toBe(true)
   })
 
@@ -427,10 +378,7 @@ describe('旋转树堆', () => {
     const tree = new TreapRotate({
       random: priorities([0.5, 0.5]),
     }).from([2, 1])
-    expect([
-      tree.root?.value,
-      tree.root?.left?.value,
-    ]).toStrictEqual([2, 1])
+    expect(preOrderOf(tree.root)).toStrictEqual([2, 1])
   })
 
   it('删除有两个孩子的节点时，上提优先级更高的孩子', () => {
@@ -438,15 +386,7 @@ describe('旋转树堆', () => {
       random: priorities([0.1, 0.5, 0.4]),
     }).from([2, 1, 3])
     tree.delete(2)
-    expect([
-      tree.root?.value,
-      tree.root?.left?.value,
-      [...tree],
-    ]).toStrictEqual([
-      3,
-      1,
-      [1, 3],
-    ])
+    expect(preOrderOf(tree.root)).toStrictEqual([3, 1])
     expect(structureOk(tree.root)).toBe(true)
   })
 
@@ -455,15 +395,7 @@ describe('旋转树堆', () => {
       random: priorities([0.1, 0.5, 0.5]),
     }).from([2, 1, 3])
     tree.delete(2)
-    expect([
-      tree.root?.value,
-      tree.root?.right?.value,
-      tree.root?.left,
-    ]).toStrictEqual([
-      1,
-      3,
-      null,
-    ])
+    expect(preOrderOf(tree.root)).toStrictEqual([1, 3])
     expect(structureOk(tree.root)).toBe(true)
   })
 
@@ -472,17 +404,17 @@ describe('旋转树堆', () => {
       random: priorities([0.1, 0.5]),
     }).from([2, 1])
     tree.delete(2)
-    expect([
-      tree.root?.value,
-      tree.root?.left,
-      tree.root?.right,
-      tree.size,
-    ]).toStrictEqual([
-      1,
-      null,
-      null,
-      1,
-    ])
+    expect(preOrderOf(tree.root)).toStrictEqual([1])
+    expect(tree.size).toBe(1)
+    expect(structureOk(tree.root)).toBe(true)
+  })
+
+  it('删除只有右孩子的节点', () => {
+    const tree = new TreapRotate({
+      random: priorities([0.1, 0.5]),
+    }).from([1, 2])
+    tree.delete(1)
+    expect(preOrderOf(tree.root)).toStrictEqual([2])
     expect(structureOk(tree.root)).toBe(true)
   })
 

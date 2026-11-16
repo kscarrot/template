@@ -1,85 +1,119 @@
 import type { SearchTreeADT } from 'src/datastructure/ADT'
+import type { BinaryItem, BinaryNode, EmptyMeta } from 'src/datastructure/Node'
 import type { compareFunction } from 'src/util/Comparator'
-import { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
-import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
+import { createBinaryNode, isNil } from 'src/datastructure/Node'
+import { BinaryTree, countNodes } from 'src/datastructure/tree/BinaryTree'
 import { Comparator } from 'src/util/Comparator'
 
-export interface RemovedNodeInfo<N> {
-  removed: N
-  child: N | null
-  parent: N | null
+export interface RemovedNodeInfo<T, Meta> {
+  /** 被物理摘除的节点：两个孩子时是后继，否则是目标本身 */
+  removed: BinaryNode<T, Meta>
+  /** 顶替 removed 位置的孩子，可能是哨兵 */
+  child: BinaryItem<T, Meta>
+  /** removed 原来的父节点，平衡回溯从这里开始 */
+  parent: BinaryItem<T, Meta>
 }
 
-/** 二叉搜索树。节点默认是普通二叉节点，带额外字段的子类覆盖 createNode */
-export class BinarySearchTree<T, N extends BinaryTreeNode<T, N> = BinaryTreeNode<T>>
-  extends BinaryTree<T, N>
-  implements SearchTreeADT<T> {
-  comparator: Comparator<T>
+/** 二叉搜索树。重复值放到右侧 */
+export class BinarySearchTree<T, Meta = EmptyMeta> extends BinaryTree<T, Meta> implements SearchTreeADT<T> {
+  protected readonly comparator: Comparator<T>
 
   constructor(comparator?: compareFunction<T>) {
     super()
     this.comparator = new Comparator(comparator)
   }
 
-  /** 造一个普通二叉节点。子类节点带额外字段时覆盖它 */
-  protected createNode(value: T, parent: N | null): N {
-    return new BinaryTreeNode(value, parent
-      ? { parent }
-      : {}) as unknown as N
+  /** 新节点的附加数据。Meta 不是空对象的子类必须重写 */
+  protected createMeta(): Meta {
+    return {} as Meta
   }
 
-  /** 按比较顺序逐个 insert。比较器和树自己的状态在构造时已经写好 */
-  from(values: readonly T[] = []): this {
+  protected createNode(value: T, parent: BinaryItem<T, Meta>): BinaryNode<T, Meta> {
+    return createBinaryNode(value, this.createMeta(), parent, this.nil, this.nil)
+  }
+
+  /** 按数组顺序逐个插入。比较器在构造时传入 */
+  from(values: readonly T[]) {
     for (const value of values)
       this.insert(value)
     return this
   }
 
-  protected searchMinNode(currentNode: N | null): N | null {
-    let minNode = currentNode
-    while (minNode?.left) {
-      minNode = minNode.left
+  protected minNode(node: BinaryNode<T, Meta>) {
+    let current = node
+    while (!isNil(current.left))
+      current = current.left
+    return current
+  }
+
+  protected maxNode(node: BinaryNode<T, Meta>) {
+    let current = node
+    while (!isNil(current.right))
+      current = current.right
+    return current
+  }
+
+  getMin() {
+    return isNil(this.root)
+      ? null
+      : this.minNode(this.root).value
+  }
+
+  getMax() {
+    return isNil(this.root)
+      ? null
+      : this.maxNode(this.root).value
+  }
+
+  /** 沿 BST 路径查找 value；找到返回节点，没找到返回哨兵 */
+  protected searchNode(value: T) {
+    let node = this.root
+    while (!isNil(node)) {
+      switch (this.comparator.compare(value, node.value)) {
+        case 0:
+          return node
+        case -1:
+          node = node.left
+          break
+        case 1:
+          node = node.right
+          break
+      }
     }
-    return minNode
+    return node
   }
 
-  getMin(): T | null {
-    const minNode = this.searchMinNode(this.root)
-    return minNode?.value ?? null
-  }
+  override search = (value: T) => !isNil(this.searchNode(value))
 
-  protected searchMaxNode(currentNode: N | null): N | null {
-    let maxNode = currentNode
-    while (maxNode?.right) {
-      maxNode = maxNode.right
-    }
-    return maxNode
-  }
-
-  getMax(): T | null {
-    const maxNode = this.searchMaxNode(this.root)
-    return maxNode?.value ?? null
-  }
-
-  /** 按 BST 规则挂上一个新叶子并返回它，重复值放到右侧 */
-  protected insertNode(value: T): N {
-    let parent: N | null = null
+  /** 按 BST 规则挂上一个新叶子并返回它 */
+  protected insertNode(value: T) {
+    /** 按照小于放左边，大于放右边，找到合适的父节点 */
+    let parent: BinaryItem<T, Meta> = this.nil
     let current = this.root
-    while (current) {
+    while (!isNil(current)) {
       parent = current
       current = this.comparator.lt(value, current.value)
         ? current.left
         : current.right
     }
 
+    /** 创建新节点并挂接到父节点 */
     const node = this.createNode(value, parent)
-    if (!parent)
+
+    /** 如果父节点是哨兵，则新节点成为根节点 */
+    if (isNil(parent)) {
       this.root = node
-    else if (this.comparator.lt(value, parent.value))
+    }
+    /** 如果新值小于父节点，则挂接到父节点的左边 */
+    else if (this.comparator.lt(value, parent.value)) {
       parent.left = node
-    else
+    }
+    /** 如果新值大于父节点，则挂接到父节点的右边 */
+    else {
       parent.right = node
-    this.size++
+    }
+
+    this._size++
     return node
   }
 
@@ -88,152 +122,92 @@ export class BinarySearchTree<T, N extends BinaryTreeNode<T, N> = BinaryTreeNode
     return this
   }
 
-  protected searchNode(value: T, currentNode: N | null): N | null {
-    const result = this.searchNodeWithLastVisited(value, currentNode)
-    return result.node
-  }
-
-  /**
-   * 从 currentNode 开始按 BST 路径查找 value，同时记录路径上最后访问的节点
-   * @param value 要查找的值
-   * @param currentNode 查找起点（通常是根节点）
-   * @returns
-   * - node：值等于 value 的节点，未找到为 null
-   * - lastNode：找到时就是 node 本身；未找到时是路径走到尽头前的最后一个节点
-   *   （即 value 若插入时的父节点）；起点为 null 时也为 null
-   */
-  protected searchNodeWithLastVisited(
-    value: T,
-    currentNode: N | null,
-  ): {
-    node: N | null
-    lastNode: N | null
-  } {
-    if (currentNode === null) {
-      return {
-        node: null,
-        lastNode: null,
-      }
-    }
-
-    let lastNode = currentNode
-    while (currentNode) {
-      lastNode = currentNode
-
-      switch (this.comparator.compare(value, currentNode.value)) {
-        case 0:
-          return {
-            node: currentNode,
-            lastNode,
-          }
-        case 1:
-          currentNode = currentNode.right
-          break
-        case -1:
-          currentNode = currentNode.left
-          break
-      }
-    }
-
-    return {
-      node: null,
-      lastNode,
-    }
-  }
-
-  search(value: T) {
-    return this.searchNode(value, this.root) !== null
-  }
-
   delete(value: T) {
-    const node = this.searchNode(value, this.root)
-    if (node)
+    const node = this.searchNode(value)
+    if (!isNil(node))
       this.removeNode(node)
     return this
   }
 
-  /**
-   * 从树上删除 node：有两个孩子时用后继的值覆盖 node，转为摘除后继
-   * @returns
-   * - removed：被物理摘除的节点（两个孩子时是后继，否则是 node 本身）
-   * - child：顶替 removed 位置的孩子，可能为 null
-   * - parent：removed 原来的父节点，平衡回溯从这里开始
-   */
-  protected removeNode(node: N): RemovedNodeInfo<N> {
+  /** 有两个孩子时用后继的值覆盖 node，转为摘除后继。meta 留在原位置 */
+  protected removeNode(node: BinaryNode<T, Meta>): RemovedNodeInfo<T, Meta> {
     let removed = node
-    if (node.left && node.right) {
-      removed = this.searchMinNode(node.right) as N
+
+    /**
+     * 左右子树都有删掉节点了会没有地方挂
+     * 这里在右子树上找最小的节点（后继）来替换删除的节点
+     */
+    if (!isNil(node.left) && !isNil(node.right)) {
+      removed = this.minNode(node.right)
       node.value = removed.value
     }
 
+    /**  到这里 removed 最多只有一个孩子 */
     const parent = removed.parent
-    const child = removed.left ?? removed.right
-    if (!parent)
+    const child = isNil(removed.left)
+      ? removed.right
+      : removed.left
+
+    /** 用 child 顶替 removed 在父节点上的位置 */
+    if (isNil(parent)) {
+      /** 删的是根则 child 成为新根 */
       this.root = child
-    else if (parent.left === removed)
-      parent.left = child
-    else
-      parent.right = child
-    if (child)
+    }
+    else {
+      if (parent.left === removed)
+        /** 删的是左孩子则左孩子指向 child */
+        parent.left = child
+      else
+        /** 删的是右孩子则右孩子指向 child */
+        parent.right = child
+    }
+
+    // child 是哨兵时不能写 parent；是真节点则认新父
+    if (!isNil(child))
       child.parent = parent
-    this.size--
+    this._size--
     return { removed, child, parent }
   }
 
-  protected getNodeSize(currentNode: N | null): number {
-    if (currentNode === null) {
-      return 0
-    }
-    else if (currentNode.isLeaf) {
-      return 1
-    }
-    else {
-      return 1 + this.getNodeSize(currentNode.left) + this.getNodeSize(currentNode.right)
-    }
+  /** 子树节点数。缓存了子树大小的子类重写它 */
+  protected subtreeSize(node: BinaryItem<T, Meta>) {
+    return countNodes(node)
   }
 
-  protected getKthNode(currentNode: N | null, index: number): N | null {
-    if (currentNode === null) {
-      return null
+  /** 中序第 k 个，k 从 1 开始 */
+  getKth(k: number) {
+    let node = this.root
+    let index = k - 1
+    while (!isNil(node)) {
+      const leftSize = this.subtreeSize(node.left)
+      if (index < leftSize) {
+        node = node.left
+      }
+      else if (index > leftSize) {
+        index -= leftSize + 1
+        node = node.right
+      }
+      else {
+        return node.value
+      }
     }
-    // 比当前节点小的节点数 index = k - 1
-    const leftSize = this.getNodeSize(currentNode.left)
-    if (leftSize > index) {
-      return this.getKthNode(currentNode.left, index)
-    }
-    else if (leftSize < index) {
-      /**
-       * 当前节点不是第k个节点，需要继续在右子树中查找
-       * 前往右子树的过程中,需要减去左子树的节点数
-       */
-      return this.getKthNode(currentNode.right, index - leftSize - 1)
-    }
-    else {
-      /** 当前节点就是第k个节点 */
-      return currentNode
-    }
+    return null
   }
 
-  getKth(k: number): T | null {
-    const node = this.getKthNode(this.root, k - 1)
-    return node?.value ?? null
-  }
-
-  protected getNodeRank(currentNode: N | null, value: T): number {
-    if (currentNode === null) {
-      return 0
+  /** 小于等于 value 的节点个数 */
+  getRank(value: T) {
+    let rank = 0
+    let node = this.root
+    while (!isNil(node)) {
+      if (this.comparator.lt(value, node.value)) {
+        node = node.left
+      }
+      else {
+        rank += this.subtreeSize(node.left) + 1
+        node = node.right
+      }
     }
-    if (this.comparator.lt(value, currentNode.value)) {
-      return this.getNodeRank(currentNode.left, value)
-    }
-    else {
-      const leftSize = this.getNodeSize(currentNode.left)
-      return this.getNodeRank(currentNode.right, value) + leftSize + 1
-    }
-  }
-
-  getRank(value: T): number {
-    return this.getNodeRank(this.root, value)
+    return rank
   }
 
   getPrev(value: T) {

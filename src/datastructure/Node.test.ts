@@ -1,4 +1,4 @@
-import { createBinaryNil, createDoublyNil, createMultiNil, createSinglyNil } from 'src/datastructure/Node'
+import { createBinaryNil, createDoublyNil, createFiberNil, createMultiNil, createSinglyNil } from 'src/datastructure/Node'
 
 describe('空节点', () => {
   it('单向哨兵的 next 只指向自己', () => {
@@ -52,5 +52,23 @@ describe('空节点', () => {
     }).toThrow(TypeError)
     expect(nil.parent).toBe(nil)
     expect(nil.children).toEqual([])
+  })
+
+  it('fiber 哨兵的 parent、child、sibling 只指向自己', () => {
+    const nil = createFiberNil()
+    expect([
+      nil.parent,
+      nil.child,
+      nil.sibling,
+    ]).toStrictEqual([
+      nil,
+      nil,
+      nil,
+    ])
+
+    expect(() => {
+      nil.sibling = createFiberNil()
+    }).toThrow(TypeError)
+    expect(nil.sibling).toBe(nil)
   })
 })

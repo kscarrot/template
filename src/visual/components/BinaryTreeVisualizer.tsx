@@ -1,10 +1,11 @@
-import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
+import type { BinaryItem, BinaryNode } from 'src/datastructure/Node'
 import cytoscape from 'cytoscape'
 import React, { useEffect, useRef } from 'react'
-import { traverseBinaryTreeNode } from 'src/datastructure/tree/BinaryTree'
+import { isNil } from 'src/datastructure/Node'
+import { traverseBinaryTreeNode } from 'src/datastructure/traverse'
 
 interface BinaryTreeVisualizerProps {
-  root: BinaryTreeNode<any> | null
+  root: BinaryItem<unknown, unknown>
   style?: React.CSSProperties
 }
 
@@ -16,11 +17,11 @@ interface CyEdge { data: { source: string, target: string, edgeType: 'child' | '
  * @param root 二叉树根节点
  * @returns { nodes, edges }
  */
-function binaryTreeToCytoscapeData(root: BinaryTreeNode<any> | null) {
+function binaryTreeToCytoscapeData(root: BinaryItem<unknown, unknown>) {
   const nodes: CyNode[] = []
   const edges: CyEdge[] = []
   let id = 0
-  const nodeMap = new Map<BinaryTreeNode<any>, string>()
+  const nodeMap = new Map<BinaryNode<unknown, unknown>, string>()
 
   // 第一次遍历：收集所有节点
   for (const node of traverseBinaryTreeNode(root)) {
@@ -40,7 +41,7 @@ function binaryTreeToCytoscapeData(root: BinaryTreeNode<any> | null) {
   for (const node of traverseBinaryTreeNode(root)) {
     const nodeId = nodeMap.get(node)!
     // child 边（不区分左右）
-    if (node.left) {
+    if (!isNil(node.left)) {
       const childId = nodeMap.get(node.left)!
       edges.push({
         data: { source: nodeId, target: childId, edgeType: 'child' },
@@ -50,7 +51,7 @@ function binaryTreeToCytoscapeData(root: BinaryTreeNode<any> | null) {
         data: { source: childId, target: nodeId, edgeType: 'parent' },
       })
     }
-    if (node.right) {
+    if (!isNil(node.right)) {
       const childId = nodeMap.get(node.right)!
       edges.push({
         data: { source: nodeId, target: childId, edgeType: 'child' },

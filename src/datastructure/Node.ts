@@ -10,6 +10,7 @@ export const E_NodeKind = {
   doubly: 'doubly-node',
   binary: 'binary-node',
   multi: 'multi-node',
+  fiber: 'fiber-node',
 } as const
 
 export type NodeKind = ValueOf<typeof E_NodeKind>
@@ -107,7 +108,28 @@ export type MultiItem<Data, Meta = EmptyMeta>
     | MultiNil
 
 // ============================================================================
-// 5. 创建空节点
+// 5. Fiber 树 (First Child / Next Sibling)
+// ============================================================================
+
+export interface FiberNil extends Nil {
+  parent: FiberNil
+  child: FiberNil
+  sibling: FiberNil
+}
+
+export interface FiberNode<Data, Meta = EmptyMeta> extends Node<Data, Meta> {
+  readonly kind: typeof E_NodeKind.fiber
+  parent: FiberItem<Data, Meta>
+  child: FiberItem<Data, Meta>
+  sibling: FiberItem<Data, Meta>
+}
+
+export type FiberItem<Data, Meta = EmptyMeta>
+  = | FiberNode<Data, Meta>
+    | FiberNil
+
+// ============================================================================
+// 6. 创建空节点
 // ============================================================================
 
 export function createSinglyNil(): SinglyNil {
@@ -192,6 +214,23 @@ export function createBinaryNil(): BinaryNil {
   return nil
 }
 
+export function createBinaryNode<Data, Meta = EmptyMeta>(
+  value: Data,
+  meta: Meta,
+  parent: BinaryItem<Data, Meta>,
+  left: BinaryItem<Data, Meta>,
+  right: BinaryItem<Data, Meta>,
+): BinaryNode<Data, Meta> {
+  return {
+    kind: E_NodeKind.binary,
+    value,
+    meta,
+    parent,
+    left,
+    right,
+  }
+}
+
 export function createMultiNil(): MultiNil {
   const children: [] = []
   const nil: MultiNil = {
@@ -213,4 +252,62 @@ export function createMultiNil(): MultiNil {
   }
   Object.freeze(children)
   return nil
+}
+
+export function createMultiNode<Data>(
+  value: Data,
+  parent: MultiItem<Data>,
+  children: MultiNode<Data>[] = [],
+): MultiNode<Data> {
+  return {
+    kind: E_NodeKind.multi,
+    value,
+    meta: {},
+    parent,
+    children,
+  }
+}
+
+export function createFiberNil(): FiberNil {
+  const nil: FiberNil = {
+    kind: E_NodeKind.nil,
+    get parent() {
+      return nil
+    },
+    set parent(value) {
+      if (value !== nil)
+        throw new TypeError('FiberNil.parent 只能指向自己')
+    },
+    get child() {
+      return nil
+    },
+    set child(value) {
+      if (value !== nil)
+        throw new TypeError('FiberNil.child 只能指向自己')
+    },
+    get sibling() {
+      return nil
+    },
+    set sibling(value) {
+      if (value !== nil)
+        throw new TypeError('FiberNil.sibling 只能指向自己')
+    },
+  }
+  return nil
+}
+
+export function createFiberNode<Data>(
+  value: Data,
+  parent: FiberItem<Data>,
+  child: FiberItem<Data>,
+  sibling: FiberItem<Data>,
+): FiberNode<Data> {
+  return {
+    kind: E_NodeKind.fiber,
+    value,
+    meta: {},
+    parent,
+    child,
+    sibling,
+  }
 }

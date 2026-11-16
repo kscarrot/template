@@ -1,119 +1,46 @@
-import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
-import { FiberNode, TreeNode } from 'src/datastructure/node/TreeNode'
+import type { BinaryNode, FiberItem, FiberNode, MultiItem, MultiNode } from 'src/datastructure/Node'
+import { createFiberNil, createFiberNode, E_NodeKind, isNil } from 'src/datastructure/Node'
+import { traverseFiberTreeNode } from 'src/datastructure/traverse'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
+import { mapGenerator } from 'src/util/Iter'
 
-/**
- * @description 从二叉树节点递归构建 Fiber 树
- * @param binaryNode 当前处理的二叉树节点
- * @param parentFiberNode 目标 Fiber 树中的父节点
- * @returns 构建好的 Fiber 节点或 null
- */
-function buildFiberTreeFromBinaryTree<T>(
-  binaryNode: BinaryTreeNode<T> | null,
-  parentFiberNode: FiberNode<T> | null,
-): FiberNode<T> | null {
-  // 如果二叉树节点为空，则返回 null
-  if (!binaryNode)
-    return null
+type SourceNode<T> = BinaryNode<T, unknown> | MultiNode<T>
 
-  // 创建当前 Fiber 节点并链接父节点
-  const currentFiberNode = new FiberNode<T>(binaryNode.value, parentFiberNode)
-
-  // 递归构建左、右子树的 Fiber 节点
-  const leftChildFiber = buildFiberTreeFromBinaryTree(binaryNode.left, currentFiberNode)
-  const rightChildFiber = buildFiberTreeFromBinaryTree(binaryNode.right, currentFiberNode)
-
-  // 第一个子节点作为 child 其余子节点作为 child 的兄弟节点
-  currentFiberNode.child = leftChildFiber
-  if (leftChildFiber) {
-    leftChildFiber.sibling = rightChildFiber
-  }
-  else {
-    currentFiberNode.child = rightChildFiber
-  }
-
-  // 返回当前 Fiber 节点
-  return currentFiberNode
+/** 二叉树按先左后右取存在的孩子，多叉树按 children 顺序 */
+function childrenOf<T>(node: SourceNode<T>): SourceNode<T>[] {
+  if (node.kind === E_NodeKind.multi)
+    return node.children
+  return [node.left, node.right].filter(child => !isNil(child))
 }
 
 /**
- * @description 从多叉树节点递归构建 Fiber 树
- * @param treeNode 当前处理的多叉树节点
- * @param parentFiberNode 目标 Fiber 树中的父节点
- * @returns 构建好的 Fiber 节点
+ * Fiber 树：每个节点只记第一个孩子 child 和下一个兄弟 sibling，可以表示任意多叉树
+ * 可以从二叉树或多叉树建立，孩子顺序保持不变
  */
-function buildFiberTreeFromTreeNode<T>(treeNode: TreeNode<T>, parentFiberNode: FiberNode<T> | null): FiberNode<T> {
-  // 创建当前 Fiber 节点并链接父节点
-  const currentFiberNode = new FiberNode<T>(treeNode.value, parentFiberNode)
+export class FiberTree<T> {
+  protected readonly nil = createFiberNil()
+  root: FiberItem<T> = this.nil
 
-  // 遍历所有子节点
-  if (treeNode.children && treeNode.children.length > 0) {
-    let previousSibling: FiberNode<T> | null = null
-    for (let i = 0; i < treeNode.children.length; i++) {
-      const childTreeNode = treeNode.children[i]
-      // 递归构建 Fiber 节点
-      const childFiberNode = buildFiberTreeFromTreeNode(childTreeNode, currentFiberNode)
-      // 第一个子节点作为child
-      if (i === 0) {
-        currentFiberNode.child = childFiberNode
-      }
-      else if (previousSibling) {
-        // 其余子节点作为 child 的兄弟节点F
-        previousSibling.sibling = childFiberNode
-      }
-      previousSibling = childFiberNode
-    }
+  constructor(tree: BinaryTree<T, unknown> | MultiItem<T>) {
+    const source = tree instanceof BinaryTree
+      ? tree.root
+      : tree
+    if (!isNil(source))
+      this.root = this.build(source, this.nil)
   }
 
-  // 返回当前 Fiber 节点
-  return currentFiberNode
-}
+  traverseNodes = () => traverseFiberTreeNode(this.root);
 
-/**
- * @description 遍历Fiber树
- * @param fiberTree 要遍历的Fiber树
- * @returns 返回一个Generator，用于遍历Fiber树
- */
-function* traverseFiberTreeNode<T>(fiberTree: FiberNode<T> | null): Generator<FiberNode<T>> {
-  let current = fiberTree
-  while (current) {
-    yield current
-    if (current.child) {
-      current = current.child
-    }
-    else if (current.sibling) {
-      current = current.sibling
-    }
-    else {
-      current = current.parent?.sibling || null
-    }
+  [Symbol.iterator] = () => mapGenerator(this.traverseNodes(), node => node.value)
+
+  /** 第一个孩子挂到 child，其余孩子依次挂成前一个的 sibling */
+  private build(node: SourceNode<T>, parent: FiberItem<T>): FiberNode<T> {
+    const fiber = createFiberNode(node.value, parent, this.nil, this.nil)
+    const children = childrenOf(node).map(child => this.build(child, fiber))
+    children.forEach((child, index) => {
+      child.sibling = children[index + 1] ?? this.nil
+    })
+    fiber.child = children[0] ?? this.nil
+    return fiber
   }
 }
-
-function* traverseFiberTree<T>(fiberTree: FiberNode<T> | null): Generator<T> {
-  for (const node of traverseFiberTreeNode(fiberTree)) {
-    yield node.value
-  }
-}
-
-class FiberTree<T> {
-  root: FiberNode<T> | null = null
-
-  constructor(tree: BinaryTree<T> | TreeNode<T> | null) {
-    if (tree instanceof BinaryTree) {
-      this.root = buildFiberTreeFromBinaryTree(tree.root, null)
-    }
-    else if (tree instanceof TreeNode) {
-      this.root = buildFiberTreeFromTreeNode(tree, null)
-    }
-    else {
-      this.root = null
-    }
-  }
-
-  [Symbol.iterator](): Iterator<T> {
-    return traverseFiberTree(this.root)
-  }
-}
-
-export { FiberTree, traverseFiberTreeNode }

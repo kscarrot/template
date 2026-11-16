@@ -25,11 +25,12 @@
 ### 源码目录结构（`src/`）
 
 - **`datastructure/`** — 通用数据结构实现，均实现 `ADT.ts` 中定义的接口：
-  - `node/` — 节点类型（`ListNode`、`BinaryTreeNode`、`AVLNode`、`TreapNode`），供所有结构共用
+  - `Node.ts` — 所有节点类型（单向、双向、二叉、多叉、Fiber）及其工厂函数。空位置统一用哨兵 nil 表示：每个结构持有自己的 nil，用 `isNil` 判断，nil 的链接只能指向自己，写入别的值会抛 `TypeError`。结构专属的数据放在节点的 `meta` 里（如 AVL 的 `height`、树堆的 `priority` / `size`）
+  - `traverse.ts` — 链表、二叉树（前序/中序/后序，`E_TraverseType`）、Fiber 树的节点遍历生成器
+  - `rotate.ts` — 二叉树旋转（`rotateLeft`、`rotateRight`、`rotateUp`）
   - `list/` — SinglyLinkList、DoublyLinkList、CircularLinkList、Stack、Queue、Dequeue
   - `tree/` — BinaryTree、BinarySearchTree、AVLTree、SplayTree、ScapegoatTree、Treap、TreapRotate、FiberTree
-  - `heap/` — Min/Max Heap
-  - `collection/` — HashTable、HashSet
+  - `collection/` — HashTable、HashSet、Heap
   - `graph/` — 空目录，待实现
 - **`algorithm/sort/`** — 排序算法实现（bubble、cocktail、heap、insertion、merge、quick、selection），统一签名 `(arr: number[]) => number[]`
 - **`util/`** — 共享工具：`Comparator`（通用比较类，供数据结构和排序使用）、`Iter`（生成器映射，以及按数组顺序取值）

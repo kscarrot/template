@@ -1,4 +1,4 @@
-import { Heap } from 'src/datastructure/heap/Heap'
+import { Heap } from 'src/datastructure/collection/Heap'
 
 it('test min heap basic', () => {
   const h = new Heap()

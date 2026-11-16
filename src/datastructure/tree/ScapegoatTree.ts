@@ -1,40 +1,18 @@
-import type { BinaryTreeNode } from 'src/datastructure/node/TreeNode'
+import type { BinaryItem, BinaryNode } from 'src/datastructure/Node'
 import type { compareFunction } from 'src/util/Comparator'
+import { isNil } from 'src/datastructure/Node'
+import { traverseBinaryTreeNode } from 'src/datastructure/traverse'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
-import { traverseBinaryTreeNode } from 'src/datastructure/tree/BinaryTree'
+import { countNodes } from 'src/datastructure/tree/BinaryTree'
 
-function depthOf<T>(node: BinaryTreeNode<T>): number {
+function depthOf<T>(node: BinaryNode<T>): number {
   let depth = 0
   let current = node
-  while (current.parent) {
+  while (!isNil(current.parent)) {
     current = current.parent
     depth++
   }
   return depth
-}
-
-/**
- * 把按中序排列的节点连成高度最小的树：取中点为根，左右两半递归
- * 会覆盖每个节点原有的 parent / left / right
- * @returns 新树的根，nodes 为空时为 null
- */
-function buildBalanced<T>(nodes: BinaryTreeNode<T>[]): BinaryTreeNode<T> | null {
-  const build = (start: number, end: number, parent: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null => {
-    if (start > end) {
-      // 区间为空：没有节点
-      return null
-    }
-    else {
-      // 取中点为根，左右两半递归成左右子树
-      const mid = Math.floor((start + end) / 2)
-      const node = nodes[mid]
-      node.parent = parent
-      node.left = build(start, mid - 1, node)
-      node.right = build(mid + 1, end, node)
-      return node
-    }
-  }
-  return build(0, nodes.length - 1, null)
 }
 
 /**
@@ -62,31 +40,24 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
   override insert(value: T): this {
     const node = this.insertNode(value)
     this.maxSize = Math.max(this.maxSize, this.size)
-    if (this.isTooDeep(node)) {
-      // 新节点太深：重建路径上的替罪羊子树
+    // 新节点太深：重建路径上的替罪羊子树
+    if (this.isTooDeep(node))
       this.rebuild(this.findScapegoat(node))
-    }
-    else {
-      // 深度在允许范围内：无需重建
-    }
     return this
   }
 
   override delete(value: T): this {
     super.delete(value)
-    if (this.root && this.size < this.alpha * this.maxSize) {
+    if (!isNil(this.root) && this.size < this.alpha * this.maxSize) {
       // 节点数降得太多：重建整棵树，并以当前节点数重新计算 maxSize
       this.rebuild(this.root)
       this.maxSize = this.size
-    }
-    else {
-      // 树已空，或节点数仍在允许范围内：无需重建
     }
     return this
   }
 
   /** 深度超过 log_{1/α}(maxSize)；用乘方比较以避开对数在整数边界上的浮点误差 */
-  private isTooDeep(node: BinaryTreeNode<T>): boolean {
+  private isTooDeep(node: BinaryNode<T>): boolean {
     return (1 / this.alpha) ** depthOf(node) > this.maxSize
   }
 
@@ -94,50 +65,50 @@ export class ScapegoatTree<T> extends BinarySearchTree<T> {
    * 从新插入的节点往上，找第一个「某个孩子的子树大小 > α × 自身子树大小」的祖先
    * 子树大小按「孩子 + 兄弟 + 1」递推，只需统计兄弟子树，总开销与替罪羊子树大小成正比
    */
-  private findScapegoat(node: BinaryTreeNode<T>): BinaryTreeNode<T> {
+  private findScapegoat(node: BinaryNode<T>): BinaryNode<T> {
     let child = node
     let childSize = 1
-    while (child.parent) {
+    while (!isNil(child.parent)) {
       const parent = child.parent
       const sibling = parent.left === child
         ? parent.right
         : parent.left
-      const parentSize = childSize + this.getNodeSize(sibling) + 1
-      if (childSize > this.alpha * parentSize) {
-        // parent 失衡：它就是替罪羊
+      const parentSize = childSize + countNodes(sibling) + 1
+      // parent 失衡：它就是替罪羊
+      if (childSize > this.alpha * parentSize)
         return parent
-      }
-      else {
-        // parent 仍平衡：继续往上找
-        child = parent
-        childSize = parentSize
-      }
+      child = parent
+      childSize = parentSize
     }
     throw new Error(`ScapegoatTree: no scapegoat found above a node at depth ${depthOf(node)}`)
   }
 
-  /** 把子树重建为高度最小的形状，复用原节点且中序不变，新子树根接回原来的位置 */
-  private rebuild(subtreeRoot: BinaryTreeNode<T>): void {
-    const subtreeParent = subtreeRoot.parent
-    const isLeftChild = subtreeParent?.left === subtreeRoot
+  /**
+   * 把按中序排列的节点连成高度最小的树：取中点为根，左右两半递归
+   * 会覆盖每个节点原有的 parent / left / right
+   */
+  private buildBalanced(nodes: BinaryNode<T>[], start: number, end: number, parent: BinaryItem<T>): BinaryItem<T> {
+    if (start > end)
+      return this.nil
+    const mid = Math.floor((start + end) / 2)
+    const node = nodes[mid]
+    node.parent = parent
+    node.left = this.buildBalanced(nodes, start, mid - 1, node)
+    node.right = this.buildBalanced(nodes, mid + 1, end, node)
+    return node
+  }
 
-    const top = buildBalanced([
-      ...traverseBinaryTreeNode(subtreeRoot),
-    ])
-    if (!top)
-      throw new Error('ScapegoatTree: cannot rebuild an empty subtree')
-    top.parent = subtreeParent
-    if (!subtreeParent) {
-      // 重建的是整棵树：新子树根成为树根
+  /** 把子树重建为高度最小的形状，复用原节点且中序不变，新子树根接回原来的位置 */
+  private rebuild(subtreeRoot: BinaryNode<T>): void {
+    const parent = subtreeRoot.parent
+    const isLeftChild = !isNil(parent) && parent.left === subtreeRoot
+    const nodes = traverseBinaryTreeNode(subtreeRoot).toArray()
+    const top = this.buildBalanced(nodes, 0, nodes.length - 1, parent)
+    if (isNil(parent))
       this.root = top
-    }
-    else if (isLeftChild) {
-      // 原子树是左孩子：接回父节点的左侧
-      subtreeParent.left = top
-    }
-    else {
-      // 原子树是右孩子：接回父节点的右侧
-      subtreeParent.right = top
-    }
+    else if (isLeftChild)
+      parent.left = top
+    else
+      parent.right = top
   }
 }
