@@ -1,8 +1,8 @@
 import type { FiberItem, FiberNode } from 'src/datastructure/Node'
 import cytoscape from 'cytoscape'
 import React, { useEffect, useRef } from 'react'
+import { traverseFiberTreeNode } from 'src/algorithm/tree/traverse'
 import { isNil } from 'src/datastructure/Node'
-import { traverseFiberTreeNode } from 'src/datastructure/traverse'
 
 interface FiberTreeVisualizerProps {
   root: FiberItem<unknown>

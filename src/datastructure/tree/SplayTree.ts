@@ -1,7 +1,7 @@
 import type { BinaryItem, BinaryNode } from 'src/datastructure/Node'
 import { isNil } from 'src/datastructure/Node'
-import { rotateUp } from 'src/datastructure/rotate'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
+import { rotateUp } from 'src/datastructure/tree/rotate'
 
 export class SplayTree<T> extends BinarySearchTree<T> {
   /** 最近一次 searchNode 走到的最后一个节点；空树时是哨兵 */

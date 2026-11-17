@@ -1,7 +1,7 @@
 import type { ListADT } from 'src/datastructure/ADT'
 import type { SinglyItem, SinglyNil, SinglyNode } from 'src/datastructure/Node'
+import { traverseLines } from 'src/algorithm/tree/traverse'
 import { createSinglyNil, createSinglyNode, isNil } from 'src/datastructure/Node'
-import { traverseLines } from 'src/datastructure/traverse'
 import { assertIndex } from 'src/util/common'
 import { mapGenerator } from 'src/util/Iter'
 

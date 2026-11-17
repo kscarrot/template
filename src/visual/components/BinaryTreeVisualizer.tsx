@@ -1,8 +1,8 @@
 import type { BinaryItem, BinaryNode } from 'src/datastructure/Node'
 import cytoscape from 'cytoscape'
 import React, { useEffect, useRef } from 'react'
+import { traverseBinaryTreeNode } from 'src/algorithm/tree/traverse'
 import { isNil } from 'src/datastructure/Node'
-import { traverseBinaryTreeNode } from 'src/datastructure/traverse'
 
 interface BinaryTreeVisualizerProps {
   root: BinaryItem<unknown, unknown>

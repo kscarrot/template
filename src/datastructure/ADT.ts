@@ -96,3 +96,71 @@ export interface SearchTreeADT<T> extends TreeADT<T> {
   /** 查找有序树中的第k个元素 */
   getKth: (k: number) => T | null
 }
+
+export type NodeId = string
+
+export interface Edge<Meta = EmptyMeta> {
+  to: NodeId
+  meta: Meta
+}
+
+export interface GraphADT<
+  TNode = unknown,
+  TMeta = EmptyMeta,
+  TEdge extends Edge<TMeta> = Edge<TMeta>,
+> {
+  readonly nodeCount: number
+  readonly edgeCount: number
+  readonly isEmpty: boolean
+  readonly isDirected: boolean
+
+  /** ===== 节点操作 ===== */
+  addNode: (id: NodeId, node: TNode) => this
+  removeNode: (id: NodeId) => this
+  hasNode: (id: NodeId) => boolean
+  getNode: (id: NodeId) => TNode | undefined
+
+  /** ===== 边操作 ===== */
+  addEdge: (from: NodeId, to: NodeId, edge: TEdge) => this
+  removeEdge: (from: NodeId, to: NodeId) => this
+  hasEdge: (from: NodeId, to: NodeId) => boolean
+  getEdge: (from: NodeId, to: NodeId) => TEdge | undefined
+
+  /** ===== 遍历操作 ===== */
+  [Symbol.iterator]: () => IterableIterator<[NodeId, TNode]>
+  nodes: () => IterableIterator<[NodeId, TNode]>
+  edges: () => IterableIterator<[NodeId, NodeId, TEdge]>
+
+  /** 清空 */
+  clear: () => this
+  /** 转置 */
+  transpose: () => this
+  /** 克隆 */
+  clone: () => this
+}
+
+export interface WeightedMeta { weight: number }
+
+export type WeightedEdge<
+  TEdgeMeta extends WeightedMeta = WeightedMeta,
+> = Edge<TEdgeMeta>
+
+/** 边 meta 至少带 weight；其余与 GraphADT 相同 */
+export interface WeightedGraphADT<
+  TNode = unknown,
+  TMeta extends WeightedMeta = WeightedMeta,
+  TEdge extends WeightedEdge<TMeta> = WeightedEdge<TMeta>,
+> extends GraphADT<TNode, TMeta, TEdge> {
+  readonly defaultWeight: number
+
+  /** ===== 带权边操作（加边用 addEdge，权放在 meta.weight） ===== */
+
+  /** 调整权重 */
+  updateWeight: (from: NodeId, to: NodeId, updater: (weight: number) => number) => this
+  /** 获取权重 */
+  getWeight: (from: NodeId, to: NodeId) => number
+  /** 加权出度 */
+  weightedOutDegree: (id: NodeId) => number
+  /** 加权入度 */
+  weightedInDegree: (id: NodeId) => number
+}

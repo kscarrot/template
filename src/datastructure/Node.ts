@@ -2,8 +2,6 @@
 // 0. 通用基类与空标记
 // ============================================================================
 
-export type EmptyMeta = Record<string, never>
-
 export const E_NodeKind = {
   nil: 'nil',
   singly: 'singly-node',

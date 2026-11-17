@@ -1,8 +1,8 @@
 import type { BinaryItem, BinaryNode } from 'src/datastructure/Node'
+import { traverseBinaryTreeNode } from 'src/algorithm/tree/traverse'
 import { createBinaryNil, createBinaryNode, isNil } from 'src/datastructure/Node'
-import { rotateLeft, rotateRight, rotateUp } from 'src/datastructure/rotate'
-import { traverseBinaryTreeNode } from 'src/datastructure/traverse'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
+import { rotateLeft, rotateRight, rotateUp } from 'src/datastructure/tree/rotate'
 import { expectTypeOf } from 'vitest'
 
 /**

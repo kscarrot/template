@@ -1,6 +1,6 @@
 import type { BinaryNode, FiberItem, FiberNode, MultiItem, MultiNode } from 'src/datastructure/Node'
+import { traverseFiberTreeNode } from 'src/algorithm/tree/traverse'
 import { createFiberNil, createFiberNode, E_NodeKind, isNil } from 'src/datastructure/Node'
-import { traverseFiberTreeNode } from 'src/datastructure/traverse'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 import { mapGenerator } from 'src/util/Iter'
 

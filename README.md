@@ -3,13 +3,12 @@
 ## 算法
 
 - [排序](./src/algorithm/sort/README.md)
+- [遍历](./src/algorithm/tree/traverse.ts)
 
 ## 数据结构
 
 - [ADT](./src/datastructure/ADT.ts)
 - [节点与哨兵](./src/datastructure/Node.ts)
-- [遍历](./src/datastructure/traverse.ts)
-- [旋转](./src/datastructure/rotate.ts)
 - [单链表](./src/datastructure/list/SinglyLinkList.ts)
 - [双链表](./src/datastructure/list/DoublyLinkList.ts)
 - [环形链表](./src/datastructure/list/CircularLinkList.ts)
@@ -19,6 +18,7 @@
 - [堆](./src/datastructure/collection/Heap.ts)
 - [HashMap](./src/datastructure/collection/HashTable.ts)
 - [HashSet](./src/datastructure/collection/HashSet.ts)
+- [旋转](./src/datastructure/tree/rotate.ts)
 - [二叉树](./src/datastructure/tree/BinaryTree.ts)
 - [二叉搜索树](./src/datastructure/tree/BinarySearchTree.ts)
 - [AVL树](./src/datastructure/tree/AVLTree.ts)
@@ -27,6 +27,8 @@
 - [替罪羊树](./src/datastructure/tree/ScapegoatTree.ts)
 - [树堆](./src/datastructure/tree/Treap.ts)
 - [旋转树堆](./src/datastructure/tree/TreapRotate.ts)
+- [有向图](./src/datastructure/graph/Graph.ts)
+- [带权有向图](./src/datastructure/graph/WeightedGraph.ts)
 
 ## 习题
 

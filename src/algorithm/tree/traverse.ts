@@ -49,6 +49,58 @@ export function* traverseBinaryTreeNode<Item extends (Node<unknown, unknown> | N
 }
 
 /**
+ * 广度优先：队列从左到右逐层访问
+ */
+export function* bfs<Item extends (Node<unknown, unknown> | Nil) & { left: Item, right: Item }>(
+  root: NoInfer<Item> & { left: Item, right: Item },
+): Generator<Exclude<Item, Nil>> {
+  const queue: Array<Exclude<Item, Nil>> = []
+  if (isNode(root))
+    queue.push(root)
+  for (let index = 0; index < queue.length; index++) {
+    const node = queue[index]
+    yield node
+    if (isNode(node.left))
+      queue.push(node.left)
+    if (isNode(node.right))
+      queue.push(node.right)
+  }
+}
+
+/**
+ * 深度优先，迭代先序：先压右孩子，弹出时先走到左孩子
+ */
+export function* dfs<Item extends (Node<unknown, unknown> | Nil) & { left: Item, right: Item }>(
+  root: NoInfer<Item> & { left: Item, right: Item },
+): Generator<Exclude<Item, Nil>> {
+  const stack: Array<Exclude<Item, Nil>> = []
+  if (isNode(root))
+    stack.push(root)
+  let node = stack.pop()
+  while (node) {
+    yield node
+    if (isNode(node.right))
+      stack.push(node.right)
+    if (isNode(node.left))
+      stack.push(node.left)
+    node = stack.pop()
+  }
+}
+
+/**
+ * 深度优先，递归先序
+ */
+export function* dfsr<Item extends (Node<unknown, unknown> | Nil) & { left: Item, right: Item }>(
+  root: NoInfer<Item> & { left: Item, right: Item },
+): Generator<Exclude<Item, Nil>> {
+  if (!isNode(root))
+    return
+  yield root
+  yield* dfsr(root.left)
+  yield* dfsr(root.right)
+}
+
+/**
  * Fiber 树的先序遍历：有 child 先走 child；没有就沿 parent 往上，走第一个带 sibling 的节点的 sibling
  * 回到 root 时结束，root 自己的 sibling 不属于这棵子树
  */

@@ -1,8 +1,8 @@
+import type { TraverseType } from 'src/algorithm/tree/traverse'
 import type { BinaryNode } from 'src/datastructure/Node'
-import type { TraverseType } from 'src/datastructure/traverse'
 import type { MockInstance } from 'vitest'
+import { E_TraverseType } from 'src/algorithm/tree/traverse'
 import { isNil } from 'src/datastructure/Node'
-import { E_TraverseType } from 'src/datastructure/traverse'
 import { BinaryTree, countNodes, heightOf } from 'src/datastructure/tree/BinaryTree'
 import { expectTypeOf, vi } from 'vitest'
 

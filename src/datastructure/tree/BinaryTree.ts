@@ -1,8 +1,8 @@
+import type { TraverseType } from 'src/algorithm/tree/traverse'
 import type { TreeADT } from 'src/datastructure/ADT'
-import type { BinaryItem, BinaryNil, EmptyMeta } from 'src/datastructure/Node'
-import type { TraverseType } from 'src/datastructure/traverse'
+import type { BinaryItem, BinaryNil } from 'src/datastructure/Node'
+import { E_TraverseType, traverseBinaryTreeNode } from 'src/algorithm/tree/traverse'
 import { createBinaryNil, createBinaryNode, isNil } from 'src/datastructure/Node'
-import { E_TraverseType, traverseBinaryTreeNode } from 'src/datastructure/traverse'
 import { mapGenerator } from 'src/util/Iter'
 
 /** 子树高度，哨兵是 0，叶子是 1 */

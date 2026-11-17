@@ -1,7 +1,7 @@
 import type { BinaryItem, BinaryNode } from 'src/datastructure/Node'
 import type { compareFunction } from 'src/util/Comparator'
+import { traverseBinaryTreeNode } from 'src/algorithm/tree/traverse'
 import { isNil } from 'src/datastructure/Node'
-import { traverseBinaryTreeNode } from 'src/datastructure/traverse'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
 import { countNodes } from 'src/datastructure/tree/BinaryTree'
 

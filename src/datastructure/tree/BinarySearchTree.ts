@@ -1,5 +1,5 @@
 import type { SearchTreeADT } from 'src/datastructure/ADT'
-import type { BinaryItem, BinaryNode, EmptyMeta } from 'src/datastructure/Node'
+import type { BinaryItem, BinaryNode } from 'src/datastructure/Node'
 import type { compareFunction } from 'src/util/Comparator'
 import { createBinaryNode, isNil } from 'src/datastructure/Node'
 import { BinaryTree, countNodes } from 'src/datastructure/tree/BinaryTree'

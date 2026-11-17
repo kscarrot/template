@@ -1,6 +1,6 @@
 import type { BinaryItem } from 'src/datastructure/Node'
+import { E_TraverseType } from 'src/algorithm/tree/traverse'
 import { isNil } from 'src/datastructure/Node'
-import { E_TraverseType } from 'src/datastructure/traverse'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
 import { expectTypeOf } from 'vitest'
 

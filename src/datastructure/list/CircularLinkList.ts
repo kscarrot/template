@@ -1,7 +1,7 @@
 import type { ListADT } from 'src/datastructure/ADT'
 import type { DoublyItem, DoublyNil, DoublyNode } from 'src/datastructure/Node'
+import { traverseLines } from 'src/algorithm/tree/traverse'
 import { createDoublyNil, createDoublyNode } from 'src/datastructure/Node'
-import { traverseLines } from 'src/datastructure/traverse'
 import { mapGenerator } from 'src/util/Iter'
 
 export class CircularLinkList<T> implements ListADT<T> {

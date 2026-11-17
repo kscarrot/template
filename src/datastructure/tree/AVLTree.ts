@@ -1,7 +1,7 @@
 import type { BinaryItem, BinaryNode } from 'src/datastructure/Node'
 import { isNil } from 'src/datastructure/Node'
-import { rotateLeft, rotateRight } from 'src/datastructure/rotate'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
+import { rotateLeft, rotateRight } from 'src/datastructure/tree/rotate'
 
 /** height 是缓存的子树高度，叶子为 1。旋转会改写 left / right，调用 updateHeight 后才有效 */
 export interface AVLMeta { height: number }

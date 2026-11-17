@@ -5,3 +5,5 @@
  * type Values = ValueOf<Obj> // string | number
  */
 type ValueOf<T> = T[keyof T]
+
+type EmptyMeta = Record<string, never>

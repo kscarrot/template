@@ -1,7 +1,7 @@
 import type { TreapItem, TreapMeta, TreapNode, TreapOptions } from 'src/datastructure/tree/Treap'
 import { isNil } from 'src/datastructure/Node'
-import { rotateUp } from 'src/datastructure/rotate'
 import { BinarySearchTree } from 'src/datastructure/tree/BinarySearchTree'
+import { rotateUp } from 'src/datastructure/tree/rotate'
 import { resize, sizeOf } from 'src/datastructure/tree/Treap'
 
 /**

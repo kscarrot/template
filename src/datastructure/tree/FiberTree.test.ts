@@ -1,6 +1,6 @@
 import type { FiberItem, MultiItem, MultiNode } from 'src/datastructure/Node'
+import { traverseFiberTreeNode } from 'src/algorithm/tree/traverse'
 import { createMultiNil, createMultiNode, isNil } from 'src/datastructure/Node'
-import { traverseFiberTreeNode } from 'src/datastructure/traverse'
 import { BinaryTree } from 'src/datastructure/tree/BinaryTree'
 import { FiberTree } from 'src/datastructure/tree/FiberTree'
 

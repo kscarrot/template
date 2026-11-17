@@ -26,13 +26,12 @@
 
 - **`datastructure/`** — 通用数据结构实现，均实现 `ADT.ts` 中定义的接口：
   - `Node.ts` — 所有节点类型（单向、双向、二叉、多叉、Fiber）及其工厂函数。空位置统一用哨兵 nil 表示：每个结构持有自己的 nil，用 `isNil` 判断，nil 的链接只能指向自己，写入别的值会抛 `TypeError`。结构专属的数据放在节点的 `meta` 里（如 AVL 的 `height`、树堆的 `priority` / `size`）
-  - `traverse.ts` — 链表、二叉树（前序/中序/后序，`E_TraverseType`）、Fiber 树的节点遍历生成器
-  - `rotate.ts` — 二叉树旋转（`rotateLeft`、`rotateRight`、`rotateUp`）
   - `list/` — SinglyLinkList、DoublyLinkList、CircularLinkList、Stack、Queue、Dequeue
-  - `tree/` — BinaryTree、BinarySearchTree、AVLTree、SplayTree、ScapegoatTree、Treap、TreapRotate、FiberTree
+  - `tree/` — BinaryTree、BinarySearchTree、AVLTree、SplayTree、ScapegoatTree、Treap、TreapRotate、FiberTree，以及 `rotate.ts`（`rotateLeft`、`rotateRight`、`rotateUp`）
   - `collection/` — HashTable、HashSet、Heap
-  - `graph/` — 空目录，待实现
+  - `graph/` — 简单有向图：`Graph`（nodes + outEdges + inEdges 索引）、`WeightedGraph`（权在 edge.meta.weight）。`GraphADT` / `WeightedGraphADT` 在 `ADT.ts`
 - **`algorithm/sort/`** — 排序算法实现（bubble、cocktail、heap、insertion、merge、quick、selection），统一签名 `(arr: number[]) => number[]`
+- **`algorithm/tree/`** — `traverse.ts`：链表、二叉树（前序/中序/后序、层序、迭代先序）、Fiber 树的节点遍历生成器
 - **`util/`** — 共享工具：`Comparator`（通用比较类，供数据结构和排序使用）、`Iter`（生成器映射，以及按数组顺序取值）
 - **`leetcode/`** — LeetCode 题解，以 `LC{编号}.ts` 命名；不纳入 ESLint 检查
 - **`kata/`** — Codewar kata 题解
